@@ -1,0 +1,17 @@
+<div class="w-full h-full bg-blue-100">
+  <div>
+    <h2>Our Mission</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor,
+      nunc id aliquam ultricies, nisl nunc lacinia nunc, nec tincidunt elit nunc
+      nec nunc. Sed auctor, nunc id aliquam ultricies, nisl nunc lacinia nunc,
+      nec tincidunt elit nunc nec nunc.</p>
+  </div>
+  <section>
+    <h2>Our Team</h2>
+    <ul>
+      {{#each teamMembers}}
+        <li>{{this.name}} - {{this.role}}</li>
+      {{/each}}
+    </ul>
+  </section>
+</div>
