@@ -2,7 +2,19 @@
   <head>
     <meta charset="utf-8" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"
+    ></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
     <title>Example App</title>
+    <style>
+      #map { position: absolute; top: 50; bottom: 50; width: 100%; }
+       #resizeMap { width: 50%; }
+    </style>
   </head>
   <body>
     <div

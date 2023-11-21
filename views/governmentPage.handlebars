@@ -1,11 +1,29 @@
-<div
-  class="w-[90%] h-screen mx-auto my-5 flex flex-row justify-center items-center gap-6"
->
-  <div class="w-[70%] h-full rounded-xl shadow-xl bg-[whitesmoke]">
-    MAP HERE
-  </div>
+<div class="w-[90%] h-screen mx-auto my-5 flex flex-row justify-center items-center gap-6">
+  <div id="map" class="w-[70%] h-[92%] align-left rounded-xl shadow-xl bg-[whitesmoke] flex-row flex float-left"></div> 
+  MAP HERE    
+  <script>
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-122.4194, 37.7749],
+      zoom: 12,
+    });
+
+    var mapDiv = document.getElementById('map');
+    mapDiv.style.float = 'left'; // Add this line to float the map to the left
+
+    var mapCanvas = document.getElementsByClassName('mapboxgl-canvas')[0];
+    var breakButton = document.getElementById('resizeDiv');
+    var fixButton = document.getElementById('resizeMap');
+
+    mapDiv.style.width = '70%';
+    mapCanvas.style.width = '100%';
+    mapCanvas.style.height = '100%';
+    biggerSmaller = 'bigger';
+  </script>
   <div class="w-[30%] h-full">
     {{> table}}
   </div>
-
 </div>
