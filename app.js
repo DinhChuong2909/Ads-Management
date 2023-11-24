@@ -18,6 +18,7 @@ const hbs = expbs.create({
   partialsDir: path.join(__dirname, "views/pieces"), // change partials folder name
 });
 
+
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./views");
