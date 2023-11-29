@@ -1,30 +1,47 @@
-<div >
+<div>
   <div id="map"></div>
   <div class="w-[30%] h-fit mx-6 absolute right-0 top-16">
     {{> table}}
   </div>
+  <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
 </div>
 
 <script>
-      mapboxgl.accessToken =
-        'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
-      var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/outdoors-v12',
-        center: [106.6974, 10.7757],
-        zoom: 14,
-      });
+  const coordinatesList = []
 
-      var mapDiv = document.getElementById('map');
-      mapDiv.style.margin = '30px 30px';
-      mapDiv.style.border = '1px solid whitesmoke';
-      mapDiv.style.borderRadius = '10px';
-      mapDiv.style.left = '0px';
-      mapDiv.style.width = '65%';
-      mapDiv.style.height = '85%';
-      mapDiv.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)';
+    function createMarker(coordinates) {
+      new mapboxgl.Marker()
+        .setLngLat(coordinates)
+        .addTo(map);
+    }
 
-      var mapCanvas = document.getElementsByClassName('mapboxgl-canvas')[0];
-      var breakButton = document.getElementById('resizeDiv');
-      var fixButton = document.getElementById('resizeMap');
+  mapboxgl.accessToken =
+    'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/outdoors-v12',
+    center: [106.6974, 10.7757],
+    zoom: 14,
+  });
+
+  var mapDiv = document.getElementById('map');
+  mapDiv.style.margin = '30px 30px';
+  mapDiv.style.border = '1px solid whitesmoke';
+  mapDiv.style.borderRadius = '10px';
+  mapDiv.style.left = '0px';
+  mapDiv.style.width = '65%';
+  mapDiv.style.height = '85%';
+  mapDiv.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)';
+
+  coordinatesList.forEach(coordinates => {
+    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
+  });
+
+  // Lắng nghe sự kiện 'click' trên bản đồ và tạo thanh ghim tại vị trí click
+  map.on('click', function (e) {
+    createMarker(e.lngLat);
+    document.getElementById('coordinates').innerHTML =
+      'Longitude: ' + e.lngLat.lng + '<br>Latitude: ' + e.lngLat.lat;
+  });
 </script>
