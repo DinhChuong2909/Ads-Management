@@ -6,24 +6,71 @@
   <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
 </div>
 
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
 <script>
-  const coordinatesList = []
-
-    function createMarker(coordinates) {
-      new mapboxgl.Marker()
-        .setLngLat(coordinates)
-        .addTo(map);
-    }
-
   mapboxgl.accessToken =
     'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
-
   var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/outdoors-v12',
+    style: 'mapbox://styles/mapbox/streets-v12',
     center: [106.6974, 10.7757],
     zoom: 14,
   });
+
+  const geocoder = new MapboxGeocoder({
+  accessToken: mapboxgl.accessToken,
+  mapboxgl: mapboxgl,
+  reverseGeocode: true, 
+  flipCoordinates: true,
+  marker: {
+    color: "red",
+  },
+  flyTo: {
+    bearing: 0,
+    animate: true,
+    duration: 750,
+    speed: 1,
+    essential: true,
+    curve: 1,
+    easing: function (t) {
+      return Math.sin((t * Math.PI) / 2);
+      },
+    },
+  });
+
+  map.addControl(
+    new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    })
+  );
+
+    // Add geolocate control to the map.
+  map.addControl(
+    new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      // When active the map will receive updates to the device's location as it changes.
+      trackUserLocation: true,
+      // Draw an arrow next to the location dot to indicate which direction the device is heading.
+      showUserHeading: true,
+    })
+  );
+
+  // Add zoom and rotation controls to the map.
+  map.addControl(new mapboxgl.NavigationControl());
+
+  const coordinatesList = []
+
+  function createMarker(coordinates) {
+    new mapboxgl.Marker()
+      .setLngLat(coordinates)
+      .addTo(map);
+  }
 
   var mapDiv = document.getElementById('map');
   mapDiv.style.margin = '30px 30px';
@@ -34,14 +81,27 @@
   mapDiv.style.height = '85%';
   mapDiv.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)';
 
+  var mapCanvas = document.getElementsByClassName('mapboxgl-canvas')[0];
+  var breakButton = document.getElementById('resizeDiv');
+  var fixButton = document.getElementById('resizeMap');
+
+ 
+  
   coordinatesList.forEach(coordinates => {
     createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
   });
-
   // Lắng nghe sự kiện 'click' trên bản đồ và tạo thanh ghim tại vị trí click
   map.on('click', function (e) {
     createMarker(e.lngLat);
     document.getElementById('coordinates').innerHTML =
       'Longitude: ' + e.lngLat.lng + '<br>Latitude: ' + e.lngLat.lat;
   });
+
+
+  let hoveredPolygonId = null;
+   coordinatesList.forEach(coordinates => {
+    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
+  });
+
+
 </script>
