@@ -8,7 +8,8 @@
 
 
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+<link rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 
 <script>
   mapboxgl.accessToken =
@@ -21,22 +22,22 @@
   });
 
   const geocoder = new MapboxGeocoder({
-  accessToken: mapboxgl.accessToken,
-  mapboxgl: mapboxgl,
-  reverseGeocode: true, 
-  flipCoordinates: true,
-  marker: {
-    color: "red",
-  },
-  flyTo: {
-    bearing: 0,
-    animate: true,
-    duration: 750,
-    speed: 1,
-    essential: true,
-    curve: 1,
-    easing: function (t) {
-      return Math.sin((t * Math.PI) / 2);
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    reverseGeocode: true,
+    flipCoordinates: true,
+    marker: {
+      color: "red",
+    },
+    flyTo: {
+      bearing: 0,
+      animate: true,
+      duration: 750,
+      speed: 1,
+      essential: true,
+      curve: 1,
+      easing: function (t) {
+        return Math.sin((t * Math.PI) / 2);
       },
     },
   });
@@ -48,7 +49,7 @@
     })
   );
 
-    // Add geolocate control to the map.
+  // Add geolocate control to the map.
   map.addControl(
     new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -85,23 +86,64 @@
   var breakButton = document.getElementById('resizeDiv');
   var fixButton = document.getElementById('resizeMap');
 
- 
-  
-  coordinatesList.forEach(coordinates => {
-    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
-  });
-  // Lắng nghe sự kiện 'click' trên bản đồ và tạo thanh ghim tại vị trí click
+  let currentMarker = null;
+
   map.on('click', function (e) {
-    createMarker(e.lngLat);
-    document.getElementById('coordinates').innerHTML =
-      'Longitude: ' + e.lngLat.lng + '<br>Latitude: ' + e.lngLat.lat;
+    // Xóa marker cũ nếu đã tồn tại
+    if (currentMarker) {
+      currentMarker.remove();
+    }
+
+    // Tạo marker mới
+    currentMarker = createMarker(e.lngLat);
+
+    // Reverse geocode the clicked coordinates to get address information
+    fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`
+    )
+      .then(response => response.json())
+      .then(data => {
+        // Initialize popup content with location information
+        let popupContent = `
+        <h3>Location Details</h3>
+        <p>Longitude: ${e.lngLat.lng}</p>
+        <p>Latitude: ${e.lngLat.lat}</p>
+      `;
+
+        // Check if any features (places) were found
+        if (data.features.length > 0) {
+          const placeName = data.features[0].place_name;
+          popupContent += `<p>Address: ${placeName}</p>`;
+        } else {
+          popupContent += '<p>No address information available.</p>';
+        }
+
+        // Create and display the popup with updated content
+        createPopup(e.lngLat, popupContent);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   });
 
+  function createMarker(coordinates) {
+    // Xóa marker cũ nếu đã tồn tại
+    if (currentMarker) {
+      currentMarker.remove();
+    }
 
-  let hoveredPolygonId = null;
-   coordinatesList.forEach(coordinates => {
-    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
-  });
+    // Tạo marker mới và trả về để lưu trữ
+    return new mapboxgl.Marker()
+      .setLngLat(coordinates)
+      .addTo(map);
+  }
+
+  function createPopup(coordinates, content) {
+    new mapboxgl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(content)
+      .addTo(map);
+  }
 
 
 </script>
