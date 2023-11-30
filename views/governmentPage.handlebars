@@ -1,8 +1,9 @@
-<div >
+<div>
   <div id="map"></div>
   <div class="w-[30%] h-fit mx-6 absolute right-0 top-16">
     {{> table}}
   </div>
+  <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
 </div>
 
 
@@ -36,9 +37,9 @@
     curve: 1,
     easing: function (t) {
       return Math.sin((t * Math.PI) / 2);
+      },
     },
-  },
-});
+  });
 
   map.addControl(
     new MapboxGeocoder({
@@ -63,23 +64,13 @@
   // Add zoom and rotation controls to the map.
   map.addControl(new mapboxgl.NavigationControl());
 
-  map.on('click', (event) => {
-    const features = map.queryRenderedFeatures(event.point, {
-        layers: ['chicago-parks']
-    });
-    if (!features.length) {
-      return;
-    }
-      const feature = features[0];
-      
-      const popup = new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML(
-          `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
-        )
-        .addTo(map);
-  });
+  const coordinatesList = []
 
+    function createMarker(coordinates) {
+      new mapboxgl.Marker()
+        .setLngLat(coordinates)
+        .addTo(map);
+    }
 
   var mapDiv = document.getElementById('map');
   mapDiv.style.margin = '30px 30px';
@@ -95,4 +86,9 @@
   var fixButton = document.getElementById('resizeMap');
 
   let hoveredPolygonId = null;
+  coordinatesList.forEach(coordinates => {
+    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
+  });
+
+
 </script>

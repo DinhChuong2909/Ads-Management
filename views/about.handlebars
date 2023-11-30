@@ -1,17 +1,29 @@
-<div class="w-full h-full bg-blue-100">
-  <div>
-    <h2>Our Mission</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor,
-      nunc id aliquam ultricies, nisl nunc lacinia nunc, nec tincidunt elit nunc
-      nec nunc. Sed auctor, nunc id aliquam ultricies, nisl nunc lacinia nunc,
-      nec tincidunt elit nunc nec nunc.</p>
+<link href="../../static/index.css" rel="stylesheet"/>
+<div class="responsive-container-block bigContainer">
+  <div class="responsive-container-block Container bottomContainer">
+    <div class="allText bottomText">
+      <p class="text-blk headingText">
+        About
+      </p>
+      <p class="text-blk subHeadingText">
+        Ads Management
+      </p>
+      <p class="text-blk description">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fermentum pulvinar ullamcorper suspendisse ac eget.
+        Pellentesque tempus leo in ullamcorper quis vestibulum ligula elementum ut. Congue in dignissim tincidunt ut
+        dolor eu. Mi, eget posuere vitae sed purus nisl lorem.
+      </p>
+      <a>
+        <button class="explore">
+          View More
+        </button>
+      </a>
+    </div>
+    <div class="videoContainer">
+      <iframe allowfullscreen="allowfullscreen" class="mainVideo" controls="controls"
+        src="https://www.youtube.com/embed/svg%3E?">
+      </iframe>
+      <img class="dotsImg image-block" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/cw3.svg">
+    </div>
   </div>
-  <section>
-    <h2>Our Team</h2>
-    <ul>
-      {{#each teamMembers}}
-        <li>{{this.name}} - {{this.role}}</li>
-      {{/each}}
-    </ul>
-  </section>
 </div>
