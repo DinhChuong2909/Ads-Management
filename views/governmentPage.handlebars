@@ -48,7 +48,7 @@
     })
   );
 
-  // Add geolocate control to the map.
+    // Add geolocate control to the map.
   map.addControl(
     new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -66,11 +66,11 @@
 
   const coordinatesList = []
 
-    function createMarker(coordinates) {
-      new mapboxgl.Marker()
-        .setLngLat(coordinates)
-        .addTo(map);
-    }
+  function createMarker(coordinates) {
+    new mapboxgl.Marker()
+      .setLngLat(coordinates)
+      .addTo(map);
+  }
 
   var mapDiv = document.getElementById('map');
   mapDiv.style.margin = '30px 30px';
@@ -85,8 +85,21 @@
   var breakButton = document.getElementById('resizeDiv');
   var fixButton = document.getElementById('resizeMap');
 
-  let hoveredPolygonId = null;
+ 
+  
   coordinatesList.forEach(coordinates => {
+    createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
+  });
+  // Lắng nghe sự kiện 'click' trên bản đồ và tạo thanh ghim tại vị trí click
+  map.on('click', function (e) {
+    createMarker(e.lngLat);
+    document.getElementById('coordinates').innerHTML =
+      'Longitude: ' + e.lngLat.lng + '<br>Latitude: ' + e.lngLat.lat;
+  });
+
+
+  let hoveredPolygonId = null;
+   coordinatesList.forEach(coordinates => {
     createMarker(coordinates); // Sử dụng hàm tạo điểm để đánh dấu từng điểm tọa độ
   });
 
