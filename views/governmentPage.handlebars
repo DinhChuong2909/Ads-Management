@@ -130,18 +130,7 @@
         <p>Longitude: ${e.lngLat.lng}</p>
         <p>Latitude: ${e.lngLat.lat}</p>
       `;
-          if (isYourData) {
-            // Thêm thông tin từ positionInfo vào popup
-            popupPeopleClick += `
-          <h3><br>${positionInfo.LoaiBangQC}</br></h3>
-          <p>${positionInfo.DiaChi}</p>
-          <p>${positionInfo.KhuVuc}</p>
-          <p>Kích thước: ${positionInfo.HinhThuc}</p>
-          <p>Số lượng: ${positionInfo.HinhThuc}</p>
-          <p>Hình thức: ${positionInfo.HinhThuc}</p>
-          <p>Phân Loại: ${positionInfo.LoaiViTri}</p>
-        `;
-          } else {
+          if (!isYourData) {
             // Check if any features (places) were found
             if (data.features.length > 0) {
               const placeName = data.features[0].place_name;
@@ -149,12 +138,6 @@
             } else {
               popupContent += '<p>No address information available.</p>';
             }
-          }
-
-          // Create and display the popup with updated content
-          if (isYourData) {
-            createPopup(e.lngLat, popupPeopleClick);
-          } else {
             createPopup(e.lngLat, popupContent);
           }
         })
@@ -184,16 +167,27 @@
   }
 
   function addAds(coordinatesList) {
-    coordinatesList.forEach(coordinates => {
-      createCustomMarker(coordinates);
-    });
+    let idx = 0;
+    for (let coordinates of coordinatesList) {
+      createCustomMarker(coordinates, idx);
+      idx++;
+    }
   }
 
-  function createCustomMarker(coordinates) {
+  function createCustomMarker(coordinates, idx) {
     const el = document.createElement('div');
     el.className = 'custom-marker';
     new mapboxgl.Marker(el)
       .setLngLat(coordinates)
+      .setPopup(
+        new mapboxgl.Popup({offset: 25})
+        .setHTML(`<h3><br>${positionInfo[idx].LoaiBangQC}</br></h3>
+          <p>Address: ${positionInfo[idx].DiaChi}</p>
+          <p>${positionInfo[idx].KhuVuc}</p>
+          <p>Kích thước: ${positionInfo[idx].HinhThuc}</p>
+          <p>Số lượng: ${positionInfo[idx].HinhThuc}</p>
+          <p>Hình thức: ${positionInfo[idx].HinhThuc}</p>
+          <p>Phân Loại: ${positionInfo[idx].LoaiViTri}</p>`))
       .addTo(map);
   }
 

@@ -9,9 +9,9 @@ export default {
         return db('vitriqc').insert(entity);
     },
     findById(id) {
-        return db('vitriqc').where('ID', id).first();
+        return db('vitriqc').where('Id', id).first();
     },
     del(id) {
-        return db('vitriqc').where('ID', id).del();
+        return db('vitriqc').where('Id', id).del();
     },
 }
