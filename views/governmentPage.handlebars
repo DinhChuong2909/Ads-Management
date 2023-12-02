@@ -10,7 +10,7 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet"
   href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
-
+<link rel="stylesheet" href="static/index.css">
 <script>
   mapboxgl.accessToken =
     'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
@@ -65,8 +65,6 @@
   // Add zoom and rotation controls to the map.
   map.addControl(new mapboxgl.NavigationControl());
 
-  const coordinatesList = []
-
   function createMarker(coordinates) {
     new mapboxgl.Marker()
       .setLngLat(coordinates)
@@ -88,42 +86,82 @@
 
   let currentMarker = null;
 
-  map.on('click', function (e) {
-    // Xóa marker cũ nếu đã tồn tại
-    if (currentMarker) {
-      currentMarker.remove();
-    }
+  const coordinatesList = {{{ coordinatesList }}};
+  const positionInfo = {{{ positionInfo }}};
 
-    // Tạo marker mới
-    currentMarker = createMarker(e.lngLat);
+  map.on('load', function () {
 
-    // Reverse geocode the clicked coordinates to get address information
-    fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`
-    )
-      .then(response => response.json())
-      .then(data => {
-        // Initialize popup content with location information
-        let popupContent = `
+    addAds(coordinatesList)
+
+
+    map.on('click', function (e) {
+      // Xóa marker cũ nếu đã tồn tại
+      if (currentMarker) {
+        currentMarker.remove();
+      }
+      let isYourData = false;
+
+      if (e.originalEvent.target.classList.contains('custom-marker')) {
+        isYourData = true;
+      }
+
+
+      // Tạo marker mới
+      if (isYourData == false) {
+        currentMarker = createMarker(e.lngLat);
+      }
+
+
+      // Reverse geocode the clicked coordinates to get address information
+      fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          // Initialize popup content with location information
+          let popupContent = `
         <h3>Location Details</h3>
         <p>Longitude: ${e.lngLat.lng}</p>
         <p>Latitude: ${e.lngLat.lat}</p>
       `;
+          let popupPeopleClick = ``;
+          let popupPeopleHover = `
+        <h3>Location Details</h3>
+        <p>Longitude: ${e.lngLat.lng}</p>
+        <p>Latitude: ${e.lngLat.lat}</p>
+      `;
+          if (isYourData) {
+            // Thêm thông tin từ positionInfo vào popup
+            popupPeopleClick += `
+          <h3><br>${positionInfo.LoaiBangQC}</br></h3>
+          <p>${positionInfo.DiaChi}</p>
+          <p>${positionInfo.KhuVuc}</p>
+          <p>Kích thước: ${positionInfo.HinhThuc}</p>
+          <p>Số lượng: ${positionInfo.HinhThuc}</p>
+          <p>Hình thức: ${positionInfo.HinhThuc}</p>
+          <p>Phân Loại: ${positionInfo.LoaiViTri}</p>
+        `;
+          } else {
+            // Check if any features (places) were found
+            if (data.features.length > 0) {
+              const placeName = data.features[0].place_name;
+              popupContent += `<p>Address: ${placeName}</p>`;
+            } else {
+              popupContent += '<p>No address information available.</p>';
+            }
+          }
 
-        // Check if any features (places) were found
-        if (data.features.length > 0) {
-          const placeName = data.features[0].place_name;
-          popupContent += `<p>Address: ${placeName}</p>`;
-        } else {
-          popupContent += '<p>No address information available.</p>';
-        }
-
-        // Create and display the popup with updated content
-        createPopup(e.lngLat, popupContent);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+          // Create and display the popup with updated content
+          if (isYourData) {
+            createPopup(e.lngLat, popupPeopleClick);
+          } else {
+            createPopup(e.lngLat, popupContent);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
   });
 
   function createMarker(coordinates) {
@@ -142,6 +180,20 @@
     new mapboxgl.Popup()
       .setLngLat(coordinates)
       .setHTML(content)
+      .addTo(map);
+  }
+
+  function addAds(coordinatesList) {
+    coordinatesList.forEach(coordinates => {
+      createCustomMarker(coordinates);
+    });
+  }
+
+  function createCustomMarker(coordinates) {
+    const el = document.createElement('div');
+    el.className = 'custom-marker';
+    new mapboxgl.Marker(el)
+      .setLngLat(coordinates)
       .addTo(map);
   }
 
