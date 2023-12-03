@@ -1,19 +1,18 @@
-<div>
+<div class="map-container">
   <div id="map"></div>
-  <div class="w-[30%] h-fit mx-6 absolute right-0 top-16">
+  <div class="table-container w-[30%] h-fit mx-6 absolute right-0 top-16">
     {{> table}}
   </div>
   <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
 </div>
-
 
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet"
   href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 <link rel="stylesheet" href="static/index.css">
 <script>
-  mapboxgl.accessToken =
-    'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
+
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v12',
@@ -42,121 +41,110 @@
     },
   });
 
-  map.addControl(
-    new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
-    })
-  );
+  map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+  }));
 
-  // Add geolocate control to the map.
-  map.addControl(
-    new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      // When active the map will receive updates to the device's location as it changes.
-      trackUserLocation: true,
-      // Draw an arrow next to the location dot to indicate which direction the device is heading.
-      showUserHeading: true,
-    })
-  );
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    trackUserLocation: true,
+    showUserHeading: true,
+  }));
 
-  // Add zoom and rotation controls to the map.
   map.addControl(new mapboxgl.NavigationControl());
 
-  function createMarker(coordinates) {
-    new mapboxgl.Marker()
-      .setLngLat(coordinates)
-      .addTo(map);
-  }
-
   var mapDiv = document.getElementById('map');
-  mapDiv.style.margin = '30px 30px';
-  mapDiv.style.border = '1px solid whitesmoke';
-  mapDiv.style.borderRadius = '10px';
-  mapDiv.style.left = '0px';
-  mapDiv.style.width = '65%';
-  mapDiv.style.height = '85%';
-  mapDiv.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)';
-
-  var mapCanvas = document.getElementsByClassName('mapboxgl-canvas')[0];
-  var breakButton = document.getElementById('resizeDiv');
-  var fixButton = document.getElementById('resizeMap');
+  mapDiv.style.cssText = 'margin: 30px 30px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 65%; height: 85%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
 
   let currentMarker = null;
-
+  let hoverPopup = null;
   const coordinatesList = {{{ coordinatesList }}};
   const positionInfo = {{{ positionInfo }}};
 
   map.on('load', function () {
+    addAds(coordinatesList);
 
-    addAds(coordinatesList)
+    map.on('click', handleMapClick);
 
+    map.on('mouseover', 'custom-marker', function (e) {
+      console.log('Mouse entered custom marker.');
+      map.getCanvas().style.cursor = 'pointer';
 
-    map.on('click', function (e) {
-      // Xóa marker cũ nếu đã tồn tại
-      if (currentMarker) {
-        currentMarker.remove();
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const info = positionInfo[e.features[0].properties.idx];
+
+      createHoverPopup(coordinates, info);
+    });
+
+    map.on('mouseleave', 'custom-marker', function () {
+      console.log('Mouse left custom marker.');
+      map.getCanvas().style.cursor = '';
+      if (hoverPopup) {
+        hoverPopup.remove();
       }
-      let isYourData = false;
-
-      if (e.originalEvent.target.classList.contains('custom-marker')) {
-        isYourData = true;
-      }
-
-
-      // Tạo marker mới
-      if (isYourData == false) {
-        currentMarker = createMarker(e.lngLat);
-      }
-
-
-      // Reverse geocode the clicked coordinates to get address information
-      fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          // Initialize popup content with location information
-          let popupContent = `
-        <h3>Location Details</h3>
-        <p>Longitude: ${e.lngLat.lng}</p>
-        <p>Latitude: ${e.lngLat.lat}</p>
-      `;
-          let popupPeopleClick = ``;
-          let popupPeopleHover = `
-        <h3>Location Details</h3>
-        <p>Longitude: ${e.lngLat.lng}</p>
-        <p>Latitude: ${e.lngLat.lat}</p>
-      `;
-          if (!isYourData) {
-            // Check if any features (places) were found
-            if (data.features.length > 0) {
-              const placeName = data.features[0].place_name;
-              popupContent += `<p>Address: ${placeName}</p>`;
-            } else {
-              popupContent += '<p>No address information available.</p>';
-            }
-            createPopup(e.lngLat, popupContent);
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
     });
   });
 
-  function createMarker(coordinates) {
-    // Xóa marker cũ nếu đã tồn tại
+  function createHoverPopup(coordinates, info) {
+    if (hoverPopup) {
+      hoverPopup.remove();
+    }
+
+    const popupContent = `<h3>${info.HinhThuc}</h3>
+    <p>Loại vị trí: ${info.LoaiViTri}</p>
+    <p>Địa chỉ: ${info.DiaChi}</p>
+    <p>Khu vực: ${info.KhuVuc}</p>
+    <p>Quy hoạch: ${info.QuyHoach ? 'Đã quy hoạch' : 'Chưa quy hoạch'}</p>`;
+
+    hoverPopup = new mapboxgl.Popup({ offset: 25 })
+      .setLngLat(coordinates)
+      .setHTML(popupContent)
+      .addTo(map);
+  }
+
+  function handleMapClick(e) {
     if (currentMarker) {
       currentMarker.remove();
     }
+    let isData = e.originalEvent.target.classList.contains('custom-marker');
 
-    // Tạo marker mới và trả về để lưu trữ
+    if (!isData) {
+      currentMarker = createMarker(e.lngLat);
+      fetchAddressInfo(e.lngLat);
+    }
+  }
+
+  function createMarker(coordinates) {
+    if (currentMarker) {
+      currentMarker.remove();
+    }
     return new mapboxgl.Marker()
       .setLngLat(coordinates)
       .addTo(map);
+      
+  }
+
+  function fetchAddressInfo(coordinates) {
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`)
+      .then(response => response.json())
+      .then(data => {
+        let popupContent = `<h3>Location Details</h3>
+          <p>Longitude: ${coordinates.lng}</p>
+          <p>Latitude: ${coordinates.lat}</p>`;
+        if (data.features.length > 0) {
+          const placeName = data.features[0].place_name;
+          popupContent += `<p>Address: ${placeName}</p>`;
+        } else {
+          popupContent += '<p>No address information available.</p>';
+        }
+        createPopup(coordinates, popupContent);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
   function createPopup(coordinates, content) {
@@ -167,11 +155,7 @@
   }
 
   function addAds(coordinatesList) {
-    let idx = 0;
-    for (let coordinates of coordinatesList) {
-      createCustomMarker(coordinates, idx);
-      idx++;
-    }
+    coordinatesList.forEach(createCustomMarker);
   }
 
   function createCustomMarker(coordinates, idx) {
@@ -179,17 +163,18 @@
     el.className = 'custom-marker';
     new mapboxgl.Marker(el)
       .setLngLat(coordinates)
-      .setPopup(
-        new mapboxgl.Popup({offset: 25})
-        .setHTML(`<h3><br>${positionInfo[idx].LoaiBangQC}</br></h3>
-          <p>Address: ${positionInfo[idx].DiaChi}</p>
-          <p>${positionInfo[idx].KhuVuc}</p>
-          <p>Kích thước: ${positionInfo[idx].HinhThuc}</p>
-          <p>Số lượng: ${positionInfo[idx].HinhThuc}</p>
-          <p>Hình thức: ${positionInfo[idx].HinhThuc}</p>
-          <p>Phân Loại: ${positionInfo[idx].LoaiViTri}</p>`))
+      .setPopup(createPopupHTML(positionInfo[idx]))
       .addTo(map);
   }
 
-
+  function createPopupHTML(info) {
+    return new mapboxgl.Popup({ offset: 25 })
+      .setHTML(`<h3><br>${info.LoaiBangQC}</br></h3>
+        <p>Address: ${info.DiaChi}</p>
+        <p>${info.KhuVuc}</p>
+        <p>Kích thước: ${info.HinhThucQC}</p>
+        <p>Số lượng: ${info.HinhThucQC}</p>
+        <p>Hình thức: ${info.HinhThucQC}</p>
+        <p>Phân Loại: ${info.LoaiViTri}</p>`);
+  }
 </script>
