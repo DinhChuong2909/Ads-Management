@@ -9,6 +9,7 @@ import path from "path";
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
 import publicRouter from "./routes/publicRouter.js"
+import phuongRouter from "./routes/phuongRouter.js"
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +33,7 @@ app.use("/static", express.static("static"));
 app.get("/", publicRouter);
 app.get("/government", governmentRouter);
 app.get("/about", aboutRouter);
-
+app.get("/phuong", phuongRouter);
 
 // START 
 function serverStartedHandler() {
