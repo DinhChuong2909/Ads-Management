@@ -6,11 +6,8 @@ import expbs from "express-handlebars";
 import path from "path";
 
 // PAGES
-import governmentRouter from "./routes/governmentRouter.js";
-import aboutRouter from "./routes/aboutRouter.js";
-import publicRouter from "./routes/publicRouter.js"
-import phuongRouter from "./routes/phuongRouter.js"
-import publicRouter from "./routes/people/homeRouter.js"
+import homeRouter from "./routes/people/homeRouter.js"
+import aboutRouter from "./routes/aboutRouter.js"
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +17,7 @@ const app = express();
 
 // HANDLEBARS
 const hbs = expbs.create({
-  defaultLayout: "main",
+  defaultLayout: "mainPublic",
   layoutsDir: path.join(__dirname, "views/layouts"), // change layout folder name
   partialsDir: path.join(__dirname, "views/pieces"), // change partials folder name
 });
@@ -31,14 +28,12 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 
 app.use("/static", express.static("static"));
-app.get("/", publicRouter);
-app.get("/government", governmentRouter);
+app.get("/", homeRouter);
 app.get("/about", aboutRouter);
-app.get("/phuong", phuongRouter);
 
 // START 
 function serverStartedHandler() {
-  console.log("Web server is running at http://localhost:3000");
+  console.log("Web server is running at http://localhost:9000");
 }
 
-app.listen(3000, serverStartedHandler);
+app.listen(9000, serverStartedHandler);

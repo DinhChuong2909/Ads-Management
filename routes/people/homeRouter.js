@@ -1,5 +1,5 @@
 import express from "express";
-import positionService from "../services/position.service.js";
+import positionService from "../../services/position.service.js";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get('/', async function (req, res) {
     const positionInfoPromises = list.map(item => positionService.findById(item.Id));
     const positionInfo = await Promise.all(positionInfoPromises);
 
-    res.render('publicPage', {
+    res.render('people/home', {
       list: list,
       empty: list.length === 0,
       coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars
