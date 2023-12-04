@@ -5,36 +5,25 @@ const router = express.Router();
 
 router.get('/phuong', async function (req, res) {
   try {
-  const list = await positionService.findAll();
-  // const id = temp.length || 0;
-  // console.log(id)
-  // const limit = 4;
-  // const page = req.query.page || 1;
-  // const offset = (page - 1) * limit;
+  const limit = 10;
+  const page = req.query.page || 1;
+  const offset = (page - 1) * limit;
 
-  // const total = await positionService.countById(id);
-  // const nPages = Math.ceil(total / limit);
-  // const pageNumbers = [];
-  // for (let i = 1; i <= nPages; i++) {
-  //   pageNumbers.push({
-  //     value: i,
-  //     isActive: i === +page
-  //   });
-  // }
+  const total = await positionService.countAll();
+  const nPages = Math.ceil(total / limit);
+  const pageNumbers = [];
+  for (let i = 1; i <= nPages; i++) {
+    pageNumbers.push({
+      value: i,
+      isActive: i === +page
+    });
+  }
 
-  // const list = await positionService.findPageById(id, limit, offset);
-  console.log(list);
-  const coordinatesList = list.map(item => [item.Lng, item.Lat]); // Lấy tọa độ từ danh sách dữ liệu
-  
-  // Lấy thông tin chi tiết của từng vị trí trong danh sách
-  const positionInfoPromises = list.map(item => positionService.findById(item.Id));
-  const positionInfo = await Promise.all(positionInfoPromises);
+  const list = await positionService.findFromId(limit, offset);
   res.render('phuong/list', {
     list: list,
     empty: list.length === 0,
-    // pageNumbers: pageNumbers,
-    coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars
-    positionInfo: JSON.stringify(positionInfo),
+    pageNumbers: pageNumbers,
   });
   } catch (error) {
     // Xử lý lỗi nếu cần

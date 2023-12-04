@@ -14,11 +14,11 @@ export default {
     del(id) {
         return db('vitriqc').where('Id', id).del();
     },
-    findPageById(id, limit, offset) {
-        return db('vitriqc').where('Id', id).limit(limit).offset(offset);
+    findFromId(limit, offset) {
+        return db('vitriqc').limit(limit).offset(offset);
     },
-    async countById(id) {
-    const list = await db('vitriqc').where('Id', id).count('Id as amount');
-    return list[0].amount;
-    },
+    async countAll() {
+        const list = await db('vitriqc').count('Id as amount');
+        return list[0].amount;
+    }
 }

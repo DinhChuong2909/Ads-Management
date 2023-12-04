@@ -8,7 +8,6 @@ import path from "path";
 // PAGES
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
-import publicRouter from "./routes/publicRouter.js"
 import phuongRouter from "./routes/phuongRouter.js"
 import publicRouter from "./routes/people/homeRouter.js"
 
