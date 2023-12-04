@@ -1,0 +1,55 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="static/css/people/home.css">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+  <title>SCH Map</title>
+  <style>
+    #map {
+      position: absolute;
+      top: 50;
+      bottom: 50;
+      width: 100%;
+    }
+
+    #resizeMap {
+      width: 50%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center">
+    <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
+
+    <div class="row">
+      <div class="col-10 col-lg-11 -mt-3 pt-2 flex justify-center gap-[20px]">
+        <ul class="flex flex-row gap-[20px]">
+          <li class="flex items-center">
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Bảng QC</span>
+          </li>
+          <li class="flex items-center">
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Báo cáo vi phạm</span>
+          </li>
+          <li class=flex items-center"">
+            <span class="toggle-label">About</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  {{{body}}}
+</body>
+
+</html>
