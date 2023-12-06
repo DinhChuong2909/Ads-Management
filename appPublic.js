@@ -19,7 +19,7 @@ const app = express();
 const hbs = expbs.create({
   defaultLayout: "mainPublic",
   layoutsDir: path.join(__dirname, "views/layouts"), // change layout folder name
-  partialsDir: path.join(__dirname, "views/pieces"), // change partials folder name
+  partialsDir: path.join(__dirname, "views/people"), // change partials folder name
 });
 
 // SETTING ENGINE

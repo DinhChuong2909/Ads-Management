@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <meta charset="utf-8" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +23,7 @@
 </head>
 
 <body>
-  <div class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center">
+  <div class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center mb-8">
     <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
 
     <div class="row">
@@ -30,14 +31,14 @@
         <ul class="flex flex-row gap-[20px]">
           <li class="flex items-center">
             <label class="toggle-switch">
-              <input type="checkbox" checked>
+              <input type="checkbox" checked id="qcToggle">
               <span class="toggle-slider"></span>
             </label>
             <span class="toggle-label">Bảng QC</span>
           </li>
           <li class="flex items-center">
             <label class="toggle-switch">
-              <input type="checkbox" checked>
+              <input type="checkbox" checked id="violationToggle">
               <span class="toggle-slider"></span>
             </label>
             <span class="toggle-label">Báo cáo vi phạm</span>
@@ -49,7 +50,45 @@
       </div>
     </div>
   </div>
-  {{{body}}}
+
+  <div class="flex justify-end gap-2">
+    <div class="w-1/5 h-full bg-white p-8 shadow-md overflow-y-auto px-6">
+      <div class="DATA">
+        {{> allData}}
+      </div>
+      <div class="REPORT">
+        {{> reportData}}
+      </div>
+    </div>
+      {{> home}}
+  </div>
 </body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const qcToggle = document.getElementById('qcToggle');
+    const violationToggle = document.getElementById('violationToggle');
+    const allData = document.querySelector('.DATA');
+    const reportData = document.querySelector('.REPORT');
+
+    qcToggle.addEventListener('change', function () {
+      if (qcToggle.checked) {
+        allData.style.display = 'block';
+      } else {
+        allData.style.display = 'none';
+      }
+    });
+
+    violationToggle.addEventListener('change', function () {
+      if (violationToggle.checked) {
+        reportData.style.display = 'block';
+      } else {
+        reportData.style.display = 'none';
+      }
+    });
+  });
+
+</script>
+
 
 </html>
