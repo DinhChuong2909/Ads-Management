@@ -8,7 +8,7 @@
 }
 
 .custom-marker {
-    background-image: url(/static/img/custom.png);
+    /* background-image: url(/static/img/custom.png); */
     background-size: cover;
     width: 25px;
     height: 25px;
