@@ -8,6 +8,7 @@ import path from "path";
 // PAGES
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
+import phuongRouter from "./routes/phuongRouter.js"
 import publicRouter from "./routes/people/homeRouter.js"
 
 // DIRNAME
@@ -32,7 +33,7 @@ app.use("/static", express.static("static"));
 app.get("/", publicRouter);
 app.get("/government", governmentRouter);
 app.get("/about", aboutRouter);
-
+app.get("/phuong", phuongRouter);
 
 // START 
 function serverStartedHandler() {
