@@ -1,0 +1,380 @@
+<div class="map-container ">
+  <div class="flex flex-row">
+    <div id="map"></div>
+    <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
+  </div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+<link rel="stylesheet" href="static/css/people/map.css">
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: [106.6991, 10.7738],
+    zoom: 14,
+  });
+
+  const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    reverseGeocode: true,
+    flipCoordinates: true,
+    marker: {
+      color: "red",
+    },
+    flyTo: {
+      bearing: 0,
+      animate: true,
+      duration: 750,
+      speed: 1,
+      essential: true,
+      curve: 1,
+      easing: function (t) {
+        return Math.sin((t * Math.PI) / 2);
+      },
+    },
+  });
+
+  map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+  }));
+
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    trackUserLocation: true,
+    showUserHeading: true,
+  }));
+
+  map.addControl(new mapboxgl.NavigationControl());
+
+  var mapDiv = document.getElementById('map');
+  mapDiv.style.cssText = 'margin: 0 250px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 70%; height: 85%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
+
+  let currentMarker = null;
+  let hoverPopup = null;
+  const coordinatesList = {{{ coordinatesList }}};
+  const positionInfo = {{{ positionInfo }}};
+
+  console.log(positionInfo)
+
+  map.on('load', function () {
+    map.addSource('ads', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: coordinatesList.map((coordinates, idx) => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: coordinates,
+          },
+          properties: {
+            idx: idx,
+          },
+        })),
+      },
+      cluster: true,
+      clusterMaxZoom: 14, // Adjust as needed
+      clusterRadius: 50, // Adjust as needed
+    });
+
+    map.addLayer({
+      id: 'clusters',
+      type: 'circle',
+      source: 'ads',
+      filter: ['has', 'point_count'],
+      paint: {
+        // Use step expressions (https://docs.mapbox.com/style-spec/reference/expressions/#step)
+        // with three steps to implement three types of circles:
+        //   * Blue, 20px circles when point count is less than 100
+        //   * Yellow, 30px circles when point count is between 100 and 750
+        //   * Pink, 40px circles when point count is greater than or equal to 750
+        'circle-color': [
+          'step',
+          ['get', 'point_count'],
+          '#51bbd6',
+          100,
+          '#f1f075',
+          750,
+          '#f28cb1'
+        ],
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
+          20,
+          100,
+          30,
+          750,
+          40
+        ]
+      }
+    });
+
+    map.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'ads',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': ['get', 'point_count_abbreviated'],
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12
+      }
+    });
+
+    map.loadImage('/static/img/custom.png', function (error, image) {
+      if (error) throw error;
+      map.addImage('custom-marker', image);
+
+      // Sau khi hình ảnh đã được thêm vào, bạn có thể sử dụng nó trong layer của mình
+      map.addLayer({
+        id: 'unclustered-point',
+        type: 'symbol',
+        source: 'ads',
+        filter: ['!', ['has', 'point_count']],
+        layout: {
+          'icon-image': 'custom-marker', // Sử dụng tên hình ảnh đã thêm
+          'icon-size': 0.2,
+          'icon-padding': 2,
+          'icon-allow-overlap': true,
+        },
+      });
+    });
+    
+
+  map.on('click', 'clusters', (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: ['clusters']
+    });
+    const clusterId = features[0].properties.cluster_id;
+    map.getSource('ads').getClusterExpansionZoom(
+      clusterId,
+      (err, zoom) => {
+        if (err) return;
+
+        map.easeTo({
+          center: features[0].geometry.coordinates,
+          zoom: zoom
+        });
+      }
+    );
+  });
+  // When a click event occurs on a feature in
+  // the unclustered-point layer, open a popup at
+  // the location of the feature, with
+  // description HTML from its properties.
+  map.on('click', 'unclustered-point', (e) => {
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const mag = e.features[0].properties.mag;
+    const tsunami =
+      e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+  });
+
+  addAds(coordinatesList);
+
+
+  map.on('click', handleMapClick);
+
+  map.on('mouseover', 'custom-marker', function (e) {
+    console.log('Mouse entered custom marker.');
+    map.getCanvas().style.cursor = 'pointer';
+
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const info = positionInfo[e.features[0].properties.idx];
+
+    createHoverPopup(coordinates, info);
+  });
+
+  map.on('mouseleave', 'custom-marker', function () {
+    console.log('Mouse left custom marker.');
+    map.getCanvas().style.cursor = '';
+    if (hoverPopup) {
+      hoverPopup.remove();
+    }
+  });
+  });
+
+  function createHoverPopup(coordinates, info) {
+    if (hoverPopup) {
+      hoverPopup.remove();
+    }
+
+    const popupContent = `<h3>${info.HinhThuc}</h3>
+    <p>Loại vị trí: ${info.LoaiViTri}</p>
+    <p>Địa chỉ: ${info.DiaChi}</p>
+    <p>Khu vực: ${info.KhuVuc}</p>
+    <p>Quy hoạch: ${info.QuyHoach ? 'Đã quy hoạch' : 'Chưa quy hoạch'}</p>`;
+
+    hoverPopup = new mapboxgl.Popup({ offset: 25 })
+      .setLngLat(coordinates)
+      .setHTML(popupContent)
+      .addTo(map);
+  }
+
+  const emptyDataPopupTemplate = `
+    <div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
+        <div class="flex flex-row text-[#014361] gap-1">
+            <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="font-semibold">
+                Thông tin bảng quảng cáo
+            </div>
+        </div>
+        <div class="flex flex-col text-[#014361] pl-7">
+            <div class="font-semibold">
+                Chưa có dữ liệu!
+            </div>
+            <div>
+                Vui lòng chọn điểm trên bảng đồ để xem.
+            </div>
+        </div>
+    </div>
+`;
+
+
+  function handleMapClick(e) {
+    if (currentMarker) {
+      currentMarker.remove();
+    }
+    let isData = e.originalEvent.target.classList.contains('custom-marker');
+
+    if (!isData) {
+      currentMarker = createMarker(e.lngLat);
+      fetchAddressInfo(e.lngLat);
+    }
+  }
+
+  function createMarker(coordinates) {
+    if (currentMarker) {
+      currentMarker.remove();
+    }
+    return new mapboxgl.Marker()
+      .setLngLat(coordinates)
+      .addTo(map);
+
+  }
+
+  function fetchAddressInfo(coordinates) {
+    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?types=poi&access_token=${mapboxgl.accessToken}`)
+      .then(response => response.json())
+      .then(data => {
+        let locationName = "";
+        let address = "";
+        if (data.features.length > 0) {
+          const placeName = data.features[0].place_name;
+          const addressArray = placeName.split(',');
+
+          // Lấy tên địa điểm
+          locationName = addressArray[0].trim();
+
+          // Lấy địa chỉ (loại bỏ tên địa điểm để chỉ lấy địa chỉ)
+          address = addressArray.slice(1).join(',').trim();
+        }
+        const popupContent = `
+<div class="bg-[#EDF7ED] -mx-3 -my-4 py-1 px-1">
+  <div class="flex flex-row gap-1">
+      <div>
+          <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <path fill="#2A502C" fill-rule="evenodd"
+                  d="M3 10a7 7 0 019.307-6.611 1 1 0 00.658-1.889 9 9 0 105.98 7.501 1 1 0 00-1.988.22A7 7 0 113 10zm14.75-5.338a1 1 0 00-1.5-1.324l-6.435 7.28-3.183-2.593a1 1 0 00-1.264 1.55l3.929 3.2a1 1 0 001.38-.113l7.072-8z" />
+          </svg>
+      </div>
+      <div class="font-semibold text-[#2A502C]">
+          Thông tin địa điểm
+      </div>
+  </div>
+  <div class="flex flex-col text-[#2A502C] pl-7">
+      <div class="font-semibold ">
+                  ${locationName}
+      </div>
+      <div>
+        ${address}
+      </div>
+  </div>
+</div>
+`;
+        createPopup(coordinates, popupContent);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+
+  function createPopup(coordinates, content) {
+    new mapboxgl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(content)
+      .addTo(map);
+  }
+
+  function addAds(coordinatesList) {
+    coordinatesList.forEach(createCustomMarker);
+  }
+
+  function createCustomMarker(coordinates, idx) {
+
+    const info = positionInfo[idx];
+    const el = document.createElement('div');
+    el.className = 'custom-marker';
+
+    if (info.HinhThucQC === null) {
+      const popupContent = emptyDataPopupTemplate;
+      new mapboxgl.Marker(el)
+        .setLngLat(coordinates)
+        .setPopup(new mapboxgl.Popup().setHTML(popupContent))
+        .addTo(map);
+    } else {
+      new mapboxgl.Marker(el)
+        .setLngLat(coordinates)
+        .setPopup(createPopupHTML(info))
+        .addTo(map);
+    }
+  }
+
+  function createPopupHTML(info) {
+    return new mapboxgl.Popup()
+      .setHTML(`
+    <div class="flex flex-col -mx-3 -my-4 py-3 px-4 bg-[#E5F6FD] rounded-lg text-[#014361]">
+    <div class="flex flex-col">
+        <div class="font-semibold">
+            ${info.LoaiBangQC}
+        </div>
+        <div>
+            ${info.DiaChi}, ${info.KhuVuc}
+        </div>
+    </div>
+    <div class="flex flex-col">
+        <div>
+            Kích thước: ${info.KichThuoc}
+        </div>
+        <div>
+            Số lượng: ${info.SoLuong}
+        </div>
+        <div>
+            Hình thức: ${info.HinhThucQC}
+        </div>
+        <div>
+            Phân loại: ${info.LoaiViTri}
+        </div>
+    </div>
+</div>`);
+  }
+</script>
