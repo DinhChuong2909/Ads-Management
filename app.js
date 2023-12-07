@@ -34,6 +34,8 @@ app.get("/", publicRouter);
 app.get("/government", governmentRouter);
 app.get("/about", aboutRouter);
 app.get("/phuong", phuongRouter);
+app.get("/phuong/diadiem", phuongRouter);
+
 
 // START 
 function serverStartedHandler() {
