@@ -3,17 +3,18 @@ import positionService from "../../services/position.service.js";
 
 const router = express.Router();
 
-router.get('/', function (req, res) {
-    res.render('people/report');
-})
+// /report?id=6
+router.get('/report', async function (req, res) {
+    const id = req.query.id || 0;
+    console.log(id)
+    const category = await positionService.findById(id);
+    if (!category) {
+      return res.redirect('/report');
+    }
+  
+    res.render('people/report', {
+      category: category
+    });
+  })
 
-router.post('/', async function (req, res) {
-    // console.log(req.body);
-    // const entity = {
-    //   CatName: req.body.txtCatName
-    // }
-    const ret = await categoryService.add(req.body);
-    console.log(ret); // inserted id
-
-    res.render('people/report');
-})
+export default router;
