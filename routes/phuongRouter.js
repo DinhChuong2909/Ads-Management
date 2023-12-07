@@ -5,6 +5,29 @@ const router = express.Router();
 
 router.get('/phuong', async function (req, res) {
   try {
+    const list = await positionService.findAll();
+    const coordinatesList = list.map(item => [item.Lng, item.Lat]); // Lấy tọa độ từ danh sách dữ liệu
+    
+    // Lấy thông tin chi tiết của từng vị trí trong danh sách
+    const positionInfoPromises = list.map(item => positionService.findById(item.Id));
+    const positionInfo = await Promise.all(positionInfoPromises);
+  
+    res.render('phuong/phuongMap', {
+      layout: 'phuongPage',
+      list: list,
+      empty: list.length === 0,
+      coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars
+      positionInfo: JSON.stringify(positionInfo),
+    });
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/phuong/diadiem', async function (req, res) {
+  try {
   const limit = 10;
   const page = req.query.page || 1;
   const offset = (page - 1) * limit;
@@ -20,10 +43,11 @@ router.get('/phuong', async function (req, res) {
   }
 
   const list = await positionService.findFromId(limit, offset);
-  res.render('phuong/list', {
+  res.render('phuong/diadiem/list', {
     list: list,
     empty: list.length === 0,
     pageNumbers: pageNumbers,
+    layout: 'phuongPage',
   });
   } catch (error) {
     // Xử lý lỗi nếu cần
@@ -32,26 +56,15 @@ router.get('/phuong', async function (req, res) {
 }
 });
 
-router.get('/add', function (req, res) {
-  res.render('phuong/add');
-})
-
-router.post('/add', async function (req, res) {
-  const ret = await categoryService.add(req.body);
-  console.log(ret); // inserted id
-
-  res.render('phuong/add');
-})
-
 // admin/categories/edit?id=6
-router.get('/edit', async function (req, res) {
+router.get('/diadiem/edit', async function (req, res) {
   const id = req.query.id || 0;
   const category = await categoryService.findById(id);
   if (!category) {
     return res.redirect('/phuong/categories');
   }
-
-  res.render('phuong/edit', {
+  
+  res.render('phuong/diadiem/edit', {
     category: category
   });
 })
@@ -66,4 +79,14 @@ router.post('/patch', async function (req, res) {
   res.redirect('/phuong/categories');
 })
 
+router.get('/add', function (req, res) {
+  res.render('phuong/add');
+})
+
+router.post('/add', async function (req, res) {
+  const ret = await categoryService.add(req.body);
+  console.log(ret); // inserted id
+
+  res.render('phuong/add');
+})
 export default router;

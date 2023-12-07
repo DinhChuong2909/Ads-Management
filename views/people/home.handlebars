@@ -1,21 +1,100 @@
 <div class="map-container ">
-  <div class="flex flex-row">
-    <div id="map"></div>
-    <div id="coordinates" style="position: absolute; top: 10px; left: 10px; background: white; padding: 5px;"></div>
+  <div id="map"></div>
+  <div id="coordinates" class="absolute top-4 left-4 bg-white p-2"></div>
+  <div class="absolute top-1 left-1/2 transform -translate-x-1/2">
+    <ul class="flex flex-row gap-4">
+      <li class="flex items-center">
+        <label class="toggle-switch">
+          <input type="checkbox" id="qcToggle">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">Bảng QC</span>
+      </li>
+      <li class="flex items-center">
+        <label class="toggle-switch">
+          <input type="checkbox" id="violationToggle">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">Báo cáo vi phạm</span>
+      </li>
+    </ul>
+  </div>
+  <div class="flex justify-end">
+    <div class="w-1/5 h-full bg-white shadow-md overflow-y-auto mx-1">
+      <div class="DATA">
+        {{> allData}}
+      </div>
+      <div class="REPORT">
+        {{> reportData}}
+      </div>
+    </div>
   </div>
 </div>
-
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet"
   href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 <link rel="stylesheet" href="static/css/people/map.css">
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const qcToggle = document.getElementById('qcToggle');
+    const violationToggle = document.getElementById('violationToggle');
+    const allData = document.querySelector('.DATA');
+    const reportData = document.querySelector('.REPORT');
+    const mapDiv = document.getElementById('map');
+
+    function hideAllDataAndReport() {
+      allData.style.display = 'none';
+      reportData.style.display = 'none';
+    }
+
+    function showAllData() {
+      allData.style.display = 'block';
+      reportData.style.display = 'none';
+    }
+
+    function showReportData() {
+      allData.style.display = 'none';
+      reportData.style.display = 'block';
+    }
+
+    function updateMapAndContentVisibility() {
+      if (!qcToggle.checked && !violationToggle.checked) {
+        mapDiv.style.width = '100%';
+        mapDiv.style.height = '90%';
+        hideAllDataAndReport();
+      } else if (qcToggle.checked && !violationToggle.checked) {
+        mapDiv.style.width = '80%';
+        showAllData();
+      } else if (!qcToggle.checked && violationToggle.checked) {
+        mapDiv.style.width = '80%';
+        showReportData();
+      }
+    }
+
+    qcToggle.addEventListener('change', function () {
+      updateMapAndContentVisibility();
+      // Logic khi toggle "Bảng QC" thay đổi trạng thái
+      // ...
+    });
+
+    violationToggle.addEventListener('change', function () {
+      updateMapAndContentVisibility();
+      // Logic khi toggle "Báo cáo vi phạm" thay đổi trạng thái
+      // ...
+    });
+
+    updateMapAndContentVisibility();
+  });
+</script>
+
 <script>
   mapboxgl.accessToken = 'pk.eyJ1IjoiZGluaGNodW9uZyIsImEiOiJjbG93bHo4MzQwc2FrMmpvbWpqd2hkNGN0In0.Qi7aQ4q5Ew0PVGADd-v2ew';
 
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v12',
-    center: [106.6974, 10.7757],
+    center: [106.6991, 10.7738],
     zoom: 14,
   });
 
@@ -56,14 +135,16 @@
   map.addControl(new mapboxgl.NavigationControl());
 
   var mapDiv = document.getElementById('map');
-  mapDiv.style.cssText = 'margin: 5px 10px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 80%; height: 85%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
+  mapDiv.style.cssText = 'margin: 5px 0px 0px 0px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 100%; height: 100%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
+
+
+  const qcToggle = document.getElementById('qcToggle');
+  const violationToggle = document.getElementById('violationToggle');
 
   let currentMarker = null;
   let hoverPopup = null;
   const coordinatesList = {{{ coordinatesList }}};
   const positionInfo = {{{ positionInfo }}};
-
-  console.log(positionInfo)
 
   map.on('load', function () {
     map.addSource('ads', {
@@ -94,9 +175,9 @@
       paint: {
         // Use step expressions (https://docs.mapbox.com/style-spec/reference/expressions/#step)
         // with three steps to implement three types of circles:
-        //   * Blue, 20px circles when point count is less than 100
-        //   * Yellow, 30px circles when point count is between 100 and 750
-        //   * Pink, 40px circles when point count is greater than or equal to 750
+        // * Blue, 20px circles when point count is less than 100
+        // * Yellow, 30px circles when point count is between 100 and 750
+        // * Pink, 40px circles when point count is greater than or equal to 750
         'circle-color': [
           'step',
           ['get', 'point_count'],
@@ -148,62 +229,62 @@
         },
       });
     });
-    
 
-  map.on('click', 'clusters', (e) => {
-    const features = map.queryRenderedFeatures(e.point, {
-      layers: ['clusters']
+
+    map.on('click', 'clusters', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['clusters']
+      });
+      const clusterId = features[0].properties.cluster_id;
+      map.getSource('ads').getClusterExpansionZoom(
+        clusterId,
+        (err, zoom) => {
+          if (err) return;
+
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom
+          });
+        }
+      );
     });
-    const clusterId = features[0].properties.cluster_id;
-    map.getSource('ads').getClusterExpansionZoom(
-      clusterId,
-      (err, zoom) => {
-        if (err) return;
+    // When a click event occurs on a feature in
+    // the unclustered-point layer, open a popup at
+    // the location of the feature, with
+    // description HTML from its properties.
+    map.on('click', 'unclustered-point', (e) => {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const mag = e.features[0].properties.mag;
+      const tsunami =
+        e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
 
-        map.easeTo({
-          center: features[0].geometry.coordinates,
-          zoom: zoom
-        });
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
-    );
-  });
-  // When a click event occurs on a feature in
-  // the unclustered-point layer, open a popup at
-  // the location of the feature, with
-  // description HTML from its properties.
-  map.on('click', 'unclustered-point', (e) => {
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const mag = e.features[0].properties.mag;
-    const tsunami =
-      e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+    });
 
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-  });
-
-  addAds(coordinatesList);
+    addAds(coordinatesList);
 
 
-  map.on('click', handleMapClick);
+    map.on('click', handleMapClick);
 
-  map.on('mouseover', 'custom-marker', function (e) {
-    console.log('Mouse entered custom marker.');
-    map.getCanvas().style.cursor = 'pointer';
+    map.on('mouseover', 'custom-marker', function (e) {
+      console.log('Mouse entered custom marker.');
+      map.getCanvas().style.cursor = 'pointer';
 
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const info = positionInfo[e.features[0].properties.idx];
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const info = positionInfo[e.features[0].properties.idx];
 
-    createHoverPopup(coordinates, info);
-  });
+      createHoverPopup(coordinates, info);
+    });
 
-  map.on('mouseleave', 'custom-marker', function () {
-    console.log('Mouse left custom marker.');
-    map.getCanvas().style.cursor = '';
-    if (hoverPopup) {
-      hoverPopup.remove();
-    }
-  });
+    map.on('mouseleave', 'custom-marker', function () {
+      console.log('Mouse left custom marker.');
+      map.getCanvas().style.cursor = '';
+      if (hoverPopup) {
+        hoverPopup.remove();
+      }
+    });
   });
 
   function createHoverPopup(coordinates, info) {
@@ -212,10 +293,10 @@
     }
 
     const popupContent = `<h3>${info.HinhThuc}</h3>
-    <p>Loại vị trí: ${info.LoaiViTri}</p>
-    <p>Địa chỉ: ${info.DiaChi}</p>
-    <p>Khu vực: ${info.KhuVuc}</p>
-    <p>Quy hoạch: ${info.QuyHoach ? 'Đã quy hoạch' : 'Chưa quy hoạch'}</p>`;
+<p>Loại vị trí: ${info.LoaiViTri}</p>
+<p>Địa chỉ: ${info.DiaChi}</p>
+<p>Khu vực: ${info.KhuVuc}</p>
+<p>Quy hoạch: ${info.QuyHoach ? 'Đã quy hoạch' : 'Chưa quy hoạch'}</p>`;
 
     hoverPopup = new mapboxgl.Popup({ offset: 25 })
       .setLngLat(coordinates)
@@ -224,28 +305,31 @@
   }
 
   const emptyDataPopupTemplate = `
-    <div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
-        <div class="flex flex-row text-[#014361] gap-1">
-            <div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <div class="font-semibold">
-                Thông tin bảng quảng cáo
-            </div>
-        </div>
-        <div class="flex flex-col text-[#014361] pl-7">
-            <div class="font-semibold">
-                Chưa có dữ liệu!
-            </div>
-            <div>
-                Vui lòng chọn điểm trên bảng đồ để xem.
-            </div>
-        </div>
+<div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
+  <div class="flex flex-row text-[#014361] gap-1">
+    <div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
     </div>
+    <div class="font-semibold">
+      Thông tin bảng quảng cáo
+    </div>
+  </div>
+  <div class="flex flex-col text-[#014361] pl-7">
+    <div class="font-semibold">
+      Chưa có dữ liệu!
+    </div>
+    <div>
+      Vui lòng chọn điểm trên bảng đồ để xem.
+    </div>
+  </div>
+</div>
 `;
 
 
@@ -287,29 +371,7 @@
           // Lấy địa chỉ (loại bỏ tên địa điểm để chỉ lấy địa chỉ)
           address = addressArray.slice(1).join(',').trim();
         }
-        const popupContent = `
-<div class="bg-[#EDF7ED] -mx-3 -my-4 py-1 px-1">
-  <div class="flex flex-row gap-1">
-      <div>
-          <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <path fill="#2A502C" fill-rule="evenodd"
-                  d="M3 10a7 7 0 019.307-6.611 1 1 0 00.658-1.889 9 9 0 105.98 7.501 1 1 0 00-1.988.22A7 7 0 113 10zm14.75-5.338a1 1 0 00-1.5-1.324l-6.435 7.28-3.183-2.593a1 1 0 00-1.264 1.55l3.929 3.2a1 1 0 001.38-.113l7.072-8z" />
-          </svg>
-      </div>
-      <div class="font-semibold text-[#2A502C]">
-          Thông tin địa điểm
-      </div>
-  </div>
-  <div class="flex flex-col text-[#2A502C] pl-7">
-      <div class="font-semibold ">
-                  ${locationName}
-      </div>
-      <div>
-        ${address}
-      </div>
-  </div>
-</div>
-`;
+        const popupContent = createReportViolationButton(coordinates.lng, coordinates.lat, locationName, address);
         createPopup(coordinates, popupContent);
       })
       .catch(error => {
@@ -317,7 +379,63 @@
       });
   }
 
-
+  function createReportViolationButton(lng, lat, locationName, address) {
+    return `
+<div class="bg-[#EDF7ED] -mx-3 -my-4 py-1 px-1">
+  <div class="flex flex-row gap-1">
+    <div>
+      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path fill="#2A502C" fill-rule="evenodd"
+          d="M3 10a7 7 0 019.307-6.611 1 1 0 00.658-1.889 9 9 0 105.98 7.501 1 1 0 00-1.988.22A7 7 0 113 10zm14.75-5.338a1 1 0 00-1.5-1.324l-6.435 7.28-3.183-2.593a1 1 0 00-1.264 1.55l3.929 3.2a1 1 0 001.38-.113l7.072-8z" />
+      </svg>
+    </div>
+    <div class="font-semibold text-[#2A502C]">
+      Thông tin địa điểm
+    </div>
+  </div>
+  <div class="flex flex-col text-[#2A502C] pl-7">
+    <div class="font-semibold ">
+      ${locationName}
+    </div>
+    <div>
+      ${address}
+    </div>
+  </div>
+  <div class="flex flex-row">
+    <div class="mr-auto">
+    </div>
+    <div class="text-[#D32E2E] flex flex-row border-[#D32E2E] border-2 rounded-sm ml-auto px-1 py-1">
+      <div>
+        <svg fill="#D32E2E" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z" />
+        </svg>
+      </div>
+      <div class="text-[#D32E2E] font-semibold">
+        <div class="report-violation-btn" onclick="reportCorViolation(${lng}, ${lat})">
+          <button class="report-btn">BÁO CÁO VI PHẠM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> `
+  }
+  function reportCorViolation(lng, lat) {
+    console.log('Vĩ độ báo cáo vi phạm:', lng);
+    console.log('\nKinh độ báo cáo vi phạm:', lat);
+    // Thực hiện các xử lý khác với tọa độ này
+  }
+  function reportViolation(adID) {
+    const adInfo = positionInfo.find(info => info.Id === adID);
+    if (adInfo) {
+      const coordinates = [adInfo.Longitude, adInfo.Latitude]; // Thay thế bằng tọa độ thực tế của điểm quảng cáo
+      console.log('Tọa độ của điểm quảng cáo:', coordinates);
+      console.log('ID: ', adID);
+      // Thực hiện các xử lý khác với tọa độ này, ví dụ: hiển thị thông báo, gửi yêu cầu báo cáo, vv.
+    } else {
+      console.log('Không tìm thấy thông tin cho ID quảng cáo:', adID);
+    }
+  }
   function createPopup(coordinates, content) {
     new mapboxgl.Popup()
       .setLngLat(coordinates)
@@ -352,52 +470,55 @@
   function createPopupHTML(info) {
     return new mapboxgl.Popup()
       .setHTML(`
-    <div class="flex flex-col -mx-3 -my-4 py-3 px-4 bg-[#E5F6FD] text-[#014361]">
-    <div class="flex flex-col">
-        <div class="font-semibold">
-            ${info.LoaiBangQC}
-        </div>
-        <div>
-            ${info.DiaChi}, ${info.KhuVuc}
-        </div>
+<div class="flex flex-col -mx-3 -my-4 py-3 px-4 bg-[#E5F6FD] rounded-lg text-[#014361]">
+  <div class="flex flex-col">
+    <div class="font-semibold">
+      ${info.LoaiBangQC}
     </div>
-    <div class="flex flex-col">
-        <div>
-            Kích thước: ${info.KichThuoc}
-        </div>
-        <div>
-            Số lượng: ${info.SoLuong}
-        </div>
-        <div>
-            Hình thức: ${info.HinhThucQC}
-        </div>
-        <div>
-            Phân loại: ${info.LoaiViTri}
-        </div>
+    <div>
+      ${info.DiaChi}, ${info.KhuVuc}
     </div>
-    <div class="flex flex-row gap-8">
-        <div class="mr-auto px-1 py-1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-        </div>
-        <div class="text-[#D32E2E] flex flex-row border-[#D32E2E] border-2 rounded-lg ml-auto px-1 py-1">
-            <div>
-                <svg fill="#D32E2E" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z" />
-                </svg>
-            </div>
-            <div class="text-[#D32E2E] font-semibold">
-                BÁO CÁO VI PHẠM
-            </div>
-        </div>
+  </div>
+  <div class="flex flex-col">
+    <div>
+      Kích thước: ${info.KichThuoc}
     </div>
+    <div>
+      Số lượng: ${info.SoLuong}
+    </div>
+    <div>
+      Hình thức: ${info.HinhThucQC}
+    </div>
+    <div>
+      Phân loại: ${info.LoaiViTri}
+    </div>
+  </div>
+  <div class="flex flex-row gap-8">
+    <div class="mr-auto px-1 py-1">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div class="text-[#D32E2E] flex flex-row border-[#D32E2E] border-2 rounded-lg ml-auto px-1 py-1">
+      <div>
+        <svg fill="#D32E2E" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z" />
+        </svg>
+      </div>
+      <div class="text-[#D32E2E] font-semibold">
+        <a class="report-violation-btn" onclick="reportViolation(${info.Id})" href="/report?id=${info.Id}"
+          role="button">
+          BÁO CÁO VI PHẠM
+        </a>
+      </div>
+    </div>
+  </div>
 </div>`);
   }
 </script>
