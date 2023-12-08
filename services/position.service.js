@@ -4,7 +4,6 @@ export default {
     findAll() {
         return db('ads');
     },
-
     add(entity) {
         return db('ads').insert(entity);
     },
@@ -20,5 +19,5 @@ export default {
     async countAll() {
         const list = await db('ads').count('Id as amount');
         return list[0].amount;
-    }
+    },
 }
