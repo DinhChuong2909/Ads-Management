@@ -11,8 +11,8 @@ import flash from "connect-flash";
 // PAGES
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
-import phuongRouter from "./routes/phuongRouter.js";
-// import publicRouter from "./routes/people/homeRouter.js";
+import phuongRouter from "./routes/phuongRouter.js"
+import publicRouter from "./routes/people/homeRouter.js"
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);

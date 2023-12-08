@@ -3,23 +3,23 @@ import db from '../utils/db.js'
 // Sửa nó thành db report
 export default {
     findAll() {
-        return db('vitriqc');
+        return db('report');
     },
 
     add(entity) {
-        return db('vitriqc').insert(entity);
+        return db('report').insert(entity);
     },
     findById(id) {
-        return db('vitriqc').where('Id', id).first();
+        return db('report').where('Id', id).first();
     },
     del(id) {
-        return db('vitriqc').where('Id', id).del();
+        return db('report').where('Id', id).del();
     },
     findFromId(limit, offset) {
-        return db('vitriqc').limit(limit).offset(offset);
+        return db('report').limit(limit).offset(offset);
     },
     async countAll() {
-        const list = await db('vitriqc').count('Id as amount');
+        const list = await db('report').count('Id as amount');
         return list[0].amount;
     }
 }
