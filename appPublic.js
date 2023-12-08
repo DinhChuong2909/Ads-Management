@@ -28,11 +28,13 @@ const hbs = expbs.create({
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/static", express.static("static"));
 app.use("/report", reportRouter)
 app.get("/report", reportRouter)
 // app.use("/", allDataRouter)
+app.post("/", homeRouter);
 app.get("/", homeRouter);
 app.get("/about", aboutRouter);
 
