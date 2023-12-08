@@ -2,9 +2,8 @@ import db from '../utils/db.js'
 
 export default {
     findAll() {
-        return db('vitriqc');
+        return db('vitriqc').orderBy('Id', 'asc');
     },
-
     add(entity) {
         return db('vitriqc').insert(entity);
     },
@@ -15,10 +14,10 @@ export default {
         return db('vitriqc').where('Id', id).del();
     },
     findFromId(limit, offset) {
-        return db('vitriqc').limit(limit).offset(offset);
+        return db('vitriqc').orderBy('Id', 'asc').limit(limit).offset(offset);
     },
     async countAll() {
         const list = await db('vitriqc').count('Id as amount');
         return list[0].amount;
-    }
+    },
 }
