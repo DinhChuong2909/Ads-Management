@@ -22,11 +22,16 @@
     >
       <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
 
-      <div> 
+      <div>
         <ul class="flex flex-row justify-center gap-6">
           <li><a href="/government">Government</a></li>
           <li><a href="/">Public</a></li>
           <li><a href="/about">About Us</a></li>
+          <li>
+            <form action="/logout?_method=DELETE" method="POST">
+              <button type="submit">Log Out</button>
+            </form>
+          </li>
         </ul>
       </div>
     </div>
