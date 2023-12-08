@@ -9,7 +9,7 @@ import path from "path";
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
 import phuongRouter from "./routes/phuongRouter.js"
-import publicRouter from "./routes/people/homeRouter.js"
+// import publicRouter from "./routes/people/homeRouter.js"
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
@@ -30,7 +30,7 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 
 app.use("/static", express.static("static"));
-app.get("/", publicRouter);
+// app.get("/", publicRouter);
 app.get("/government", governmentRouter);
 app.get("/about", aboutRouter);
 app.get("/phuong", phuongRouter);
