@@ -1,7 +1,9 @@
 import express from "express";
 import positionService from "../services/position.service.js";
+import posPendingService from "../services/posPending.service.js";
 
 const router = express.Router();
+router.use(express.urlencoded({ extended: true }));
 
 router.get('/phuong', async function (req, res) {
   try {
@@ -56,12 +58,12 @@ router.get('/phuong/diadiem', async function (req, res) {
 }
 });
 
-// admin/categories/edit?id=6
-router.get('/diadiem/edit', async function (req, res) {
+// diadiem/edit?id=6
+router.get('/phuong/diadiem/edit', async function (req, res) {
   const id = req.query.id || 0;
-  const category = await categoryService.findById(id);
+  const category = await positionService.findById(id);
   if (!category) {
-    return res.redirect('/phuong/categories');
+    return res.redirect('phuong/diadiem');
   }
   
   res.render('phuong/diadiem/edit', {
@@ -79,14 +81,30 @@ router.post('/patch', async function (req, res) {
   res.redirect('/phuong/categories');
 })
 
-router.get('/add', function (req, res) {
-  res.render('phuong/add');
-})
+router.post('/phuong/diadiem/edit/add', async function (req, res) {
+  try {
+    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungChinhSua, HinhAnh } = req.body;
+    console.log(req.body)
+    // Tạo một object chứa dữ liệu từ form
+    const updatePos = {
+      PosID,
+      HinhThucQC,
+      DiaChi,
+      Phuong,
+      KhuVuc,
+      NoiDungChinhSua,
+      HinhAnh,
+      ThoiGian: new Date() // Thêm thời gian hiện tại khi người dùng submit
+    };
 
-router.post('/add', async function (req, res) {
-  const ret = await categoryService.add(req.body);
-  console.log(ret); // inserted id
+    // Gọi phương thức từ service để thêm dữ liệu vào cơ sở dữ liệu
+    await posPendingService.add(updatePos); // Sử dụng posPendingService thay vì positionService
 
-  res.render('phuong/add');
-})
+    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
+  } catch (error) {
+    console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
+    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
+  }
+});
+
 export default router;

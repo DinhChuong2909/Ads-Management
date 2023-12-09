@@ -1,69 +1,70 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <script
-      src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
-    ></script>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
+  <script
+    src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
+  ></script>
 
-    <title>SCH Map</title>
-    <style>
-      #map { position: absolute; top: 50; bottom: 50; width: 100%; } #resizeMap
-      { width: 50%; }
-    </style>
-  </head>
-  <body>
-    <div
-      class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center"
-    >
-      <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
+  <title>SCH Map</title>
+  <style>
+    #map { position: absolute; top: 50; bottom: 50; width: 100%; } #resizeMap
+    { width: 50%; }
+  </style>
+</head>
+<body>
+  <div
+    class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center"
+  >
+    <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
 
-      <div> 
-        <ul class="flex flex-row justify-center gap-6">
-          <li><a href="/government">Government</a></li>
-          <li><a href="/">Public</a></li>
-          <li><a href="/about">About Us</a></li>
-        </ul>
+    <div> 
+      <ul class="flex flex-row justify-center gap-6">
+        <li><a href="/government">Government</a></li>
+        <li><a href="/">Public</a></li>
+        <li><a href="/about">About Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="flex flex-row w-full">
+    <div class="w-[20%] h-full bg-blue absolute">
+      <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
+        <a
+          href="/phuong"
+          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+        >
+          <img class="w-6 h-6" src="/static/img/dashboard.svg" />
+          <span class="text-sm font-semibold">Dashboard</span>
+        </a>
+        <a
+          href="/phuong/diadiem"
+          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+        >
+          <img class="w-6 h-6" src="/static/img/diadiem.svg" />
+          <span class="text-sm font-semibold">Quản lý địa điểm QC</span>
+        </a>
+        <a
+          href="/phuong/qlquan"
+          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+        >
+          <img class="w-6 h-6" src="/static/img/baocao.svg" />
+          <span class="text-sm font-semibold">Xử lý báo cáo</span>
+        </a>
+        <a
+          href="/phuong/qluser"
+          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+        >
+          <img class="w-6 h-6" src="/static/img/capphep.svg" />
+          <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
+        </a>
       </div>
     </div>
-    <div class="flex flex-row w-full">
-      <div class="w-[20%] h-full bg-blue absolute">
-        <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
-          <a
-            href="/phuong"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
-            <img class="w-6 h-6" src="/static/img/dashboard.svg" />
-            <span class="text-sm font-semibold">Dashboard</span>
-          </a>
-          <a
-            href="/phuong/diadiem"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
-            <img class="w-6 h-6" src="/static/img/diadiem.svg" />
-            <span class="text-sm font-semibold">Quản lý địa điểm QC</span>
-          </a>
-          <a
-            href="/phuong/qlquan"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
-            <img class="w-6 h-6" src="/static/img/baocao.svg" />
-            <span class="text-sm font-semibold">Xử lý báo cáo</span>
-          </a>
-          <a
-            href="/phuong/qluser"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
-            <img class="w-6 h-6" src="/static/img/capphep.svg" />
-            <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
-          </a>
-        </div>
-      </div>
-      <div class="w-[75%] ml-auto">{{{body}}}</div>
-    </div>
-  </body>
+    <div class="w-[75%] ml-auto">{{{body}}}</div>
+  </div>
+</body>
 </html>

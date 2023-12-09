@@ -28,13 +28,18 @@ const hbs = expbs.create({
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/static", express.static("static"));
 // app.get("/", publicRouter);
+app.use("/phuong", phuongRouter);
+app.get("/phuong/diadiem/edit", phuongRouter);
+
 app.get("/government", governmentRouter);
 app.get("/about", aboutRouter);
 app.get("/phuong", phuongRouter);
 app.get("/phuong/diadiem", phuongRouter);
+app.post("/phuong/diadiem/edit/add", phuongRouter);
 
 
 // START 
