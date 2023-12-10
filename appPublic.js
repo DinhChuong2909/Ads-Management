@@ -9,7 +9,6 @@ import path from "path";
 import homeRouter from "./routes/people/homeRouter.js"
 import reportRouter from "./routes/people/reportRouter.js"
 import aboutRouter from "./routes/aboutRouter.js"
-import allDataRouter from "./routes/people/allDataRouter.js"
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
