@@ -1,5 +1,6 @@
 import express from "express";
 import positionService from "../../services/position.service.js";
+import reportService from "../../services/report.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -10,37 +11,44 @@ router.get('/report', async function (req, res) {
   console.log(id)
   const category = await positionService.findById(id);
   if (!category) {
-    return res.redirect('/report');
+    return res.redirect('/');
   }
 
+  console.log('Category:', category); // In ra toàn bộ category để kiểm tra dữ liệu
+  console.log('Lat:', category.Lat); // In ra giá trị của Lat từ category
+  console.log('Lng:', category.Lng); // In ra giá trị của Lng từ category
+
+
   res.render('people/report', {
-    category: category
+    infoId: id,
+    category: category,
+    Lat: category.Lat,
+    Lng: category.Lng
   });
 })
 
-// Endpoint để nhận dữ liệu từ form
-router.post('/', async (req, res) => {
+router.post('/report', async function (req, res) {
   try {
-    const { HinhThucReport, HoTen, Email, SDT, NoiDungBaoCao, HinhAnh } = req.body;
-    console.log(HinhThucReport)
-    // Tạo một object chứa dữ liệu từ form
-    const reportData = {
-      HinhThucReport,
-      HoTen,
-      Email,
-      SDT,
-      NoiDungBaoCao,
-      HinhAnh,
-      ThoiGian: new Date() // Thêm thời gian hiện tại khi người dùng submit
+    const entity = {
+      Lat: req.body.Lat,
+      Lng: req.body.Lng,
+      AdsID: req.body.adId,
+      HinhThucReport: req.body.form__type,
+      HoTen: req.body.form__name,
+      Email: req.body.form__email,
+      SDT: req.body.form__phone__number,
+      NoiDungBaoCao: req.body.textarea,
+      HinhAnh: req.body.form__file,
+      ThoiGian: req.body.form__timestamp
     };
+    console.log(entity)
+    const ret = await reportService.add(entity);
+    console.log(ret);
 
-    // Gọi phương thức từ service để thêm dữ liệu vào cơ sở dữ liệu
-    await reportService.add(reportData); // Sử dụng reportService thay vì positionService
-
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
+    res.redirect('/');
   } catch (error) {
-    console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
+    // Xử lý lỗi nếu có
+    res.status(500).json({ error: error.message });
   }
 });
 
