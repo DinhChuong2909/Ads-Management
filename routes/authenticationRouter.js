@@ -7,11 +7,12 @@ import {
 } from "../utils/passport.js";
 import initializePassport from "../utils/passport.js";
 import authenticationService from "../services/authentication.service.js";
+import convertStringToDate from "../utils/dateConverter.js";
 
 const router = express.Router();
 
 // INIT PASSPORT
-router.use((req, res, next) => {
+router.get("/", (req, res, next) => {
   initializePassport(
     passport,
     (email) => authenticationService.findByEmail(email),
@@ -51,7 +52,6 @@ router.get("/register", checkNotAuthenticated, (req, res) => {
 
 router.post("/register", checkNotAuthenticated, async (req, res) => {
   try {
-    console.log("req body:", req.body);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = {
@@ -59,7 +59,7 @@ router.post("/register", checkNotAuthenticated, async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       hashed_password: hashedPassword,
-      date_of_birth: req.body.dob,
+      date_of_birth: convertStringToDate(req.body.dob),
       phone: req.body.phone,
       role: req.body.role,
     };
@@ -67,7 +67,7 @@ router.post("/register", checkNotAuthenticated, async (req, res) => {
 
     res.redirect("/login");
   } catch (error) {
-    console.log("post failed", error);
+    console.log("Post failed", error);
     res.redirect("/register");
   }
 });

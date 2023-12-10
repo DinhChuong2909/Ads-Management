@@ -1,23 +1,10 @@
 import db from "../utils/db.js";
 
-/*
-{
-    id: '1702228082953',
-    name: 'Lê Hoàng Sang',
-    email: 'lhsang64.contact@gmail.com',
-    hashedpassword: '$2a$10$jKTacpCfCT6IgsTFMiyB4.ok3MyT6OHVeHG4mlV48JaZIX4.jnApa',
-    dateOfBirth: '12/12/2023',
-    phone: '0356021521',
-    role: 'cbsovhtt'
-  }
-*/
-
 export default {
   findAll() {
     return db("accounts").orderBy("id", "asc");
   },
   add(entity) {
-    console.log("add entity:", entity);
     return db("accounts").insert(entity);
   },
   findById(id) {
