@@ -31,9 +31,10 @@ app.set("views", "./views");
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/static", express.static("static"));
-app.use("/report", reportRouter)
-app.get("/report", reportRouter)
-// app.use("/", allDataRouter)
+app.use("/report", reportRouter);
+app.get("/report", reportRouter);
+app.post("/report", reportRouter);
+// app.use("/", allDataRouter);
 app.post("/", homeRouter);
 app.get("/", homeRouter);
 app.get("/about", aboutRouter);
