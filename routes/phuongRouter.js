@@ -1,10 +1,12 @@
 import express from "express";
 import positionService from "../services/position.service.js";
 import posPendingService from "../services/posPending.service.js";
+import licenseService from "../services/LicensingRequest.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
+// dashboard/Map
 router.get('/phuong', async function (req, res) {
   try {
     const list = await positionService.findAll();
@@ -28,6 +30,7 @@ router.get('/phuong', async function (req, res) {
   }
 });
 
+// Bang vi tri cac diem
 router.get('/phuong/diadiem', async function (req, res) {
   try {
   const limit = 10;
@@ -63,22 +66,12 @@ router.get('/phuong/diadiem/edit', async function (req, res) {
   const id = req.query.id || 0;
   const category = await positionService.findById(id);
   if (!category) {
-    return res.redirect('phuong/diadiem');
+    return res.redirect('/phuong/diadiem');
   }
   
   res.render('phuong/diadiem/edit', {
     category: category
   });
-})
-
-router.post('/del', async function (req, res) {
-  await categoryService.del(req.body.CatID);
-  res.redirect('/phuong/categories');
-})
-
-router.post('/patch', async function (req, res) {
-  await categoryService.patch(req.body);
-  res.redirect('/phuong/categories');
 })
 
 router.post('/phuong/diadiem/edit/add', async function (req, res) {
@@ -99,6 +92,85 @@ router.post('/phuong/diadiem/edit/add', async function (req, res) {
 
     // Gọi phương thức từ service để thêm dữ liệu vào cơ sở dữ liệu
     await posPendingService.add(updatePos); // Sử dụng posPendingService thay vì positionService
+
+    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
+  } catch (error) {
+    console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
+    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
+  }
+});
+
+router.get('/phuong/capphep', async function (req, res) {
+  try {
+  const limit = 10;
+  const page = req.query.page || 1;
+  const offset = (page - 1) * limit;
+
+  const total = await licenseService.countAll();
+  const nPages = Math.ceil(total / limit);
+  const pageNumbers = [];
+  for (let i = 1; i <= nPages; i++) {
+    pageNumbers.push({
+      value: i,
+      isActive: i === +page
+    });
+  }
+
+  const list = await licenseService.findFromId(limit, offset);
+  res.render('phuong/capphep/list', {
+    list: list,
+    empty: list.length === 0,
+    pageNumbers: pageNumbers,
+    layout: 'phuongPage',
+  });
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+}
+});
+
+router.get('/phuong/capphep/edit', async function (req, res) {
+  
+  res.render('phuong/capphep/edit', {
+    
+  });
+})
+
+router.post('/capphep/del', async function (req, res) {
+  try {
+    console.log(req.body);
+    const id = req.body.ID; // Get the id from the query parameters
+    console.log(id);
+    await licenseService.del(id);
+    res.redirect('/capphep');
+    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
+  } catch (error) {
+    console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
+    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
+  }
+})
+
+router.post('/capphep/edit/add', async function (req, res) {
+  try {
+    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc} = req.body;
+    console.log(req.body)
+    // Tạo một object chứa dữ liệu từ form
+    const updatePos = {
+      PosID,
+      HinhThucQC,
+      DiaChi,
+      Phuong,
+      KhuVuc,
+      NoiDungQC,
+      HinhAnh,
+      Email,
+      NgayBatDau,
+      NgayKetThuc, // Thêm thời gian hiện tại khi người dùng submit
+    };
+
+    // Gọi phương thức từ service để thêm dữ liệu vào cơ sở dữ liệu
+    await licenseService.add(updatePos);
 
     res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
   } catch (error) {
