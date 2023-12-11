@@ -2,6 +2,7 @@ import express from "express";
 import positionService from "../services/position.service.js";
 import posPendingService from "../services/posPending.service.js";
 import licenseService from "../services/LicensingRequest.service.js";
+import reportService from "../services/report.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -100,6 +101,53 @@ router.post('/phuong/diadiem/edit/add', async function (req, res) {
   }
 });
 
+// /phuong/baocao
+router.get('/phuong/baocao', async function (req, res) {
+  try {
+    const limit = 10;
+    const page = req.query.page || 1;
+    const offset = (page - 1) * limit;
+  
+    const total = await reportService.countAll();
+    const nPages = Math.ceil(total / limit);
+    const pageNumbers = [];
+    for (let i = 1; i <= nPages; i++) {
+      pageNumbers.push({
+        value: i,
+        isActive: i === +page
+      });
+    }
+  
+    const list = await reportService.findFromId(limit, offset);
+    res.render('phuong/baocao/list', {
+      list: list,
+      empty: list.length === 0,
+      pageNumbers: pageNumbers,
+      layout: 'phuongPage',
+    });
+    } catch (error) {
+      // Xử lý lỗi nếu cần
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/phuong/baocao/detail', async function (req, res) {
+  const id = req.query.id || 0;
+  console.log(id)
+  const category = await reportService.findById(id);
+  console.log(category);
+  if (!category) {
+    return res.redirect('/phuong/baocao');
+  }
+  
+  res.render('phuong/baocao/detail', {
+    layout: 'phuongPage',
+    category: category
+  });
+});
+
+// /phuong/capphep
 router.get('/phuong/capphep', async function (req, res) {
   try {
   const limit = 10;
@@ -131,10 +179,7 @@ router.get('/phuong/capphep', async function (req, res) {
 });
 
 router.get('/phuong/capphep/edit', async function (req, res) {
-  
-  res.render('phuong/capphep/edit', {
-    
-  });
+  res.render('phuong/capphep/edit', {});
 })
 
 router.post('/capphep/del', async function (req, res) {

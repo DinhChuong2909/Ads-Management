@@ -143,12 +143,16 @@ app.get("/about", aboutRouter);
 
 // Phuong
 app.get("/phuong", phuongRouter);
+
 app.get("/phuong/diadiem", phuongRouter);
 app.get("/phuong/diadiem/edit", phuongRouter);
 app.post("/phuong/diadiem/edit/add", phuongRouter);
 
+app.get("/phuong/baocao", phuongRouter);
+app.get("/phuong/baocao/detail", phuongRouter);
+
 app.get("/phuong/capphep", phuongRouter);
-app.get("/phuong/capphep/edit", phuongRouter);
+app.get("/phuong/capphep/detail", phuongRouter);
 // START
 function serverStartedHandler() {
   console.log("Web server is running at http://localhost:3000");
