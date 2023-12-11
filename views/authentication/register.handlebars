@@ -6,9 +6,9 @@
   #105BBD; border-radius: 0.25rem; }
 </style>
 
-<div class="w-screen h-[90%] flex justify-center items-center">
+<div class="w-screen h-[90vh] flex justify-center items-center">
   <div
-    class="w-56 h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 shadow-xl rounded-lg flex flex-col justify-center items-center"
+    class="w-56 h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center"
   >
     <h1 class="text-2xl font-medium text-center">Register</h1>
     <form
@@ -70,13 +70,6 @@
       </div>
       <div>
         <label class="text-sm font-medium text-gray-900" for="dob">Date of birth</label>
-        {{! <input
-          class="h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300"
-          type="date"
-          id="dob"
-          name="dob"
-          required
-        /> }}
         <div class="relative max-w-sm">
           <div
             class="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none"
@@ -99,7 +92,7 @@
             id="dob"
             name="dob"
             required
-            class="h-7 w-full ps-10 p-1 mt-0.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            class="h-7 w-full ps-10 mt-0.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
             placeholder="Your birthday"
           />
         </div>
@@ -130,7 +123,7 @@
         </select>
       </div>
       <button
-        class="text-lg font-light px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-1"
+        class="text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-1"
         type="submit"
       >Register</button>
     </form>
@@ -141,11 +134,11 @@
   ></script>
 
   <script>
-    function validatePasswords() { var password =
+    /* eslint-disable */ function validatePasswords() { var password =
     document.getElementById("password").value; var confirmPassword =
     document.getElementById("confirmPassword").value; var passwordMatchMessage =
     document.getElementById("passwordMatchMessage"); if (password !==
     confirmPassword) { passwordMatchMessage.textContent = "Passwords do not
-    match" } else { passwordMatchMessage.textContent = ""; } }
+    match"; } else { passwordMatchMessage.textContent = ""; } }
   </script>
 </div>

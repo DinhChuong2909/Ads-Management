@@ -5,22 +5,18 @@ import { fileURLToPath } from "url";
 import expbs from "express-handlebars";
 import passport from "passport";
 import path from "path";
-import moment from 'moment'
+import moment from "moment";
 
 import flash from "connect-flash";
 import methodOverride from "method-override";
 import session from "express-session";
-import bcrypt from "bcryptjs";
-
-// UTILS
-import initializePassport from "./utils/passport.js";
-import { checkAuthenticated, checkNotAuthenticated } from "./utils/passport.js";
 
 // PAGES
 import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
 import phuongRouter from "./routes/phuongRouter.js";
 // import publicRouter from "./routes/people/homeRouter.js"
+import authenticationRouter from "./routes/authenticationRouter.js";
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
@@ -28,39 +24,24 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
-// USER DB (TEMP)
-const users = [];
-
-// INIT PASSPORT
-initializePassport(
-  passport,
-  (email) => users.find((user) => user.email === email),
-  (id) => users.find((user) => user.id === id)
-);
-
-var DateFormats = {
-  short: "DD MMMM - YYYY",
-  long: "dddd DD.MM.YYYY HH:mm"
-};
-
 // HANDLEBARS
 const hbs = expbs.create({
   defaultLayout: "main",
   layoutsDir: path.join(__dirname, "views/layouts"), // change layout folder name
   partialsDir: path.join(__dirname, "views/pieces"), // change partials folder name
   helpers: {
-    formatDate: function(datetime, format) {
-        if (moment) {
-            format = DateFormats[format] || format;
-            return moment(datetime).format(format);
-        } else {
-            return datetime;
-        }
+    formatDate: function (datetime, format) {
+      if (moment) {
+        format = DateFormats[format] || format;
+        return moment(datetime).format(format);
+      } else {
+        return datetime;
+      }
     },
     eq: function (a, b, options) {
       return a === b ? options.fn(this) : options.inverse(this);
     },
-  }
+  },
 });
 
 // SETTING ENGINE
@@ -69,71 +50,28 @@ app.set("view engine", "handlebars");
 app.set("views", "./views");
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(flash());
 app.use(
   session({
     secret: "SangChuongHuyKTPM2AdsMng",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {},
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(methodOverride("_method"));
 
 // CHECK AUTHENTICATED
-app.get("/", checkAuthenticated, (req, res) => {
-  res.render("phuong", { name: req.user.name });
-});
-app.get("/login", checkNotAuthenticated, (req, res) => {
-  res.render("authentication/signIn");
-});
-app.post(
-  "/login",
-  checkNotAuthenticated,
-  passport.authenticate("local", {
-    successRedirect: "/phuong",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
-app.get("/register", checkNotAuthenticated, (req, res) => {
-  res.render("authentication/register");
-});
-app.post("/register", checkNotAuthenticated, async (req, res) => {
-  try {
-    console.log("req body:", req.body);
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-      dateOfBirth: req.body.dob,
-      phone: phone,
-      role: role,
-    });
-    res.redirect("/login");
-  } catch (error) {
-    console.log("post failed", error);
-    res.redirect("/register");
-  }
-  console.log("Users: ", users);
-});
-
-app.delete("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(500).send("Error logging out");
-    }
-    res.redirect("/login");
-  });
-});
+app.get("/", authenticationRouter);
+app.get("/login", authenticationRouter);
+app.post("/login", authenticationRouter);
+app.get("/register", authenticationRouter);
+app.post("/register", authenticationRouter);
+app.delete("/logout", authenticationRouter);
 
 // PAGE ROUTERS
-
 app.use("/static", express.static("static"));
 // app.get("/", publicRouter);
 app.use("/phuong", phuongRouter);
