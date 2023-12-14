@@ -16,7 +16,14 @@ import governmentRouter from "./routes/governmentRouter.js";
 import aboutRouter from "./routes/aboutRouter.js";
 import phuongRouter from "./routes/phuongRouter.js";
 // import publicRouter from "./routes/people/homeRouter.js"
-import authenticationRouter from "./routes/authenticationRouter.js";
+
+// AUTHENTICATION ROUTERS
+import authenticationRouter from "./routes/authentication/index.js";
+import forgotPasswordRouter from "./routes/authentication/forgotPassword.js";
+import loginRouter from "./routes/authentication/login.js";
+import registerRouter from "./routes/authentication/register.js";
+import updateRouter from "./routes/authentication/update.js";
+import logoutRouter from "./routes/authentication/logout.js";
 
 // DIRNAME
 const __filename = fileURLToPath(import.meta.url);
@@ -65,17 +72,18 @@ app.use(methodOverride("_method"));
 
 // CHECK AUTHENTICATED
 app.get("/", authenticationRouter);
-
-app.get("/login", authenticationRouter);
-app.post("/login", authenticationRouter);
-
-app.get("/register", authenticationRouter);
-app.post("/register", authenticationRouter);
-
-app.get("/updatePassword", authenticationRouter);
-app.post("/updatePassword", authenticationRouter);
-
-app.delete("/logout", authenticationRouter);
+app.get("/login", loginRouter);
+app.post("/login", loginRouter);
+app.get("/register", registerRouter);
+app.post("/register", registerRouter);
+app.get("/update-password", updateRouter);
+app.post("/update-password", updateRouter);
+app.get("/update-information", updateRouter);
+app.post("/update-information", updateRouter);
+app.get("/forgot-password", forgotPasswordRouter);
+app.post("/enter-otp", forgotPasswordRouter);
+app.post("/reset-password", forgotPasswordRouter);
+app.delete("/logout", logoutRouter);
 
 // PAGE ROUTERS
 app.use("/static", express.static("static"));

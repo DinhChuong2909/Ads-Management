@@ -21,14 +21,17 @@ export default {
   updateName(id, newName) {
     return db("accounts").where("id", id).update({ name: newName });
   },
-  updateBirth(id, newBirth) {
-    return db("accounts").where("id", id).update({ day_of_birth: newBirth });
+  updateDOB(id, newBirth) {
+    return db("accounts").where("id", id).update({ date_of_birth: newBirth });
   },
   updateEmail(id, newEmail) {
     return db("accounts").where("id", id).update({ email: newEmail });
   },
   updatePhone(id, newPhone) {
     return db("accounts").where("id", id).update({ phone: newPhone });
+  },
+  updateOtp(id, newOtp) {
+    return db("accounts").where("id", id).update({ otp: newOtp });
   },
   del(id) {
     return db("accounts").where("id", id).del();

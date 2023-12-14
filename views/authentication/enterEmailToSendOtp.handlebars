@@ -2,12 +2,12 @@
   <div
     class="w-56 h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center"
   >
-    <h1 class="text-2xl py-2 font-medium text-center">Login</h1>
+    <h1 class="text-2xl py-2 font-medium text-center">Enter your email</h1>
     {{#if messages.error}}
       {{messages.error}}
     {{/if}}
     <form
-      action="/login"
+      action="/enter-otp"
       method="POST"
       class="flex flex-col justify-center items-center gap-2"
     >
@@ -24,33 +24,12 @@
           required
         />
       </div>
-      <div>
-        <label
-          class="text-sm font-medium text-gray-900"
-          for="password"
-        >Password</label>
-        <input
-          class="h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300"
-          type="password"
-          id="password"
-          name="password"
-          required
-        />
-      </div>
       <div class="flex flex-col gap-2 text-white mt-1">
         <button
           class="text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center"
           type="submit"
           onclick="{showToast}"
-        >Login</button>
-        <a
-          class="text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center"
-          href="/register"
-        >Register</a>
-        <a
-          class="text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center"
-          href="/forgot-password"
-        >Forget</a>
+        >Send OTP</button>
       </div>
     </form>
   </div>
