@@ -30,14 +30,14 @@ function initialize(passport, getUserByEmail, getUserById) {
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log(req, "next");
+    // console.log(req, "next");
     return next();
   }
   res.redirect("/login");
 }
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log(req, "redirect to /phuong");
+    // console.log(req, "redirect to /phuong");
     return res.redirect("/phuong");
   }
   next();

@@ -65,10 +65,16 @@ app.use(methodOverride("_method"));
 
 // CHECK AUTHENTICATED
 app.get("/", authenticationRouter);
+
 app.get("/login", authenticationRouter);
 app.post("/login", authenticationRouter);
+
 app.get("/register", authenticationRouter);
 app.post("/register", authenticationRouter);
+
+app.get("/updatePassword", authenticationRouter);
+app.post("/updatePassword", authenticationRouter);
+
 app.delete("/logout", authenticationRouter);
 
 // PAGE ROUTERS

@@ -72,6 +72,29 @@ router.post("/register", checkNotAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/updatePassword", checkAuthenticated, (req, res) => {
+  res.render("authentication/updatePassword");
+});
+
+router.post("/updatePassword", checkAuthenticated, async (req, res) => {
+  try {
+    const hashedNewPassword = await bcrypt.hash(req.body.password, 10);
+    const user = await authenticationService.findByEmail(req.body.email);
+
+    await authenticationService.updatePassword(user.id, hashedNewPassword);
+
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).send("Error logging out");
+      }
+      res.redirect("/login");
+    });
+  } catch (error) {
+    console.log("Post failed", error);
+    res.redirect("/updatePassword");
+  }
+});
+
 router.delete("/logout", (req, res) => {
   req.logout((err) => {
     if (err) {
