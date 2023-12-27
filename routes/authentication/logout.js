@@ -1,14 +1,14 @@
-import express from "express";
+import express from 'express'
 
-const router = express.Router();
+const router = express.Router()
 
-router.delete("/logout", (req, res) => {
+router.post('/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
-      return res.status(500).send("Error logging out");
+      return res.status(500).send('Error logging out')
     }
-    res.redirect("/login");
-  });
-});
+    res.redirect('/login')
+  })
+})
 
-export default router;
+export default router

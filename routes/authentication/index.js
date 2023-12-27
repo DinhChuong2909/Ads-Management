@@ -1,30 +1,29 @@
-import express from "express";
-import passport from "passport";
-import { checkAuthenticated } from "../../utils/passport.js";
-import initializePassport from "../../utils/passport.js";
-import authenticationService from "../../services/authentication.service.js";
+import express from 'express'
+import passport from 'passport'
+import { checkAuthenticated } from '../../utils/passport.js'
+import authenticationService from '../../services/authentication.service.js'
 
-const router = express.Router();
+const router = express.Router()
 
 // INIT PASSPORT
-router.get("/", (req, res, next) => {
+router.get('/', (req, res, next) => {
   initializePassport(
     passport,
     (Email) => authenticationService.findByEmail(Email),
     (ID) => authenticationService.findById(ID)
-  );
-  next();
-});
+  )
+  next()
+})
 
-router.get("/", checkAuthenticated, (req, res) => {
-  if (red.body.Role === "cbsovhtt") {
-  } else if (req.body.Role === "cbquan") {
-    res.render("quan");
-  } else if (req.body.Role === "cbphuong") {
-    res.render("phuong");
+router.get('/', checkAuthenticated, (req, res) => {
+  if (red.body.Role === 'cbsovhtt') {
+  } else if (req.body.Role === 'cbquan') {
+    res.render('quan')
+  } else if (req.body.Role === 'cbphuong') {
+    res.render('phuong')
   } else {
-    res.redirect("/register");
+    res.redirect('/register')
   }
-});
+})
 
-export default router;
+export default router

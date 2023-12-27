@@ -11,7 +11,7 @@
  Target Server Version : 50739 (5.7.39)
  File Encoding         : 65001
 
- Date: 27/12/2023 16:23:07
+ Date: 27/12/2023 23:43:43
 */
 
 SET NAMES utf8mb4;
@@ -40,8 +40,8 @@ CREATE TABLE `accounts` (
 BEGIN;
 INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (1, 'Vũ Đình Chương', 'vdchuong21@clc.fitus.edu.vn', '$2a$10$0LQHd6fTQfAjAz5OYtRc/uz5eVm5FvjibnYgXfCFWlwe4aW9FATZi', '2023-11-06', '0356021522', 'cbsovhtt', '');
 INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (2, 'Nguyễn Quốc Huy', 'nqhuy21@clc.fitus.edu.vn', '$2a$10$s7t/oaak6rOwKTEyp0OO8.hNziyrHxLaD9F.adk1pr4DB4hq//Hcm', '2023-11-20', '0356021523', 'cbsovhtt', '');
-INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (3, 'Lê Hoàng Sang', 'lhsang64.contact@gmail.com', '$2a$10$WUbysMySR9mimjMabUx8k.mxLUzhfTQGNoqBGDZZpmPb4zKidnASG', '2023-11-20', '1234', 'cbsovhtt', NULL);
-INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (1655, 'Lê Hoàng Sang', 'lhsang21@clc.fitus.edu.vn', '$2a$10$oVG.1pcYQ0ssTrB32gwYeOYUraF2BLHyzoNajMXIVOw07OSQtuuS6', '2023-10-29', '0356021521', 'cbsovhtt', NULL);
+INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (3, 'Lê Hoàng Sang', 'lhsang64.contact@gmail.com', '$2a$10$zM37frDb1MLCwZffv7yDeey/ojMUqJv4VejFvB/dfs3C82d0c2Mue', '2023-11-20', '1234', 'cbsovhtt', '391069');
+INSERT INTO `accounts` (`ID`, `Name`, `Email`, `Hashed_password`, `Date_of_birth`, `Phone`, `Role`, `OTP`) VALUES (8922, 'Lê Hoàng Sang', 'lhsang21@clc.fitus.edu.vn', '$2a$10$IfRa8aWkwf8KU.68PKDGUuZHwDJfkkgRIzf1Rz4rr6PbTGxDCPbfW', '2023-11-07', '0356021521', 'cbsovhtt', NULL);
 COMMIT;
 
 -- ----------------------------
