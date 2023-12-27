@@ -10,17 +10,17 @@ const router = express.Router();
 router.get("/", (req, res, next) => {
   initializePassport(
     passport,
-    (email) => authenticationService.findByEmail(email),
-    (id) => authenticationService.findById(id)
+    (Email) => authenticationService.findByEmail(Email),
+    (ID) => authenticationService.findById(ID)
   );
   next();
 });
 
 router.get("/", checkAuthenticated, (req, res) => {
-  if (red.body.role === "cbsovhtt") {
-  } else if (req.body.role === "cbquan") {
+  if (red.body.Role === "cbsovhtt") {
+  } else if (req.body.Role === "cbquan") {
     res.render("quan");
-  } else if (req.body.role === "cbphuong") {
+  } else if (req.body.Role === "cbphuong") {
     res.render("phuong");
   } else {
     res.redirect("/register");

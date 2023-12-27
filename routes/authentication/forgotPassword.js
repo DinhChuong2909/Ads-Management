@@ -10,26 +10,26 @@ router.get("/forgot-password", (req, res) => {
 });
 
 router.post("/enter-otp", checkNotAuthenticated, async (req, res) => {
-  const user = await authenticationService.findByEmail(req.body.email);
+  const user = await authenticationService.findByEmail(req.body.Email);
 
   if (user) {
     res.render("authentication/enterPassword");
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    await authenticationService.updateOtp(user.id, otp);
+    await authenticationService.updateOtp(user.ID, otp);
 
-    sendOtpEmail(req.body.email, otp);
+    sendOtpEmail(req.body.Email, otp);
   } else {
     res.render("authentication/error");
   }
 });
 
 router.post("/reset-password", checkNotAuthenticated, async (req, res) => {
-  const { otp } = req.body;
-  const user = await authenticationService.findByEmail(req.body.email);
+  const { OTP } = req.body;
+  const user = await authenticationService.findByEmail(req.body.Email);
 
-  if (user && user.otp && user.otp.toString() === otp.toString()) {
-    await authenticationService.updateOtp(user.id, null);
+  if (user && user.OTP && user.OTP.toString() === OTP.toString()) {
+    await authenticationService.updateOtp(user.ID, null);
 
     res.render("authentication/updatePassword");
   } else {

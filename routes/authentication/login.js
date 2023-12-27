@@ -11,6 +11,9 @@ router.get("/login", checkNotAuthenticated, (req, res) => {
 router.post(
   "/login",
   checkNotAuthenticated,
+  (req) => {
+    console.log("Body login req:", req.body);
+  },
   passport.authenticate("local", {
     successRedirect: "/phuong",
     failureRedirect: "/login",

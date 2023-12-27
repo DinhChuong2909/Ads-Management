@@ -12,16 +12,16 @@ router.get("/register", checkNotAuthenticated, (req, res) => {
 
 router.post("/register", checkNotAuthenticated, async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await bcrypt.hash(req.body.Password, 10);
 
     const user = {
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      hashed_password: hashedPassword,
-      date_of_birth: convertStringToDate(req.body.dob),
-      phone: req.body.phone,
-      role: req.body.role,
+      ID: Date.now().toString().slice(-4),
+      Name: req.body.Name,
+      Email: req.body.Email,
+      Hashed_password: hashedPassword,
+      Date_of_birth: convertStringToDate(req.body.DOB),
+      Phone: req.body.Phone,
+      Role: req.body.Role,
     };
     await authenticationService.add(user);
 

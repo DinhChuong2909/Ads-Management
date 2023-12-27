@@ -12,10 +12,10 @@ router.get("/update-password", checkAuthenticated, (req, res) => {
 
 router.post("/update-password", checkAuthenticated, async (req, res) => {
   try {
-    const hashedNewPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await authenticationService.findByEmail(req.body.email);
+    const hashedNewPassword = await bcrypt.hash(req.body.Password, 10);
+    const user = await authenticationService.findByEmail(req.body.Email);
 
-    await authenticationService.updatePassword(user.id, hashedNewPassword);
+    await authenticationService.updatePassword(user.ID, hashedNewPassword);
 
     req.logout((err) => {
       if (err) {
@@ -35,12 +35,12 @@ router.get("/update-information", checkAuthenticated, (req, res) => {
 
 router.post("/update-information", checkAuthenticated, async (req, res) => {
   try {
-    const user = await authenticationService.findByEmail(req.body.currentemail);
+    const user = await authenticationService.findByEmail(req.body.CurrentEmail);
 
-    const newName = req.body.name;
-    const newEmail = req.body.email;
-    const newDOB = convertStringToDate(req.body.dob);
-    const newPhone = req.body.phone;
+    const newName = req.body.Name;
+    const newEmail = req.body.Email;
+    const newDOB = convertStringToDate(req.body.DOB);
+    const newPhone = req.body.Phone;
 
     async function updateIfValid(value, updateFunction) {
       if (value !== undefined && value !== null && value !== "") {
@@ -48,18 +48,18 @@ router.post("/update-information", checkAuthenticated, async (req, res) => {
       }
     }
     await updateIfValid(newName, () =>
-      authenticationService.updateName(user.id, newName)
+      authenticationService.updateName(user.ID, newName)
     );
     await updateIfValid(newEmail, () =>
-      authenticationService.updateEmail(user.id, newEmail)
+      authenticationService.updateEmail(user.ID, newEmail)
     );
     if (newDOB instanceof Date && !isNaN(newDOB)) {
       await updateIfValid(newDOB, () =>
-        authenticationService.updateDOB(user.id, newDOB)
+        authenticationService.updateDOB(user.ID, newDOB)
       );
     }
     await updateIfValid(newPhone, () =>
-      authenticationService.updatePhone(user.id, newPhone)
+      authenticationService.updatePhone(user.ID, newPhone)
     );
   } catch (error) {
     console.log("Post failed", error);

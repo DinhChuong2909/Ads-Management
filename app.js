@@ -105,6 +105,7 @@ app.get("/phuong/baocao/detail", phuongRouter);
 
 app.get("/phuong/capphep", phuongRouter);
 app.get("/phuong/capphep/detail", phuongRouter);
+
 // START
 function serverStartedHandler() {
   console.log("Web server is running at http://localhost:3000");
