@@ -39,7 +39,7 @@ router.get('/phuong/diadiem', async function (req, res) {
   const offset = (page - 1) * limit;
   const phuong = 1;
 
-  const total = await positionService.countAll(phuong);
+  const total = await positionService.countAll();
   const nPages = Math.ceil(total / limit);
   const pageNumbers = [];
   for (let i = 1; i <= nPages; i++) {
