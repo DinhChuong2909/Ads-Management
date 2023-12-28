@@ -1,8 +1,8 @@
 import express from "express";
-import positionService from "../services/position.service.js";
-import posPendingService from "../services/posPending.service.js";
-import licenseService from "../services/LicensingRequest.service.js";
-import reportService from "../services/report.service.js";
+import positionService from "../../services/position.service.js";
+import posPendingService from "../../services/posPending.service.js";
+import licenseService from "../../services/LicensingRequest.service.js";
+import reportService from "../../services/report.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));

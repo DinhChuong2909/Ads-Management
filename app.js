@@ -12,7 +12,8 @@ import session from 'express-session'
 // PAGES
 import governmentRouter from './routes/governmentRouter.js'
 import aboutRouter from './routes/aboutRouter.js'
-import phuongRouter from './routes/phuongRouter.js'
+import phuongRouter from './routes/phuong/phuongRouter.js'
+import quanRouter from './routes/quan/quanRouter.js'
 // import publicRouter from "./routes/people/homeRouter.js"
 
 // AUTHENTICATION ROUTERS
@@ -98,6 +99,16 @@ app.get('/phuong/baocao', phuongRouter)
 app.get('/phuong/baocao/detail', phuongRouter)
 app.get('/phuong/capphep', phuongRouter)
 app.get('/phuong/capphep/detail', phuongRouter)
+
+// Quan
+app.get('/quan', quanRouter)
+app.get('/quan/diadiem', quanRouter)
+app.get('/quan/diadiem/edit', quanRouter)
+app.post('/quan/diadiem/edit/add', quanRouter)
+app.get('/quan/baocao', quanRouter)
+app.get('/quan/baocao/detail', quanRouter)
+app.get('/quan/capphep', quanRouter)
+app.get('/quan/capphep/detail', quanRouter)
 
 // START
 function serverStartedHandler() {
