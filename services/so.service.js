@@ -24,6 +24,21 @@ export default {
   add(entity) {
     return db("quan").insert(entity);
   },
+  findAdsType(limit, offset) {
+    return db("ads").distinct('LoaiBangQC').limit(limit).offset(offset);
+  },
+  findFromAdsType(type, limit, offset) {
+    return db("ads").where('LoaiBangQC', type).orderBy('ID', 'asc').limit(limit).offset(offset);
+  },
+  async countAdsType() {
+    const list = await db("ads").distinct('LoaiBangQC');
+    return list.length;
+  },
+  async countFromAdsType(type) {
+    const list = await db("ads").where('LoaiBangQC', type).count("Id as amount");
+    return list.length;  
+  },
+
   //   findById(id) {
   //     return db("quan").where("ID", id).first();
   //   },

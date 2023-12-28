@@ -123,6 +123,8 @@ app.get('/quan/capphep/detail', quanRouter)
 app.get('/so', soRouter)
 app.get('/so/quan', soRouter)
 app.get('/so/quan/:quan', soRouter)
+app.get('/so/quangcao', soRouter)
+app.get('/so/quangcao/:type', soRouter)
 
 // START
 function serverStartedHandler() {

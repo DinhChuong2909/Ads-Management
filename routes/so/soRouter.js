@@ -92,5 +92,66 @@ router.get('/so/quan/:quan', async function (req, res) {
     }
 });
 
+router.get('/so/quangcao', async function (req, res) {
+    try {
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await soService.countAdsType();
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await soService.findAdsType(limit, offset);
+        res.render('so/quangcao/list', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/quangcao/:type', async function (req, res) {
+    try {
+        const type = req.params.type;
+
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await soService.countFromAdsType(type);
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await soService.findFromAdsType(type, limit, offset);
+        res.render('so/quangcao/detail', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 export default router;
