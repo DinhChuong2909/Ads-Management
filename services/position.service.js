@@ -4,6 +4,12 @@ export default {
     findAll() {
         return db('ads').orderBy('Id', 'asc');
     },
+    findPhuong(phuong, quan) {
+        return db('ads').orderBy('Id', 'asc').where('KhuVuc', quan).where('Phuong', phuong);
+    },
+    findQuan(quan) {
+        return db('ads').orderBy('Id', 'asc').where('KhuVuc', quan);
+    },
     add(entity) {
         return db('ads').insert(entity);
     },
