@@ -30,6 +30,11 @@ const __dirname = dirname(__filename)
 
 const app = express()
 
+var DateFormats = {
+  short: "DD MMMM - YYYY",
+  long: "dddd DD.MM.YYYY HH:mm"
+};
+
 // HANDLEBARS
 const hbs = expbs.create({
   defaultLayout: 'main',
@@ -100,6 +105,9 @@ app.get('/phuong/baocao', phuongRouter)
 app.get('/phuong/baocao/detail', phuongRouter)
 app.get('/phuong/capphep', phuongRouter)
 app.get('/phuong/capphep/detail', phuongRouter)
+app.post('/phuong/capphep/del', phuongRouter)
+app.post('/phuong/capphep/edit/add', phuongRouter)
+app.get('/phuong/capphep/edit/', phuongRouter)
 
 // Quan
 app.get('/quan', quanRouter)
