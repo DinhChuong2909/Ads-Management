@@ -109,7 +109,7 @@ router.get('/so/quangcao', async function (req, res) {
         }
         
         const list = await soService.findAdsType(limit, offset);
-        res.render('so/quangcao/list', {
+        res.render('so/loaiQuangCao/list', {
             list: list,
             empty: list.length === 0,
             pageNumbers: pageNumbers,
@@ -141,7 +141,69 @@ router.get('/so/quangcao/:type', async function (req, res) {
         }
         
         const list = await soService.findFromAdsType(type, limit, offset);
-        res.render('so/quangcao/detail', {
+        res.render('so/loaiQuangCao/detail', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/diemdat', async function (req, res) {
+    try {
+        const quyhoach = 0;
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await positionService.countDiemDat(quyhoach);
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await positionService.findDiemDat(limit, offset);
+        res.render('so/diemdat/list', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/bangqc', async function (req, res) {
+    try {
+        const quyhoach = 1;
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await positionService.countBangQC(quyhoach);
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await positionService.findBangQC(limit, offset);
+        res.render('so/bangqc/list', {
             list: list,
             empty: list.length === 0,
             pageNumbers: pageNumbers,
