@@ -16,8 +16,8 @@ export default {
     findFromId(limit, offset) {
         return db('ads').orderBy('Id', 'asc').limit(limit).offset(offset);
     },
-    async countAll() {
-        const list = await db('ads').count('Id as amount');
+    async countAll(phuong) {
+        const list = await db('ads').where('Phuong', phuong).count('Id as amount');
         return list[0].amount;
     },
 }

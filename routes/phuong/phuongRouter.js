@@ -37,8 +37,9 @@ router.get('/phuong/diadiem', async function (req, res) {
   const limit = 10;
   const page = req.query.page || 1;
   const offset = (page - 1) * limit;
+  const phuong = 1;
 
-  const total = await positionService.countAll();
+  const total = await positionService.countAll(phuong);
   const nPages = Math.ceil(total / limit);
   const pageNumbers = [];
   for (let i = 1; i <= nPages; i++) {
@@ -182,13 +183,13 @@ router.get('/phuong/capphep/edit', async function (req, res) {
   res.render('phuong/capphep/edit', {});
 })
 
-router.post('/capphep/del', async function (req, res) {
+router.post('/phuong/capphep/del', async function (req, res) {
   try {
     console.log(req.body);
     const id = req.body.ID; // Get the id from the query parameters
     console.log(id);
     await licenseService.del(id);
-    res.redirect('/capphep');
+    res.redirect('/phuong/capphep');
     res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
