@@ -15,6 +15,7 @@ import aboutRouter from './routes/aboutRouter.js'
 import phuongRouter from './routes/phuong/phuongRouter.js'
 import quanRouter from './routes/quan/quanRouter.js'
 import quanQuanTamRouter from './routes/quan/quanTamRouter.js'
+import soRouter from './routes/so/soRouter.js'
 // import publicRouter from "./routes/people/homeRouter.js"
 
 // AUTHENTICATION ROUTERS
@@ -29,6 +30,11 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const app = express()
+
+var DateFormats = {
+  short: 'DD MMMM - YYYY',
+  long: 'dddd DD.MM.YYYY HH:mm',
+}
 
 // HANDLEBARS
 const hbs = expbs.create({
@@ -100,6 +106,9 @@ app.get('/phuong/baocao', phuongRouter)
 app.get('/phuong/baocao/detail', phuongRouter)
 app.get('/phuong/capphep', phuongRouter)
 app.get('/phuong/capphep/detail', phuongRouter)
+app.post('/phuong/capphep/del', phuongRouter)
+app.post('/phuong/capphep/edit/add', phuongRouter)
+app.get('/phuong/capphep/edit/', phuongRouter)
 
 // Quan
 app.get('/quan', quanRouter)
@@ -113,6 +122,13 @@ app.get('/quan/capphep/detail', quanRouter)
 app.get('/quan-select-quantam', quanQuanTamRouter)
 app.post('/quan-select-quantam', quanQuanTamRouter)
 app.get('/quan-select-quantam/detail', quanQuanTamRouter)
+
+// So
+app.get('/so', soRouter)
+app.get('/so/quan', soRouter)
+app.get('/so/quan/:quan', soRouter)
+app.get('/so/quangcao', soRouter)
+app.get('/so/quangcao/:type', soRouter)
 
 // START
 function serverStartedHandler() {
