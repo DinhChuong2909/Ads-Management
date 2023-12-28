@@ -12,7 +12,6 @@ passport.use(
         return cb(null, false, { message: 'No user with that email' })
       }
       try {
-        console.log(Password, user)
         if (bcrypt.compareSync(Password, user.Hashed_password)) {
           console.log('Login success')
           return cb(null, user)

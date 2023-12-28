@@ -19,8 +19,8 @@
 </head>
 <body>
   {{> header}}
-  <div class="flex flex-row w-full">
-    <div class="w-[20%] h-full bg-blue absolute">
+  <div class="w-full flex flex-row p-8">
+    <div class="w-[20%] h-full bg-blue">
       <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
         <a
           href="/quan"
@@ -50,9 +50,16 @@
           <img class="w-6 h-6" src="/static/img/capphep.svg" />
           <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
         </a>
+        <a
+          href="/quan-select-quantam"
+          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+        >
+          <img class="w-6 h-6" src="/static/img/capphep.svg" />
+          <span class="text-sm font-semibold">View Specipic Wards</span>
+        </a>
       </div>
     </div>
-    <div class="w-[75%] ml-auto">{{{body}}}</div>
+    <div class="w-[80%]">{{{body}}}</div>
   </div>
 </body>
 </html>

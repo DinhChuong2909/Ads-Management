@@ -14,6 +14,7 @@ import governmentRouter from './routes/governmentRouter.js'
 import aboutRouter from './routes/aboutRouter.js'
 import phuongRouter from './routes/phuong/phuongRouter.js'
 import quanRouter from './routes/quan/quanRouter.js'
+import quanQuanTamRouter from './routes/quan/quanTamRouter.js'
 // import publicRouter from "./routes/people/homeRouter.js"
 
 // AUTHENTICATION ROUTERS
@@ -109,6 +110,9 @@ app.get('/quan/baocao', quanRouter)
 app.get('/quan/baocao/detail', quanRouter)
 app.get('/quan/capphep', quanRouter)
 app.get('/quan/capphep/detail', quanRouter)
+app.get('/quan-select-quantam', quanQuanTamRouter)
+app.post('/quan-select-quantam', quanQuanTamRouter)
+app.get('/quan-select-quantam/detail', quanQuanTamRouter)
 
 // START
 function serverStartedHandler() {
