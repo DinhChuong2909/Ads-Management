@@ -89,22 +89,28 @@
           </div>
           {{/eq}}
           {{#eq Duyet "1"}}
-          <div class="text-[#89A984]">
+          <div class="text-green-600">
             ĐÃ DUYỆT
           </div>
           {{/eq}}
         </td>
-        <td>
+        <td class="px-4 py-4 text-right">
+          {{#eq Duyet "1"}}
+            <button
+                href="#"
+                class="font-medium text-gray-400 dark:text-gray-500 cursor-not-allowed"
+            >Xoá</button>
+          {{else}}
           <form method="post" action="" id="deleteForm">
             <script>
-              function onSubmit(token) {
-                document.getElementById("deleteForm").submit();
+              function onSubmit(token) {  
+                  document.getElementById("deleteForm").submit();
               }
             </script>
             <input type="hidden" name="ID" value="{{ID}}">
-            <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              formaction="/phuong/capphep/del">Xoá</button>
+            <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" formaction="/quan/capphep/del">Xoá</button>
           </form>
+          {{/eq}}
         </td>
       </tr>
       {{/each}}

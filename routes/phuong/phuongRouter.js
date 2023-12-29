@@ -147,9 +147,9 @@ router.get('/phuong/baocao', async function (req, res) {
 
 router.get('/phuong/baocao/detail', async function (req, res) {
   const id = req.query.id || 0;
-  console.log(id)
+  // console.log(id)
   const category = await reportService.findById(id);
-  console.log(category);
+  // console.log(category);
   if (!category) {
     return res.redirect('/phuong/baocao');
   }
@@ -158,6 +158,19 @@ router.get('/phuong/baocao/detail', async function (req, res) {
     layout: 'phuongPage',
     category: category
   });
+});
+
+router.post('/phuong/baocao/detail/:id', async function(req, res)
+{
+  const id = req.params.id || 0;
+  console.log(id)
+  const xl = "1"
+  const ndxl = req.body.NoiDungXuLy;
+  
+  const temp = await reportService.updateXuLyByID(id, xl);
+  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+
+  res.redirect('/phuong')
 });
 
 // /phuong/capphep
@@ -207,15 +220,11 @@ router.get('/phuong/capphep/edit', async function (req, res) {
 
 router.post('/phuong/capphep/del', async function (req, res) {
   try {
-    console.log(req.body);
     const id = req.body.ID; // Get the id from the query parameters
-    console.log(id);
     await licenseService.del(id);
     res.redirect('/phuong/capphep');
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
   }
 })
 
