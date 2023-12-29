@@ -24,25 +24,32 @@ router.get('/so/statistics/select-ward-district', async function (req, res) {
       districtsList: allDistricts,
       wardsList: mergedArray,
     })
-  } catch (error) {}
+  } catch (error) { }
 })
 
-router.post('/so/statistics-ward/:ID', async function (req, res) {
+router.get('/so/statistics-ward/:ID', async function (req, res) {
   try {
     const wardId = req.params.ID || 0
     const data = await phuongService.findById(wardId)
     console.log(data)
     //render report data of this
-  } catch (error) {}
+  } catch (error) { }
 })
 
-router.post('/so/statistics-district/:ID', async function (req, res) {
+router.get('/so/statistics-district/:ID', async function (req, res) {
   try {
     const districtId = req.params.ID || 0
     const data = await quanService.findById(districtId)
     console.log(data)
     //render report data of this id
-  } catch (error) {}
+    res.render('so/thongke/statistics',
+      {
+        layout: 'soPage',
+        empty: listenerCount.length === 0,
+
+
+      })
+  } catch (error) { }
 })
 
 export default router

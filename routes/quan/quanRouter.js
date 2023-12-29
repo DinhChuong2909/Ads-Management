@@ -159,6 +159,18 @@ router.get('/quan/baocao/detail', async function (req, res) {
   })
 })
 
+router.post('/quan/baocao/detail/:id', async function (req, res) {
+  const id = req.params.id || 0;
+  console.log(id)
+  const xl = "1"
+  const ndxl = req.body.NoiDungXuLy;
+
+  const temp = await reportService.updateXuLyByID(id, xl);
+  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+
+  res.redirect('/quan')
+});
+
 // /quan/capphep
 router.get('/quan/capphep', async function (req, res) {
   try {
