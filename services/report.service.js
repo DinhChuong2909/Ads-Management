@@ -20,6 +20,12 @@ export default {
   findFromId(limit, offset) {
     return db('report').limit(limit).offset(offset)
   },
+  updateXuLyByID(id, xl) {
+    return db('report').where('STT', id).update('Xuly', xl)
+  },
+  updateNDXuLyByID(id, ndxl) {
+    return db('report').where('STT', id).update('NoiDungXuLy', ndxl)
+  },
   async countAll() {
     const list = await db('report').count('STT as amount')
     return list[0].amount

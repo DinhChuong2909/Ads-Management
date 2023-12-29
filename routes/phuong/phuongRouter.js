@@ -147,9 +147,9 @@ router.get('/phuong/baocao', async function (req, res) {
 
 router.get('/phuong/baocao/detail', async function (req, res) {
   const id = req.query.id || 0;
-  console.log(id)
+  // console.log(id)
   const category = await reportService.findById(id);
-  console.log(category);
+  // console.log(category);
   if (!category) {
     return res.redirect('/phuong/baocao');
   }
@@ -158,6 +158,19 @@ router.get('/phuong/baocao/detail', async function (req, res) {
     layout: 'phuongPage',
     category: category
   });
+});
+
+router.post('/phuong/baocao/detail/:id', async function(req, res)
+{
+  const id = req.params.id || 0;
+  console.log(id)
+  const xl = "1"
+  const ndxl = req.body.NoiDungXuLy;
+  
+  const temp = await reportService.updateXuLyByID(id, xl);
+  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+
+  res.redirect('/phuong')
 });
 
 // /phuong/capphep
