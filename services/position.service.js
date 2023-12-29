@@ -10,6 +10,12 @@ export default {
   findQuan(quan) {
     return db('ads').orderBy('Id', 'asc').where('KhuVuc', quan)
   },
+  findDiemDat(limit, offset) {
+    return db('ads').orderBy('Id', 'asc').where('QuyHoach', 0).limit(limit).offset(offset)
+  },
+  findBangQC(limit, offset) {
+    return db('ads').orderBy('Id', 'asc').where('QuyHoach', 1).limit(limit).offset(offset)
+  },
   add(entity) {
     return db('ads').insert(entity)
   },
@@ -39,4 +45,13 @@ export default {
     const list = await db('ads').where('KhuVuc', quan).where('Phuong', phuong).count('Id as amount')
     return list[0].amount
   },
+  async countDiemDat(quyhoach) {
+    const list = await db('ads').where('QuyHoach', quyhoach).count('Id as amount')
+    return list[0].amount
+  },
+  async countBangQC(quyhoach) {
+    const list = await db('ads').where('QuyHoach', quyhoach).count('Id as amount')
+    return list[0].amount
+  },
+  
 }

@@ -63,7 +63,7 @@ router.get('/quan-select-quantam/detail', async function (req, res) {
     return res.redirect('/quan-select-quantam')
   }
 
-  res.render('quan/duyetphuong/detail', {
+  res.render('phuong/baocao/detail', {
     layout: 'quanPage',
     category: category,
   })

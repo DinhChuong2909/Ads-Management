@@ -129,6 +129,8 @@ app.get('/so/quan', soRouter)
 app.get('/so/quan/:quan', soRouter)
 app.get('/so/quangcao', soRouter)
 app.get('/so/quangcao/:type', soRouter)
+app.get('/so/diemdat', soRouter)
+app.get('/so/bangqc', soRouter)
 
 // START
 function serverStartedHandler() {
