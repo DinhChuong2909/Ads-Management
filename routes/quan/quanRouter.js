@@ -165,7 +165,7 @@ router.get('/quan/capphep', async function (req, res) {
     }
 
     const list = await licenseService.findFromId(limit, offset)
-    res.render('phuong/capphep/list', {
+    res.render('quan/capphep/list', {
       list: list,
       empty: list.length === 0,
       pageNumbers: pageNumbers,

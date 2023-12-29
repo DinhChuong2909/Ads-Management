@@ -1,6 +1,7 @@
 import express from "express";
 import soService from "../../services/so.service.js";
 
+import posPendingService from "../../services/posPending.service.js";
 import positionService from "../../services/position.service.js";
 
 const router = express.Router();
@@ -215,5 +216,67 @@ router.get('/so/bangqc', async function (req, res) {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/so/diemdat', async function (req, res) {
+    try {
+        const quyhoach = 0;
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await positionService.countDiemDat(quyhoach);
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await positionService.findDiemDat(limit, offset);
+        res.render('so/diemdat/list', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
+    try {
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await posPendingService.countAll();
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+        
+        const list = await posPendingService.findAll(limit, offset);
+        res.render('so/list/yeuCauChinhSuaList', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 export default router;
