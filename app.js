@@ -135,6 +135,9 @@ app.get('/so/bangqc', soRouter)
 app.get('/so/statistics/select-ward-district', statisticsRouter)
 app.post('/so/statistics-district/:ID', statisticsRouter)
 app.post('/so/statistics-ward/:ID', statisticsRouter)
+app.get('/so/yeu-cau-chinh-sua', soRouter)
+app.get('/so/capphep', soRouter)
+app.post('/so/capphep/:id', soRouter)
 
 // START
 function serverStartedHandler() {

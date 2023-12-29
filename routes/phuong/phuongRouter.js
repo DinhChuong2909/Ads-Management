@@ -3,6 +3,8 @@ import positionService from "../../services/position.service.js";
 import posPendingService from "../../services/posPending.service.js";
 import licenseService from "../../services/LicensingRequest.service.js";
 import reportService from "../../services/report.service.js";
+import phuongService from "../../services/phuong.service.js";
+import quanService from "../../services/quan.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -12,11 +14,11 @@ router.get('/phuong', async function (req, res) {
   try {
     const list = await positionService.findAll();
     const coordinatesList = list.map(item => [item.Lng, item.Lat]); // Lấy tọa độ từ danh sách dữ liệu
-    
+
     // Lấy thông tin chi tiết của từng vị trí trong danh sách
     const positionInfoPromises = list.map(item => positionService.findById(item.Id));
     const positionInfo = await Promise.all(positionInfoPromises);
-  
+
     res.render('phuong/phuongMap', {
       layout: 'phuongPage',
       list: list,
@@ -34,33 +36,43 @@ router.get('/phuong', async function (req, res) {
 // Bang vi tri cac diem
 router.get('/phuong/diadiem', async function (req, res) {
   try {
-  const limit = 10;
-  const page = req.query.page || 1;
-  const offset = (page - 1) * limit;
-  const phuong = 1;
+    const limit = 10;
+    const page = req.query.page || 1;
+    const offset = (page - 1) * limit;
+    const phuong = 1;
 
-  const total = await positionService.countAll();
-  const nPages = Math.ceil(total / limit);
-  const pageNumbers = [];
-  for (let i = 1; i <= nPages; i++) {
-    pageNumbers.push({
-      value: i,
-      isActive: i === +page
+    const total = await positionService.countAll();
+    const nPages = Math.ceil(total / limit);
+    const pageNumbers = [];
+    for (let i = 1; i <= nPages; i++) {
+      pageNumbers.push({
+        value: i,
+        isActive: i === +page
+      });
+    }
+
+    const list = await positionService.findFromId(limit, offset);
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const phuong = await phuongService.findById(item.Phuong);
+        const quan = await quanService.findById(item.KhuVuc);
+        item.Phuong = phuong.Name;
+        item.KhuVuc = quan.Name;
+      }
+    }
+
+    res.render('phuong/diadiem/list', {
+      list: list,
+      empty: list.length === 0,
+      pageNumbers: pageNumbers,
+      layout: 'phuongPage',
     });
-  }
-
-  const list = await positionService.findFromId(limit, offset);
-  res.render('phuong/diadiem/list', {
-    list: list,
-    empty: list.length === 0,
-    pageNumbers: pageNumbers,
-    layout: 'phuongPage',
-  });
   } catch (error) {
     // Xử lý lỗi nếu cần
     console.error(error);
     res.status(500).send('Internal Server Error');
-}
+  }
 });
 
 // diadiem/edit?id=6
@@ -70,7 +82,7 @@ router.get('/phuong/diadiem/edit', async function (req, res) {
   if (!category) {
     return res.redirect('/phuong/diadiem');
   }
-  
+
   res.render('phuong/diadiem/edit', {
     category: category
   });
@@ -108,7 +120,7 @@ router.get('/phuong/baocao', async function (req, res) {
     const limit = 10;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
-  
+
     const total = await reportService.countAll();
     const nPages = Math.ceil(total / limit);
     const pageNumbers = [];
@@ -118,7 +130,7 @@ router.get('/phuong/baocao', async function (req, res) {
         isActive: i === +page
       });
     }
-  
+
     const list = await reportService.findFromId(limit, offset);
     res.render('phuong/baocao/list', {
       list: list,
@@ -126,10 +138,10 @@ router.get('/phuong/baocao', async function (req, res) {
       pageNumbers: pageNumbers,
       layout: 'phuongPage',
     });
-    } catch (error) {
-      // Xử lý lỗi nếu cần
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -141,7 +153,7 @@ router.get('/phuong/baocao/detail', async function (req, res) {
   if (!category) {
     return res.redirect('/phuong/baocao');
   }
-  
+
   res.render('phuong/baocao/detail', {
     layout: 'phuongPage',
     category: category
@@ -151,32 +163,42 @@ router.get('/phuong/baocao/detail', async function (req, res) {
 // /phuong/capphep
 router.get('/phuong/capphep', async function (req, res) {
   try {
-  const limit = 10;
-  const page = req.query.page || 1;
-  const offset = (page - 1) * limit;
+    const limit = 10;
+    const page = req.query.page || 1;
+    const offset = (page - 1) * limit;
 
-  const total = await licenseService.countAll();
-  const nPages = Math.ceil(total / limit);
-  const pageNumbers = [];
-  for (let i = 1; i <= nPages; i++) {
-    pageNumbers.push({
-      value: i,
-      isActive: i === +page
+    const total = await licenseService.countAll();
+    const nPages = Math.ceil(total / limit);
+    const pageNumbers = [];
+    for (let i = 1; i <= nPages; i++) {
+      pageNumbers.push({
+        value: i,
+        isActive: i === +page
+      });
+    }
+
+    const list = await licenseService.findFromId(limit, offset);
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const phuong = await phuongService.findById(item.Phuong);
+        const quan = await quanService.findById(item.KhuVuc);
+        item.Phuong = phuong.Name;
+        item.KhuVuc = quan.Name;
+      }
+    }
+
+    res.render('phuong/capphep/list', {
+      list: list,
+      empty: list.length === 0,
+      pageNumbers: pageNumbers,
+      layout: 'phuongPage',
     });
-  }
-
-  const list = await licenseService.findFromId(limit, offset);
-  res.render('phuong/capphep/list', {
-    list: list,
-    empty: list.length === 0,
-    pageNumbers: pageNumbers,
-    layout: 'phuongPage',
-  });
   } catch (error) {
     // Xử lý lỗi nếu cần
     console.error(error);
     res.status(500).send('Internal Server Error');
-}
+  }
 });
 
 router.get('/phuong/capphep/edit', async function (req, res) {
@@ -199,7 +221,7 @@ router.post('/phuong/capphep/del', async function (req, res) {
 
 router.post('/capphep/edit/add', async function (req, res) {
   try {
-    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc} = req.body;
+    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc } = req.body;
     console.log(req.body)
     // Tạo một object chứa dữ liệu từ form
     const updatePos = {

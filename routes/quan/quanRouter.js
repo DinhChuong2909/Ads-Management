@@ -3,6 +3,8 @@ import positionService from '../../services/position.service.js'
 import posPendingService from '../../services/posPending.service.js'
 import licenseService from '../../services/LicensingRequest.service.js'
 import reportService from '../../services/report.service.js'
+import phuongService from '../../services/phuong.service.js'
+import quanService from '../../services/quan.service.js'
 
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
@@ -49,6 +51,16 @@ router.get('/quan/diadiem', async function (req, res) {
     }
 
     const list = await positionService.findFromId(limit, offset)
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const phuong = await phuongService.findById(item.Phuong);
+        const quan = await quanService.findById(item.KhuVuc);
+        item.Phuong = phuong.Name;
+        item.KhuVuc = quan.Name;
+      }
+    }
+
     res.render('quan/diadiem/list', {
       list: list,
       empty: list.length === 0,
@@ -165,7 +177,17 @@ router.get('/quan/capphep', async function (req, res) {
     }
 
     const list = await licenseService.findFromId(limit, offset)
-    res.render('phuong/capphep/list', {
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const phuong = await phuongService.findById(item.Phuong);
+        const quan = await quanService.findById(item.KhuVuc);
+        item.Phuong = phuong.Name;
+        item.KhuVuc = quan.Name;
+      }
+    }
+
+    res.render('quan/capphep/list', {
       list: list,
       empty: list.length === 0,
       pageNumbers: pageNumbers,
