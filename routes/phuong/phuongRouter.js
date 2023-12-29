@@ -207,15 +207,11 @@ router.get('/phuong/capphep/edit', async function (req, res) {
 
 router.post('/phuong/capphep/del', async function (req, res) {
   try {
-    console.log(req.body);
     const id = req.body.ID; // Get the id from the query parameters
-    console.log(id);
     await licenseService.del(id);
     res.redirect('/phuong/capphep');
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
   }
 })
 
