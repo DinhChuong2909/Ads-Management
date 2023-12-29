@@ -1,0 +1,50 @@
+<div class='w-full mx-auto mt-8 flex flex-row gap-4 justify-center items-start'>
+  <div>
+    <h1 class='mt-4 mb-1 text-2xl'>Districts</h1>
+    <table class='w-[500px] bg-white border border-gray-300 rounded shadow-lg overflow-hidden'>
+      <thead>
+        <tr>
+          <th class='py-2 px-4 border-b'>District</th>
+          <th class='p-2 w-[200px] border-b'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each districtsList}}
+          <tr class='border-b'>
+            <td class='py-2 px-4 text-center'>{{this.Name}}</td>
+            <td class='p-2 flex justify-center items-center'>
+              <form action='/so/statistics-district/{{this.ID}}' method='POST'>
+                <button type='submit' class='text-blue-500 p-1'>View</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h1 class='mt-4 mb-1 text-2xl'>Wards</h1>
+    <table class='w-[700px] bg-white border border-gray-300 rounded shadow-lg overflow-hidden'>
+      <thead>
+        <tr>
+          <th class='py-2 px-4 border-b'>District</th>
+          <th class='py-2 px-4 border-b'>Ward</th>
+          <th class='py-2 w-[200px] border-b'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each wardsList}}
+          <tr class='border-b'>
+            <td class='py-2 px-4 text-center'>{{this.DistrictName}}</td>
+            <td class='py-2 px-4 text-center'>{{this.Name}}</td>
+            <td class='p-2 flex justify-center items-center'>
+              <form action='/so/statistics-ward/{{this.ID}}' method='POST'>
+                <button type='submit' class='text-blue-500 p-1'>View</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

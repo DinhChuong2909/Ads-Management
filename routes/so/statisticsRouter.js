@@ -1,46 +1,48 @@
-// Xem thống kê các báo cáo & cách thức xử lý của từng Phường, Quận -> Xang doing
+import express from 'express'
+import phuongService from '../../services/phuong.service.js'
+import quanService from '../../services/quan.service.js'
 
-import express from "express";
-import phuongService from "../../services/phuong.service";
-import quanService from "../../services/quan.service";
+const router = express.Router()
+router.use(express.urlencoded({ extended: true }))
 
-const router = express.Router();
-router.use(express.urlencoded({ extended: true }));
-
-// DONT DELETE, XANG DOING THIS
-
-router.get("/select-ward-district", async function (req, res) {
+router.get('/so/statistics/select-ward-district', async function (req, res) {
   try {
-    const allWards = await phuongService.findAll();
-    const allDistricts = await quanService.findAll();
+    const allDistricts = await quanService.findAll()
+    const allWards = await phuongService.findAll()
 
-    // render all list of Phuong & Quan
-    res.render("/so/wardAndDistrictSeleection", {
-      layout: "main",
-      wardsList: allWards,
+    console.log(allDistricts)
+    console.log(allWards)
+
+    const nameMap = new Map(allDistricts.map((item) => [item.ID, item.Name]))
+    const mergedArray = allWards.map((item) => ({
+      ...item,
+      DistrictName: nameMap.get(item.ThuocQuan),
+    }))
+
+    res.render('so/thongke/wardAndDistrictSelection', {
+      layout: 'soPage',
       districtsList: allDistricts,
-    });
+      wardsList: mergedArray,
+    })
   } catch (error) {}
-});
+})
 
-router.get("/statistics-ward:id", {
-  async function(req, res) {
-    try {
-      const id = req.params.id;
-      const data = await phuongService.findById(id);
-      //render data of this id
-    } catch (error) {}
-  },
-});
+router.post('/so/statistics-ward/:ID', async function (req, res) {
+  try {
+    const wardId = req.params.ID || 0
+    const data = await phuongService.findById(wardId)
+    console.log(data)
+    //render report data of this
+  } catch (error) {}
+})
 
-router.get("/statistics-district:id", {
-  async function(req, res) {
-    try {
-      const id = req.params.id;
-      const data = await quanService.findById(id);
-      //render data of this id
-    } catch (error) {}
-  },
-});
+router.post('/so/statistics-district/:ID', async function (req, res) {
+  try {
+    const districtId = req.params.ID || 0
+    const data = await quanService.findById(districtId)
+    console.log(data)
+    //render report data of this id
+  } catch (error) {}
+})
 
-export default router;
+export default router

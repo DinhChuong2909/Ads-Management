@@ -59,6 +59,7 @@ router.get('/quan-select-quantam/detail', async function (req, res) {
   console.log(id)
   const category = await reportService.findById(id)
   console.log(category)
+
   if (!category) {
     return res.redirect('/quan-select-quantam')
   }

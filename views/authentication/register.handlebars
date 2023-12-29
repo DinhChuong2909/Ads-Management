@@ -4,115 +4,113 @@
   appearance: none; width: 100%; padding: 0.5rem; border: 2px solid #105BBD; border-radius: 0.25rem; }
 </style>
 
-<div class='w-screen h-[90vh] flex justify-center items-center'>
-  <div
-    class='w-56 h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center'
+<div
+  class='w-56 h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center'
+>
+  <h1 class='text-2xl py-2 font-medium text-center'>Register</h1>
+  <form
+    action='/register'
+    method='POST'
+    class='flex flex-col justify-center items-center gap-2'
+    onsubmit='return validatePasswords()'
   >
-    <h1 class='text-2xl py-2 font-medium text-center'>Register</h1>
-    <form
-      action='/register'
-      method='POST'
-      class='flex flex-col justify-center items-center gap-2'
-      onsubmit='return validatePasswords()'
-    >
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='Name'>Name</label>
-        <input
-          class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
-          type='text'
-          id='Name'
-          name='Name'
-          required
-        />
-      </div>
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='Email'>Email</label>
-        <input
-          class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
-          type='email'
-          id='Email'
-          name='Email'
-          required
-        />
-      </div>
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='Password'>Password</label>
-        <input
-          class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
-          type='password'
-          id='Password'
-          name='Password'
-          required
-        />
-      </div>
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='ConfirmPassword'>Confirm password</label>
-        <input
-          class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
-          type='password'
-          id='ConfirmPassword'
-          name='ConfirmPassword'
-          required
-          oninput='validatePasswords()'
-        />
-        <span id='passwordMatchMessage' style='color: red;'></span>
-      </div>
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='DOB'>Date of birth</label>
-        <div class='relative max-w-sm'>
-          <div class='absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none'>
-            <svg
-              class='w-3.5 h-3.5 text-gray-500'
-              aria-hidden='true'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='currentColor'
-              viewBox='0 0 20 20'
-            >
-              <path
-                d='M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z'
-              />
-            </svg>
-          </div>
-          <input
-            datepicker
-            type='text'
-            id='DOB'
-            name='DOB'
-            required
-            class='h-7 w-full ps-10 mt-0.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500'
-            placeholder='Your birthday'
-          />
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='Name'>Name</label>
+      <input
+        class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
+        type='text'
+        id='Name'
+        name='Name'
+        required
+      />
+    </div>
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='Email'>Email</label>
+      <input
+        class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
+        type='email'
+        id='Email'
+        name='Email'
+        required
+      />
+    </div>
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='Password'>Password</label>
+      <input
+        class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
+        type='password'
+        id='Password'
+        name='Password'
+        required
+      />
+    </div>
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='ConfirmPassword'>Confirm password</label>
+      <input
+        class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
+        type='password'
+        id='ConfirmPassword'
+        name='ConfirmPassword'
+        required
+        oninput='validatePasswords()'
+      />
+      <span id='passwordMatchMessage' style='color: red;'></span>
+    </div>
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='DOB'>Date of birth</label>
+      <div class='relative max-w-sm'>
+        <div class='absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none'>
+          <svg
+            class='w-3.5 h-3.5 text-gray-500'
+            aria-hidden='true'
+            xmlns='http://www.w3.org/2000/svg'
+            fill='currentColor'
+            viewBox='0 0 20 20'
+          >
+            <path
+              d='M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z'
+            />
+          </svg>
         </div>
-      </div>
-      <div>
-        <label class='text-sm font-medium text-gray-900' for='Phone'>Phone number</label>
         <input
-          class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
-          type='tel'
-          id='Phone'
-          name='Phone'
+          datepicker
+          type='text'
+          id='DOB'
+          name='DOB'
           required
+          class='h-7 w-full ps-10 mt-0.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500'
+          placeholder='Your birthday'
         />
       </div>
-      <div class='custom-dropdown'>
-        <label for='Role' class='text-sm font-medium text-gray-900'>Select a role</label>
-        <select
-          id='Role'
-          name='Role'
-          required
-          class='w-full h-7 px-2 py-1 mt-0.5 bg-gray-50 mr-36 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500'
-        >
-          <option value='cbsovhtt' selected>CB So VH-TT</option>
-          <option value='cbquan'>CB Quan</option>
-          <option value='cbphuong'>CB Phuong</option>
-        </select>
-      </div>
-      <button
-        class='text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-1'
-        type='submit'
-      >Register</button>
-    </form>
-  </div>
+    </div>
+    <div>
+      <label class='text-sm font-medium text-gray-900' for='Phone'>Phone number</label>
+      <input
+        class='h-7 w-full px-1 mt-0.5 rounded-lg border border-gray-300'
+        type='tel'
+        id='Phone'
+        name='Phone'
+        required
+      />
+    </div>
+    <div class='custom-dropdown'>
+      <label for='Role' class='text-sm font-medium text-gray-900'>Select a role</label>
+      <select
+        id='Role'
+        name='Role'
+        required
+        class='w-full h-7 px-2 py-1 mt-0.5 bg-gray-50 mr-36 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500'
+      >
+        <option value='cbsovhtt' selected>CB So VH-TT</option>
+        <option value='cbquan'>CB Quan</option>
+        <option value='cbphuong'>CB Phuong</option>
+      </select>
+    </div>
+    <button
+      class='text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-1'
+      type='submit'
+    >Register</button>
+  </form>
 </div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js'></script>

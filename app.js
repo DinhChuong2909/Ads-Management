@@ -16,6 +16,7 @@ import phuongRouter from './routes/phuong/phuongRouter.js'
 import quanRouter from './routes/quan/quanRouter.js'
 import quanQuanTamRouter from './routes/quan/quanTamRouter.js'
 import soRouter from './routes/so/soRouter.js'
+import statisticsRouter from './routes/so/statisticsRouter.js'
 // import publicRouter from "./routes/people/homeRouter.js"
 
 // AUTHENTICATION ROUTERS
@@ -131,6 +132,9 @@ app.get('/so/quangcao', soRouter)
 app.get('/so/quangcao/:type', soRouter)
 app.get('/so/diemdat', soRouter)
 app.get('/so/bangqc', soRouter)
+app.get('/so/statistics/select-ward-district', statisticsRouter)
+app.post('/so/statistics-district/:ID', statisticsRouter)
+app.post('/so/statistics-ward/:ID', statisticsRouter)
 
 // START
 function serverStartedHandler() {
