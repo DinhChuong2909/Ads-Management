@@ -20,4 +20,9 @@ export default {
         const list = await db('capphep').count('ID as amount');
         return list[0].amount;
     },
+    updateDuyetById(id, status)
+    {
+      return db('capphep').where('ID', id).update('Duyet', status);
+    }
+  
 }

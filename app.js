@@ -132,6 +132,8 @@ app.get('/so/quangcao/:type', soRouter)
 app.get('/so/diemdat', soRouter)
 app.get('/so/bangqc', soRouter)
 app.get('/so/yeu-cau-chinh-sua', soRouter)
+app.get('/so/capphep', soRouter)
+app.post('/so/capphep/:id', soRouter)
 
 // START
 function serverStartedHandler() {

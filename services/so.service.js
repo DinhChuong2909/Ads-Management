@@ -38,7 +38,6 @@ export default {
     const list = await db('ads').where('LoaiBangQC', type).count('Id as amount')
     return list.length
   },
-
   //   findById(id) {
   //     return db("quan").where("ID", id).first();
   //   },

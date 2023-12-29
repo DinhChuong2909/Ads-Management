@@ -2,27 +2,36 @@
     <table class="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption
             class="p-5 pt-7 text-[24px] text-[#0059CC] font-bold text-left rtl:text-right bg-white dark:text-white dark:bg-gray-800 rounded-lg">
-            Danh sách các yêu cầu chỉnh sửa
+            DACH SÁCH BẢNG QUẢNG CÁO YÊU CẦU CẤP PHÉP
         </caption>
         <thead class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    ID Bảng quảng cáo
+                <th scope="col" class="px-4 py-3">
+                    ID
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    Thời gian
+                <th scope="col" class="px-4 py-3">
+                    Email
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    Quận
+                <th scope="col" class="px-4 py-3">
+                    Địa chỉ
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    Phường
+                <th scope="col" class="px-4 py-3">
+                    Khu Vực
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    Hình thức quảng cáo
+                <th scope="col" class="px-4 py-3">
+                    Hình thức
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
-                    Nội dung chỉnh sửa
+                <th scope="col" class="px-4 py-3">
+                    Nội dung
+                </th>
+                <th scope="col" class="px-4 py-3">
+                    Ngày bắt đầu
+                </th>
+                <th scope="col" class="px-4 py-3">
+                    Ngày kết thúc
+                </th>
+                <th scope="col" class="px-4 py-3">
+                    <span class="sr-only">Action</span>
                 </th>
             </tr>
         </thead>
@@ -34,24 +43,41 @@
             {{else}}
             {{#each this.list}}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row"
-                    class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                    {{PosID}}
+                <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ID}}
                 </th>
-                <td class="px-4 py-4 text-center">
-                    {{ThoiGian}}
+                <td class="px-4 py-4">
+                    {{Email}}
                 </td>
-                <td class="px-4 py-4 text-center">
+                <td class="px-4 py-4">
+                    {{DiaChi}}
+                </td>
+                <td class="px-4 py-4">
                     {{KhuVuc}}
                 </td>
-                <td class="px-4 py-4 text-center">
-                    {{Phuong}}
-                </td>
-                <td class="px-4 py-4 text-center">
+                <td class="px-4 py-4">
                     {{HinhThucQC}}
                 </td>
-                <td class="px-4 py-4 text-center">
-                    {{NoiDungChinhSua}}
+                <td class="px-4 py-4">
+                    {{NoiDungQC}}
+                </td>
+                <td class="px-4 py-4">
+                    {{formatDate NgayBatDau "short"}}
+                </td>
+                <td class="px-4 py-4">
+                    {{formatDate NgayKetThuc "short"}}
+                </td>
+                <td class="px-4 py-4">
+                    <form action="/so/capphep/{{ID}}" method="post">
+                        <input type="hidden" name="_method" value="PUT">
+                        <div class="flex flex-row gap-3">
+                            <button name="duyet" value="1" type="submit"
+                                class="text-white bg-green-500 hover:bg-green-700 hover:shadow-xl rounded-xl py-3 px-2 font-bold">Duyệt</button>
+                            <button name="duyet" value="-1" type="submit"
+                                class="text-white bg-red-500 hover:bg-red-700 hover:shadow-xl rounded-xl py-3 px-2 font-bold">Không
+                                Duyệt</button>
+                        </div>
+                    </form>
                 </td>
             </tr>
             {{/each}}

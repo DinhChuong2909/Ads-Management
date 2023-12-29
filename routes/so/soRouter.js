@@ -1,8 +1,11 @@
 import express from "express";
 import soService from "../../services/so.service.js";
 
+import licenseService from "../../services/LicensingRequest.service.js";
 import posPendingService from "../../services/posPending.service.js";
 import positionService from "../../services/position.service.js";
+import phuongService from "../../services/phuong.service.js";
+import quanService from "../../services/quan.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -108,7 +111,7 @@ router.get('/so/quangcao', async function (req, res) {
                 isActive: i === +page
             });
         }
-        
+
         const list = await soService.findAdsType(limit, offset);
         res.render('so/loaiQuangCao/list', {
             list: list,
@@ -140,40 +143,9 @@ router.get('/so/quangcao/:type', async function (req, res) {
                 isActive: i === +page
             });
         }
-        
+
         const list = await soService.findFromAdsType(type, limit, offset);
         res.render('so/loaiQuangCao/detail', {
-            list: list,
-            empty: list.length === 0,
-            pageNumbers: pageNumbers,
-            layout: 'soPage',
-        });
-    } catch (error) {
-        // Xử lý lỗi nếu cần
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-router.get('/so/diemdat', async function (req, res) {
-    try {
-        const quyhoach = 0;
-        const limit = 10;
-        const page = req.query.page || 1;
-        const offset = (page - 1) * limit;
-
-        const total = await positionService.countDiemDat(quyhoach);
-        const nPages = Math.ceil(total / limit);
-        const pageNumbers = [];
-        for (let i = 1; i <= nPages; i++) {
-            pageNumbers.push({
-                value: i,
-                isActive: i === +page
-            });
-        }
-        
-        const list = await positionService.findDiemDat(limit, offset);
-        res.render('so/diemdat/list', {
             list: list,
             empty: list.length === 0,
             pageNumbers: pageNumbers,
@@ -202,8 +174,18 @@ router.get('/so/bangqc', async function (req, res) {
                 isActive: i === +page
             });
         }
-        
+
         const list = await positionService.findBangQC(limit, offset);
+
+        if (list && list.length > 0) {
+            for (let item of list) {
+                const phuong = await phuongService.findById(item.Phuong);
+                const quan = await quanService.findById(item.KhuVuc);
+                item.Phuong = phuong.Name;
+                item.KhuVuc = quan.Name;
+            }
+        }
+
         res.render('so/bangqc/list', {
             list: list,
             empty: list.length === 0,
@@ -233,9 +215,19 @@ router.get('/so/diemdat', async function (req, res) {
                 isActive: i === +page
             });
         }
-        
+
         const list = await positionService.findDiemDat(limit, offset);
-        res.render('so/diemdat/list', {
+
+        if (list && list.length > 0) {
+            for (let item of list) {
+                const phuong = await phuongService.findById(item.Phuong);
+                const quan = await quanService.findById(item.KhuVuc);
+                item.Phuong = phuong.Name;
+                item.KhuVuc = quan.Name;
+            }
+        }
+
+        res.render('so/list/diemdatList', {
             list: list,
             empty: list.length === 0,
             pageNumbers: pageNumbers,
@@ -263,8 +255,17 @@ router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
                 isActive: i === +page
             });
         }
-        
         const list = await posPendingService.findAll(limit, offset);
+
+        if (list && list.length > 0) {
+            for (let item of list) {
+                const phuong = await phuongService.findById(item.Phuong);
+                const quan = await quanService.findById(item.KhuVuc);
+                item.Phuong = phuong.Name;
+                item.KhuVuc = quan.Name;
+            }
+        }
+
         res.render('so/list/yeuCauChinhSuaList', {
             list: list,
             empty: list.length === 0,
@@ -278,5 +279,112 @@ router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
     }
 });
 
+router.get('/so/capphep', async function (req, res) {
+    try {
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await licenseService.countAll();
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+
+        const list = await licenseService.findFromId(limit, offset);
+
+        if (list && list.length > 0) {
+            for (let item of list) {
+                const phuong = await phuongService.findById(item.Phuong);
+                const quan = await quanService.findById(item.KhuVuc);
+                item.Phuong = phuong.Name;
+                item.KhuVuc = quan.Name;
+            }
+
+            // Lọc danh sách để chỉ hiển thị những phần tử có Duyet = 0
+            const filteredList = list.filter(item => item.Duyet === "0");
+
+            res.render('so/list/capPhepList', {
+                list: filteredList,
+                empty: filteredList.length === 0,
+                pageNumbers: pageNumbers,
+                layout: 'soPage',
+            });
+        } else {
+            res.render('so/list/capPhepList', {
+                list: [],
+                empty: true,
+                pageNumbers: pageNumbers,
+                layout: 'soPage',
+            });
+        }
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+router.post('/so/capphep/:id', async function (req, res) {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        const duyet = req.body.duyet;
+        console.log(duyet)
+
+        const templist = await licenseService.updateDuyetById(id, duyet);
+
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await licenseService.countAll();
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+
+        const list = await licenseService.findFromId(limit, offset);
+
+        if (list && list.length > 0) {
+            for (let item of list) {
+                const phuong = await phuongService.findById(item.Phuong);
+                const quan = await quanService.findById(item.KhuVuc);
+                item.Phuong = phuong.Name;
+                item.KhuVuc = quan.Name;
+            }
+
+            // Lọc danh sách để chỉ hiển thị những phần tử có Duyet = 0
+            const filteredList = list.filter(item => item.Duyet === "0");
+
+            res.render('so/list/capPhepList', {
+                list: filteredList,
+                empty: filteredList.length === 0,
+                pageNumbers: pageNumbers,
+                layout: 'soPage',
+            });
+        } else {
+            res.render('so/list/capPhepList', {
+                list: [],
+                empty: true,
+                pageNumbers: pageNumbers,
+                layout: 'soPage',
+            });
+        }
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 export default router;

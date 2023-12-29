@@ -1,11 +1,7 @@
-
 <div class="w-fit shadow-md mr-auto my-4 rounded-lg">
-  <table
-    class="w-auto h-screen text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-  >
+  <table class="w-auto h-screen text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <caption
-      class="p-5 text-[24px] font-bold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800 rounded-lg"
-    >
+      class="p-5 text-[24px] font-bold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800 rounded-lg">
       <div class="flex justify-between place-self-center">
         <span class="pt-2 text-[#0059CC]">Cấp phép quảng cáo</span>
         <button class="mr-8 bg-[#0059CC] py-2 px-6 rounded-full hover:bg-[#0059B0]">
@@ -15,19 +11,14 @@
         </button>
       </div>
     </caption>
-    <thead
-      class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-    >
+    <thead class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
         <th scope="col" class="px-4 py-3">
           ID
         </th>
         <th scope="col" class="px-4 py-3">
-          PosID
+          Email
         </th>
-        <th scope="col" class="px-4 py-3">
-          Email      
-          </th>
         <th scope="col" class="px-4 py-3">
           Địa chỉ
         </th>
@@ -38,10 +29,16 @@
           Hình thức
         </th>
         <th scope="col" class="px-4 py-3">
+          Nội dung
+        </th>
+        <th scope="col" class="px-4 py-3">
           Ngày bắt đầu
         </th>
         <th scope="col" class="px-4 py-3">
           Ngày kết thúc
+        </th>
+        <th scope="col" class="px-4 py-3">
+          Tình trạng
         </th>
         <th scope="col" class="px-4 py-3">
           <span class="sr-only">Action</span>
@@ -54,75 +51,88 @@
         Không có dữ liệu
       </div>
       {{else}}
-        {{#each this.list}}
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th
-              scope="row"
-              class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {{ID}}
-            </th>
-            <td class="px-4 py-4">
-              {{PosID}}
-            </td>
-            <td class="px-4 py-4">
-              {{Email}}
-            </td>
-            <td class="px-4 py-4">
-              {{DiaChi}}
-            </td>
-            <td class="px-4 py-4">
-              {{KhuVuc}}
-            </td>
-            <td class="px-4 py-4">
-              {{HinhThucQC}}
-            </td>
-            <td class="px-4 py-4">
-              {{formatDate NgayBatDau "short"}}
-            </td>
-            <td class="px-4 py-4">
-             {{formatDate NgayKetThuc "short"}}
-            </td>
-            <td class="px-4 py-4 text-right">
-              {{#eq Duyet "1"}}
-                <button
-                    href="#"
-                    class="font-medium text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                >Xoá</button>
-              {{else}}
-              <form method="post" action="" id="deleteForm">
-                <script>
-                    function onSubmit(token) {  
-                        document.getElementById("deleteForm").submit();
-                    }
-                </script>
-                <input type="hidden" name="ID" value="{{ID}}">
-                <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" formaction="/phuong/capphep/del">Xoá</button>
-              </form>
-              {{/eq}}
-            </td>
-          </tr>
-        {{/each}}
+      {{#each this.list}}
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {{ID}}
+        </th>
+        <td class="px-4 py-4">
+          {{Email}}
+        </td>
+        <td class="px-4 py-4">
+          {{DiaChi}}
+        </td>
+        <td class="px-4 py-4">
+          {{KhuVuc}}
+        </td>
+        <td class="px-4 py-4">
+          {{HinhThucQC}}
+        </td>
+        <td class="px-4 py-4">
+          {{NoiDungQC}}
+        </td>
+        <td class="px-4 py-4">
+          {{formatDate NgayBatDau "short"}}
+        </td>
+        <td class="px-4 py-4">
+          {{formatDate NgayKetThuc "short"}}
+        </td>
+        <td class="px-4 py-4 font-semibold">
+          {{#eq Duyet "-1"}}
+          <div class="text-[#F02849]">
+            KHÔNG DUYỆT
+          </div>
+          {{/eq}}
+          {{#eq Duyet "0"}}
+          <div class="text-blue-500">
+            CHƯA DUYỆT
+          </div>
+          {{/eq}}
+          {{#eq Duyet "1"}}
+          <div class="text-[#89A984]">
+            ĐÃ DUYỆT
+          </div>
+          {{/eq}}
+        </td>
+        <td>
+          <form method="post" action="" id="deleteForm">
+            <script>
+              function onSubmit(token) {
+                document.getElementById("deleteForm").submit();
+              }
+            </script>
+            <input type="hidden" name="ID" value="{{ID}}">
+            <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              formaction="/phuong/capphep/del">Xoá</button>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
     </tbody>
+
   </table>
   <nav class="flex-wrap justify-between py-4 pl-4" aria-label="Table navigation">
     <ul class="flex mx-auto -space-x-px rtl:space-x-reverse text-sm h-8">
       <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+        <a href="#"
+          class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
       </li>
       {{#each this.pageNumbers}}
       {{#if isActive}}
       <li>
-          <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
+        <a href="#" aria-current="page"
+          class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
       </li>
       {{else}}
       <li>
-          <a href="?page={{value}}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
+        <a href="?page={{value}}"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
       </li>
       {{/if}}
       {{/each}}
       <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+        <a href="#"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
       </li>
     </ul>
   </nav>
