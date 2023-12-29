@@ -48,9 +48,13 @@ router.post(
   '/login',
   passport.authenticate('local', {
     successRedirect: '/phuong',
-    failureRedirect: '/login',
+    failureRedirect: '/login-failed',
     failureFlash: true,
   })
 )
+
+router.get('/login-failed', checkNotAuthenticated, (req, res) => {
+  res.render('authentication/signInFail')
+})
 
 export default router
