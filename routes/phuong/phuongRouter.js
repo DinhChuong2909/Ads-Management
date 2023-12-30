@@ -5,6 +5,7 @@ import licenseService from "../../services/LicensingRequest.service.js";
 import reportService from "../../services/report.service.js";
 import phuongService from "../../services/phuong.service.js";
 import quanService from "../../services/quan.service.js";
+import { sendOtpEmail } from "../../services/otpEmail.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -167,10 +168,13 @@ router.post('/phuong/baocao/detail/:id', async function(req, res)
   const xl = "1"
   const ndxl = req.body.NoiDungXuLy;
   
-  const temp = await reportService.updateXuLyByID(id, xl);
-  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+  await reportService.updateXuLyByID(id, xl);
+  await reportService.updateNDXuLyByID(id, ndxl);
 
-  res.redirect('/phuong')
+  const report = await reportService.findById(id)
+  sendOtpEmail(report.Email, ndxl);
+  
+  res.redirect('/phuong/baocao')
 });
 
 // /phuong/capphep
