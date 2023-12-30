@@ -5,6 +5,7 @@ import licenseService from "../../services/LicensingRequest.service.js";
 import reportService from "../../services/report.service.js";
 import phuongService from "../../services/phuong.service.js";
 import quanService from "../../services/quan.service.js";
+import { sendOtpEmail } from "../../services/otpEmail.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -167,10 +168,13 @@ router.post('/phuong/baocao/detail/:id', async function(req, res)
   const xl = "1"
   const ndxl = req.body.NoiDungXuLy;
   
-  const temp = await reportService.updateXuLyByID(id, xl);
-  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+  await reportService.updateXuLyByID(id, xl);
+  await reportService.updateNDXuLyByID(id, ndxl);
 
-  res.redirect('/phuong')
+  const report = await reportService.findById(id)
+  sendOtpEmail(report.Email, ndxl);
+  
+  res.redirect('/phuong/baocao')
 });
 
 // /phuong/capphep
@@ -220,15 +224,11 @@ router.get('/phuong/capphep/edit', async function (req, res) {
 
 router.post('/phuong/capphep/del', async function (req, res) {
   try {
-    console.log(req.body);
     const id = req.body.ID; // Get the id from the query parameters
-    console.log(id);
     await licenseService.del(id);
     res.redirect('/phuong/capphep');
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!');
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error);
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!');
   }
 })
 

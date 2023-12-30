@@ -1,0 +1,36 @@
+<div class='w-screen h-[90vh] flex justify-center items-center'>
+  <div
+    class='h-fit w-60 mx-auto mt-8 text-black rounded overflow-hidden shadow-lg flex flex-col justify-between items-center'
+  >
+    <div>
+      <div class='bg-red-500 h-3 w-full'></div>
+      <div class='px-4 py-2 flex flex-col justify-center items-center'>
+        <h1 class='text-red-500 text-xl font-medium mb-3'>SCH Service notice</h1>
+        <div class='w-full flex flex-row justify-center'>
+          <div class='w-6 h-6 bg-white rounded-full flex items-center justify-center mr-2 ml-1'>
+            <svg
+              class='w-5 h-5 text-red-500'
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 0 20 20'
+              fill='currentColor'
+            >
+              <path
+                fill-rule='evenodd'
+                d='M5.707 4.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z'
+                clip-rule='evenodd'
+              ></path>
+            </svg>
+          </div>
+          <p>Sign in khong thanh cong. Vui lòng thử lại sau.</p>
+        </div>
+      </div>
+    </div>
+    <div class='w-full mb-2 flex flex-row justify-center items-center gap-2'>
+      <form action='/login' method='GET'>
+        <button class='w-fit bg-white px-2 py-1 rounded shadow-lg text-sm text-black' type='submit'>Try again</button>
+      </form>
+      <form action='/forgot-password' method='GET'>
+        <button class='w-fit bg-blue-500 px-2 py-1 rounded shadow-lg text-sm text-white' type='submit'>Forget</button>
+      </form>
+    </div>
+  </div></div>

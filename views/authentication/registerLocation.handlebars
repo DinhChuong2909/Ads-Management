@@ -8,23 +8,45 @@
 
 <form
   class='w-fit h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center'
-  action='/register-location'
+  action='/register-location/{{userID}}'
   method='POST'
 >
   <div>
     <h1 class='text-2xl py-2 font-medium text-center'>Choose Location</h1>
     {{#each locationsList}}
-      <div class='custom-checkbox'>
-        <input type='checkbox' id='ward{{this.ID}}' name='wards[]' value='{{this.ID}}' />
-        <label class='w-44' for='ward{{this.ID}}'>District {{this.Name}}</label>
+      <div class='custom-radio'>
         {{#if this.DistrictName}}
-          <span class='text-sm'>Ward: {{this.WardName}}</span>
+          <div
+            class='w-full h-12 border-b flex flex-row gap-3 justify-start items-center rounded hover:text-white hover:bg-[#105BBD]'
+          >
+            <input
+              class='w-4 h-4 ml-2'
+              type='radio'
+              id='ward{{this.ID}}'
+              name='selectedLocation'
+              value='{"Ward": "{{this.ID}}"}'
+            />
+            <label class='w-60' for='ward{{this.ID}}'>Ward {{this.Name}} District {{this.DistrictName}}</label>
+          </div>
+        {{else}}
+          <div
+            class='w-full h-12 border-b flex flex-row gap-3 justify-start items-center rounded hover:text-white hover:bg-[#105BBD]'
+          >
+            <input
+              class='w-4 h-4 ml-2'
+              type='radio'
+              id='district{{this.ID}}'
+              name='selectedLocation'
+              value='{"District": "{{this.ID}}"}'
+            />
+            <label class='w-60' for='district{{this.ID}}'>District {{this.Name}}</label>
+          </div>
         {{/if}}
       </div>
     {{/each}}
   </div>
   <button
-    class='text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-1'
+    class='text-base px-6 py-0.5 rounded-lg bg-[#105BBD] text-center text-white mt-2'
     type='submit'
   >Select</button>
 </form>

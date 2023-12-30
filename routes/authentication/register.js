@@ -1,6 +1,5 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
-import { checkNotAuthenticated } from '../../utils/passport.js'
 import authenticationService from '../../services/authentication.service.js'
 import convertStringToDate from '../../utils/dateConverter.js'
 import quanService from '../../services/quan.service.js'
@@ -8,11 +7,11 @@ import phuongService from '../../services/phuong.service.js'
 
 const router = express.Router()
 
-router.get('/register', checkNotAuthenticated, (req, res) => {
+router.get('/register', (req, res) => {
   res.render('authentication/register', { layout: 'soPage' })
 })
 
-router.post('/register', checkNotAuthenticated, async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.Password, 10)
 
@@ -25,6 +24,7 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
       Phone: req.body.Phone,
       Role: req.body.Role,
     }
+
     await authenticationService.add(user)
 
     // read wards and districts from database
@@ -44,25 +44,33 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
     } else {
       locationsList = []
     }
-    // render to choose district/ward
+
     res.render('authentication/registerLocation', {
       layout: 'soPage',
+      userID: user.ID,
       locationsList: locationsList,
     })
   } catch (error) {
-    console.log('Post failed', error)
     res.redirect('/register')
   }
 })
 
-router.post('/register-location', checkNotAuthenticated, async (req, res) => {
+router.post('/register-location/:userID', async (req, res) => {
   try {
-    // receive district/ward from a form
-    // write localtion data to database
-    // res.redirect('/login')
+    const parsedReq = JSON.parse(req.body.selectedLocation)
+    const userID = req.params.userID
+
+    if (parsedReq.District) {
+      const districtID = parsedReq.District
+      await authenticationService.updateDistrict(userID, districtID)
+    } else if (parsedReq.Ward) {
+      const wardID = parsedReq.Ward
+      await authenticationService.updateWard(userID, wardID)
+    }
+
+    res.render('so/taotaikhoan/createSuccess')
   } catch (error) {
-    console.log('Post failed', error)
-    res.redirect('/register')
+    res.render('so/taotaikhoan/createFail')
   }
 })
 

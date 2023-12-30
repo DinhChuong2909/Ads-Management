@@ -5,6 +5,7 @@ import licenseService from '../../services/LicensingRequest.service.js'
 import reportService from '../../services/report.service.js'
 import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
+import { sendOtpEmail } from '../../services/otpEmail.service.js'
 
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
@@ -159,18 +160,22 @@ router.get('/quan/baocao/detail', async function (req, res) {
   })
 })
 
-router.post('/quan/baocao/detail/:id', async function (req, res) {
+router.post('/quan/baocao/detail/:id', async function(req, res)
+{
   const id = req.params.id || 0;
   console.log(id)
   const xl = "1"
   const ndxl = req.body.NoiDungXuLy;
 
-  const temp = await reportService.updateXuLyByID(id, xl);
-  const temp1 = await reportService.updateNDXuLyByID(id, ndxl);
+  const temp1 = await reportService.updateXuLyByID(id, xl);
+  const temp2 = await reportService.updateNDXuLyByID(id, ndxl);
+  
+  const report = await reportService.findById(id)
+  sendOtpEmail(report.Email, ndxl);
 
-  res.redirect('/quan')
+
+  res.redirect('/quan/baocao')
 });
-
 // /quan/capphep
 router.get('/quan/capphep', async function (req, res) {
   try {
@@ -216,21 +221,17 @@ router.get('/quan/capphep/edit', async function (req, res) {
   res.render('quan/capphep/edit', {})
 })
 
-router.post('/capphep/del', async function (req, res) {
+router.post('/quan/capphep/del', async function (req, res) {
   try {
-    console.log(req.body)
     const id = req.body.ID // Get the id from the query parameters
-    console.log(id)
     await licenseService.del(id)
-    res.redirect('/capphep')
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!')
+    res.redirect('/quan/capphep')
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error)
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!')
   }
 })
 
-router.post('/capphep/edit/add', async function (req, res) {
+router.post('/quan/capphep/edit/add', async function (req, res) {
   try {
     const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc } = req.body
     console.log(req.body)
@@ -250,11 +251,8 @@ router.post('/capphep/edit/add', async function (req, res) {
 
     // Gọi phương thức từ service để thêm dữ liệu vào cơ sở dữ liệu
     await licenseService.add(updatePos)
-
-    res.status(201).send('Dữ liệu đã được ghi vào cơ sở dữ liệu!')
   } catch (error) {
     console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error)
-    res.status(500).send('Đã xảy ra lỗi khi ghi vào cơ sở dữ liệu!')
   }
 })
 
