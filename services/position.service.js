@@ -53,5 +53,12 @@ export default {
     const list = await db('ads').where('QuyHoach', quyhoach).count('Id as amount')
     return list[0].amount
   },
-  
+  joinReportByQuanId(id)
+  {
+    return db('ads').where('KhuVuc', id).join('report', 'ads.Id', '=', 'report.AdsID').join('quan', 'ads.KhuVuc', '=', 'quan.ID' )
+  },
+  joinReportByPhuongId(id)
+  {
+    return db('ads').where('Phuong', id).join('report', 'ads.Id', '=', 'report.AdsID')
+  }
 }

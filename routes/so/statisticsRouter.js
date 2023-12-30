@@ -2,6 +2,8 @@ import express from 'express'
 import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
 
+import positionService from '../../services/position.service.js'
+
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
@@ -19,6 +21,8 @@ router.get('/so/statistics/select-ward-district', async function (req, res) {
       DistrictName: nameMap.get(item.ThuocQuan),
     }))
 
+    console.log(mergedArray);
+
     res.render('so/thongke/wardAndDistrictSelection', {
       layout: 'soPage',
       districtsList: allDistricts,
@@ -30,24 +34,43 @@ router.get('/so/statistics/select-ward-district', async function (req, res) {
 router.get('/so/statistics-ward/:ID', async function (req, res) {
   try {
     const wardId = req.params.ID || 0
-    const data = await phuongService.findById(wardId)
-    console.log(data)
+
+    const wName = await phuongService.findById(wardId);
+    const dName = await quanService.findById(wName.ThuocQuan)
+    const data = await positionService.joinReportByPhuongId(wardId)
+    const count = data.length
+    
+    // console.log(data)
+    // console.log(wName)
     //render report data of this
+    res.render('so/thongke/statistics', {
+      layout: 'soPage',
+      empty: data.length === 0,
+      list: data,
+      wardName: wName,
+      districtName: dName,
+      count: count,
+    })
   } catch (error) { }
 })
 
 router.get('/so/statistics-district/:ID', async function (req, res) {
   try {
     const districtId = req.params.ID || 0
-    const data = await quanService.findById(districtId)
+
+    const district = await quanService.findById(districtId)
+    const data = await positionService.joinReportByQuanId(districtId)
+    const count = data.length;
+
     console.log(data)
     //render report data of this id
     res.render('so/thongke/statistics',
       {
         layout: 'soPage',
-        empty: listenerCount.length === 0,
-
-
+        empty: data.length === 0,
+        list: data,
+        district: district,
+        count: count,
       })
   } catch (error) { }
 })
