@@ -12,7 +12,7 @@ router.get('/', async function (req, res) {
     const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
     const positionInfo = await Promise.all(positionInfoPromises)
 
-    res.render('governmentPage.js', {
+    res.render('governmentPage', {
       list: list,
       empty: list.length === 0,
       coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars

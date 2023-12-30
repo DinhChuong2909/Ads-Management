@@ -1,0 +1,59 @@
+<div class="flex flex-col">
+    <div class="w-full flex justify-center align-center items-center font-semibold text-[18px] border-b-2 pb-2 px-3">
+        Danh sách bảng quảng cáo bị báo cáo vi phạm
+    </div>
+    <div class="w-full px-4 max-h-[470px] overflow-y-auto">
+        {{#if this.combinedData}}
+        {{#each this.combinedData}}
+        <div class="flex flex-col -mx-3 -my-4 py-3 px-4 text-[#014361] mb-6 rounded-lg shadow border-2">
+            <div class="flex flex-col">
+                <div class="font-semibold text-black">
+                    {{LoaiBangQC}}
+                </div>
+                <div>
+                    {{DiaChi}}, {{KhuVuc}}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="flex flex-row">
+                    <div class="font-semibold text-black">
+                        Hình thức bị báo cáo:
+                    </div>
+                    <div>
+                        {{HinhThucReportDisplay}}
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <div class="font-semibold text-black">
+                        Tên người báo cáo:
+                    </div>
+                    <div>
+                        {{HoTen}}
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <div class="font-semibold text-black">
+                        Lý do:
+                    </div>
+                    <div>
+                        {{{NoiDungBaoCaoDisplay}}}
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <div class="font-semibold text-black">
+                        Hình ảnh:
+                    </div>
+                    <div>
+                        {{{HinhAnhDisplay}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="flex justify-center align-center items-center text-[#014361] my-6 ">
+            <p>Chưa có khiếu nại nào</p>
+        </div>
+        {{/if}}
+    </div>
+</div>

@@ -11,6 +11,8 @@ import session from 'express-session'
 
 // PAGES
 import governmentRouter from './routes/governmentRouter.js'
+import homeRouter from "./routes/people/homeRouter.js"
+import reportRouter from "./routes/people/reportRouter.js"
 import aboutRouter from './routes/aboutRouter.js'
 import phuongRouter from './routes/phuong/phuongRouter.js'
 import quanRouter from './routes/quan/quanRouter.js'
@@ -94,8 +96,18 @@ app.use('/', logoutRouter)
 // PAGES
 app.use('/static', express.static('static'))
 // app.get("/", publicRouter);
+// app.get('/', governmentRouter)
 
-app.get('/government', governmentRouter)
+// Public
+app.use("/report", reportRouter);
+app.get("/report", reportRouter);
+app.post("/report", reportRouter);
+// app.use("/", allDataRouter);
+app.post("/", homeRouter);
+app.get("/", homeRouter);
+app.get("/about", aboutRouter);
+
+// About
 app.get('/about', aboutRouter)
 
 // Phuong
