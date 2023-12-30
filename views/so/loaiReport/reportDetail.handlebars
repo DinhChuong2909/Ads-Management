@@ -1,0 +1,90 @@
+<div
+    class="w-[90%] mr-auto p-4 my-4 flex flex-row bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div class="w-[100%]">
+        <div class="grid gap-4">
+            <div>
+                <img class="h-auto w-fit rounded-lg"
+                    src="https://flowbite.s3.amazonaws.com/docs/gallery/featured/image.jpg" alt="">
+            </div>
+            <div class="grid grid-cols-5 gap-4 w-fit">
+                <div>
+                    <img class="h-auto max-w-full rounded-lg"
+                        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+                </div>
+                <div>
+                    <img class="h-auto max-w-full rounded-lg"
+                        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+                </div>
+                <div>
+                    <img class="h-auto max-w-full rounded-lg"
+                        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
+                </div>
+                <div>
+                    <img class="h-auto max-w-full rounded-lg"
+                        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
+                </div>
+                <div>
+                    <img class="h-auto max-w-full rounded-lg"
+                        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-4 w-[100%]">
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Hình thức báo cáo</div>
+            {{this.category.HinhThucReport}}
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Họ và tên</div>
+            {{this.category.HoTen}}
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Email</div>
+            {{this.category.Email}}
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Số điện thoại</div>
+            {{this.category.SDT}}
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Thời gian gửi</div>
+            {{formatDate ThoiGian "short"}}
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Tinh trạng xử lý</div>
+            {{#eq this.category.Xuly "1"}}
+            Đã xử lý xong
+            {{else}}
+            Chưa xử lý
+            {{/eq}}
+        </div>
+        <div class="w-full">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Nội dung báo cáo</div>
+            <div class="w-full h-fit mb-2 border-2 rounded-md p-2">
+                {{{this.category.NoiDungBaoCao}}}
+            </div>
+        </div>
+
+        <div class="w-full">
+            <div class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Nội dung xử lý</div>
+            <textarea id="text" name="NoiDungXuLy" readonly
+                class="w-[100%] h-[100px] p-2 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+                placeholder="Nội dung xử lý">{{{this.category.NoiDungXuLy}}}</textarea>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const handleEdit = (Xuly) => {
+        console.log(Xuly);
+        if (Xuly === 0) {
+            document.getElementById("text").style.display = "inline-block";
+            document.getElementById("send").style.display = "inline-flex";
+        } else {
+            document.getElementById("text").style.display = "hidden";
+            document.getElementById("send").style.display = "hidden";
+        }
+    }
+</script>

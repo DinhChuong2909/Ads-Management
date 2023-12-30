@@ -30,12 +30,26 @@ export default {
   findFromAdsType(type, limit, offset) {
     return db('ads').where('LoaiBangQC', type).orderBy('ID', 'asc').limit(limit).offset(offset)
   },
+  findReportType(limit, offset) {
+    return db('report').distinct('HinhThucReport').limit(limit).offset(offset)
+  },
+  findFromReportType(type, limit, offset) {
+    return db('report').where('HinhThucReport', type).orderBy('STT', 'asc').limit(limit).offset(offset)
+  },
   async countAdsType() {
     const list = await db('ads').distinct('LoaiBangQC')
     return list.length
   },
+  async countReportType() {
+    const list = await db('report').distinct('HinhThucReport')
+    return list.length
+  },
   async countFromAdsType(type) {
     const list = await db('ads').where('LoaiBangQC', type).count('Id as amount')
+    return list.length
+  },
+  async countFromReportType(type) {
+    const list = await db('report').where('HinhThucReport', type).count('STT as amount')
     return list.length
   },
   //   findById(id) {

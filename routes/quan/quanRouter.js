@@ -167,8 +167,8 @@ router.post('/quan/baocao/detail/:id', async function(req, res)
   const xl = "1"
   const ndxl = req.body.NoiDungXuLy;
 
-  const temp1 = await reportService.updateXuLyByID(id, xl);
-  const temp2 = await reportService.updateNDXuLyByID(id, ndxl);
+  await reportService.updateXuLyByID(id, xl);
+  await reportService.updateNDXuLyByID(id, ndxl);
   
   const report = await reportService.findById(id)
   sendOtpEmail(report.Email, ndxl);

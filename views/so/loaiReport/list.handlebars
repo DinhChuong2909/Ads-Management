@@ -1,0 +1,74 @@
+<div class="shadow-md mx-auto my-4 rounded-lg mr-4">
+  <table
+    class="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <caption
+      class="p-5 pt-7 text-[24px] text-[#0059CC] font-bold text-left rtl:text-right bg-white dark:text-white dark:bg-gray-800 rounded-lg"
+    >
+      Danh sách các loại Báo cáo
+    </caption>
+    <thead
+      class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
+      <tr>
+        <th scope="col" class="w-28 px-4 py-3 text-center">
+          ID
+        </th>
+        <th scope="col" class="w-28 px-4 py-3 text-center">
+          Loại báo cáo
+        </th>
+        <th scope="col" class="w-28 px-4 py-3 text-center">
+          Xem đia điểm
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#if this.empty}}
+      <div class="card-body">
+        Không có dữ liệu
+      </div>
+      {{else}}
+        {{#each this.list}}
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <th
+              scope="row"
+              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+            >
+             {{@index}}
+            </th>
+            <td class="px-4 py-3 text-center">
+              {{HinhThucReport}}
+            </td>
+             <td class="px-4 py-4 text-center">
+              <a
+                href="/so/loaibc/{{HinhThucReport}}"
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              >Xem chi tiết</a>
+            </td>
+          </tr>
+        {{/each}}
+    </tbody>
+  </table>
+   <nav class="flex-wrap justify-between py-4 pl-4" aria-label="Table navigation">
+    <ul class="flex mx-auto -space-x-px rtl:space-x-reverse text-sm h-8">
+      <li>
+          <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+      </li>
+      {{#each this.pageNumbers}}
+      {{#if isActive}}
+      <li>
+          <a href="#" aria-current="page" class="flex items-center justify-center px-3 h- 8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
+      </li>
+      {{else}}
+      <li>
+          <a href="?page={{value}}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
+      </li>
+      {{/if}}
+      {{/each}}
+      <li>
+          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+      </li>
+    </ul>
+  </nav>
+  {{/if}}
+</div>

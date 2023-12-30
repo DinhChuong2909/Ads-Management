@@ -6,6 +6,7 @@ import posPendingService from "../../services/posPending.service.js";
 import positionService from "../../services/position.service.js";
 import phuongService from "../../services/phuong.service.js";
 import quanService from "../../services/quan.service.js";
+import reportService from "../../services/report.service.js";
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -239,6 +240,84 @@ router.get('/so/diemdat', async function (req, res) {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/so/loaibc', async function (req, res) {
+    try {
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await soService.countReportType();
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+
+        const list = await soService.findReportType(limit, offset);
+        res.render('so/loaiReport/list', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/loaibc/:type', async function (req, res) {
+    try {
+        const type = req.params.type;
+
+        const limit = 10;
+        const page = req.query.page || 1;
+        const offset = (page - 1) * limit;
+
+        const total = await soService.countFromReportType(type);
+        const nPages = Math.ceil(total / limit);
+        const pageNumbers = [];
+        for (let i = 1; i <= nPages; i++) {
+            pageNumbers.push({
+                value: i,
+                isActive: i === +page
+            });
+        }
+
+        const list = await soService.findFromReportType(type, limit, offset);
+        res.render('so/loaiReport/detail', {
+            list: list,
+            empty: list.length === 0,
+            pageNumbers: pageNumbers,
+            layout: 'soPage',
+        });
+    } catch (error) {
+        // Xử lý lỗi nếu cần
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/so/loaibc/:type/detail', async function (req, res) {
+    const id = req.query.id || 0;
+    // console.log(id)
+    const category = await reportService.findById(id);
+    // console.log(category);
+    if (!category) {
+      return res.redirect('/so/loaibc/:type');
+    }
+  
+    res.render('so/loaiReport/reportDetail', {
+      layout: 'soPage',
+      category: category,
+      isSo: true,
+    });
+  });
 
 router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
     try {

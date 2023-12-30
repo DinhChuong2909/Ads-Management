@@ -143,6 +143,9 @@ app.get('/so/statistics-ward/:ID', statisticsRouter)
 app.get('/so/yeu-cau-chinh-sua', soRouter)
 app.get('/so/capphep', soRouter)
 app.post('/so/capphep/:id', soRouter)
+app.get('/so/loaibc', soRouter)
+app.get('/so/loaibc/:type', soRouter)
+app.get('/so/loaibc/:type/detail', soRouter)
 
 // START
 function serverStartedHandler() {
