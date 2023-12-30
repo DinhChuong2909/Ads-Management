@@ -1,37 +1,107 @@
-<div class="bg-white p-4 shadow-md rounded-md">
-  <h1 class="text-xl font-semibold mb-4">Statistic A Specific Place </h1>
-
-  <div class="mb-4">
-    <span class="font-semibold">Name</span>
-    <span>{{locationName}}</span>
+<div class="w-fit shadow-md mr-auto my-4 rounded-lg">
+  <div
+    class="flex flex-row p-5 py-7  text-[#0059CC] font-bold text-left rtl:text-right bg-white dark:text-white dark:bg-gray-800 rounded-lg justify-between gap-4">
+    <div class="text-[24px] flex flex-row justify-center" style="white-space: nowrap;">
+      Thống kê báo cáo
+      {{#if this.district}}
+      Quận {{district.Name}}
+      {{else}}
+      Phường {{wardName.Name}} - Quận {{districtName.Name}}
+      {{/if}}
+    </div>
+    <div class="flex justify-center flex-row items-center">
+      {{#if this.count}}
+      Đã có {{this.count}} báo cáo được gửi lên
+      {{else}}
+      Chưa có báo cáo nào
+      {{/if}}
+    </div>
   </div>
-
-  <div class="mb-4">
-    <span class="font-semibold">Date Created</span>
-    <span>{{dataCreated}}</span>
-  </div>
-
-  <div class="mb-4">
-    <span class="font-semibold">Action</span>
-    <span>{{action}}</span>
-  </div>
-
-  <div class="mb-4">
-    <span class="font-semibold">Date Updated</span>
-    <span>{{dateUpdated}}</span>
-  </div>
-
-  <div class="mb-4">
-    <span class="font-semibold">Solution</span>
-    <span>{{solution}}</span>
-  </div>
-
-  <div class="flex space-x-4">
-    <form aciton="" method="">
-      <button
-        type="submit"
-        class="bg-blue-500 text-white px-4 py-2 rounded-md"
-      >Back</button>
-    </form>
-  </div>
+  <table class="w-auto h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <th scope="col" class="px-4 py-3">
+        ID
+      </th>
+      <th scope="col" class="w-36 px-4 py-3">
+        STT Điểm đặt
+      </th>
+      <th scope="col" class="w-36 px-4 py-3">
+        Người báo cáo
+      </th>
+      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+        Hình Thức báo cáo
+      </th>
+      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+        Tình Trạng Xử lý
+      </th>
+      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+        Cách thức xử lý
+      </th>
+    </thead>
+    <tbody>
+      {{#if this.empty}}
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <td colspan="6">
+          <div class="flex justify-center items-center">
+            <span style="white-space: nowrap;">Không có báo cáo nào</span>
+          </div>
+        </td>
+      </tr>
+      {{else}}
+      {{#each this.list}}
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {{STT}}
+        </th>
+        <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {{AdsID}}
+        </th>
+        <td class="px-4 py-4">
+          {{HoTen}}
+        </td>
+        <td class="px-4 py-4">
+          {{HinhThucReport}}
+        </td>
+        {{#eq Xuly "1"}}
+        <td class="px-4 py-4">
+          Đã xử lý xong
+        </td>
+        {{else}}
+        <td class="px-4 py-4">
+          Đang xử lý
+        </td>
+        {{/eq}}
+        <td class="px-4 py-4 text-right">
+          {{NoiDungXuLy}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <nav class="flex-wrap justify-between py-4 pl-4" aria-label="Table navigation">
+    <ul class="flex mx-auto -space-x-px rtl:space-x-reverse text-sm h-8">
+      <li>
+        <a href="#"
+          class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+      </li>
+      {{#each this.pageNumbers}}
+      {{#if isActive}}
+      <li>
+        <a href="#" aria-current="page"
+          class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
+      </li>
+      {{else}}
+      <li>
+        <a href="?page={{value}}"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
+      </li>
+      {{/if}}
+      {{/each}}
+      <li>
+        <a href="#"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+      </li>
+    </ul>
+  </nav>
+  {{/if}}
 </div>

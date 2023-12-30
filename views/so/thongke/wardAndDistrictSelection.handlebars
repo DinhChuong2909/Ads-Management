@@ -13,7 +13,7 @@
           <tr class='border-b'>
             <td class='py-2 px-4 text-center'>{{this.Name}}</td>
             <td class='p-2 flex justify-center items-center'>
-              <form action='/so/statistics-district/{{this.ID}}' method='POST'>
+              <form action='/so/statistics-district/{{this.ID}}' method='GET'>
                 <button type='submit' class='text-blue-500 p-1'>View</button>
               </form>
             </td>
@@ -38,7 +38,7 @@
             <td class='py-2 px-4 text-center'>{{this.DistrictName}}</td>
             <td class='py-2 px-4 text-center'>{{this.Name}}</td>
             <td class='p-2 flex justify-center items-center'>
-              <form action='/so/statistics-ward/{{this.ID}}' method='POST'>
+              <form action='/so/statistics-ward/{{this.ID}}' method='GET'>
                 <button type='submit' class='text-blue-500 p-1'>View</button>
               </form>
             </td>
