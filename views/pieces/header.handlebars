@@ -3,19 +3,19 @@
 
   <div>
     <ul class='flex flex-row justify-center gap-6'>
-      <li><a href='/' class="hover:text-red-600">Public</a></li>
-      <li><a href='/about' class="hover:text-red-600">About Us</a></li>
+      <li><a href='/' class="hover:text-red-600">Trang chủ</a></li>
+      <li><a href='/about' class="hover:text-red-600">Giới thiệu</a></li>
       <li class="relative inline-block text-left">
         <button id="settingBtn" type="button"
           class="inline-flex hover:text-red-600">
-          Setting
+          Cài đặt
         </button>
         <div id="settingDropdown"
           class="hidden absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 divide-y divide-gray-100 rounded-md shadow-lg z-10">
-          <a href='/update-information' class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Update Info</a>
-          <a href='/update-password' class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Change Password</a>
+          <a href='/update-information' class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cập nhật thông tin</a>
+          <a href='/update-password' class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Thay đổi mật khẩu</a>
           <form action='/logout' method='POST' class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <button type='submit' class="text-gray-700 hover:bg-gray-100">Login/logout</button>
+            <button type='submit' class="text-red-700 hover:bg-gray-100">Đăng nhập/xuất</button>
           </form>
         </div>
       </li>
