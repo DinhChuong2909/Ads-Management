@@ -232,7 +232,7 @@ router.post('/phuong/capphep/del', async function (req, res) {
   }
 })
 
-router.post('/capphep/edit/add', async function (req, res) {
+router.post('/phuong/capphep/edit/add', async function (req, res) {
   try {
     const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc } = req.body;
     console.log(req.body)
