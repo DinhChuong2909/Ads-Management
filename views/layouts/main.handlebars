@@ -25,7 +25,9 @@
 
 <body>
   {{> header}}
-  {{{body}}}
-  {{> footer}}
+  <div class="h-screen">
+    <div class="h-screen">{{{body}}}</div>
+    <div>{{> footer}}</div>
+  </div>
 </body>
 </html>

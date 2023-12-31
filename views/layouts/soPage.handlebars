@@ -24,69 +24,71 @@
 
 <body>
   {{> header}}
-  <div class="w-full flex flex-row p-8">
-    <div class="w-[20%] h-full">
-      <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
-        <a href="/so"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/dashboard.svg" />
-          <span class="text-sm font-semibold">Bản đồ</span>
-        </a>
-        <a href="/so/quan"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/district.svg" />
-          <span class="text-sm font-semibold">Danh sách quận</span>
-        </a>
-        <a href="/so/quangcao"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/diadiem.svg" />
-          <span class="text-sm font-semibold">Phân loại QC</span>
-        </a>
-        <a href="/so/diemdat"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/diadiem.svg" />
-          <span class="text-sm font-semibold">Danh sách điểm đặt QC</span>
-        </a>
-        <a href="/so/bangqc"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/ads.svg" />
-          <span class="text-sm font-semibold">Danh sách bảng QC</span>
-        </a>
-        <a href="/so/loaibc"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/report.svg" />
-          <span class="text-sm font-semibold">Danh sách loại báo cáo</span>
-        </a>
-        <a href="/so/yeu-cau-chinh-sua"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/edit.svg" />
-          <span class="text-sm font-semibold">Yêu cầu chỉnh sửa</span>
-        </a>
-        {{!-- <a href="/so/baocao"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/baocao.svg" />
-          <span class="text-sm font-semibold">Xử lý báo cáo</span>
-        </a> --}}
-        <a href="/so/capphep"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/capphep.svg" />
-          <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
-        </a>
-        <a href="/so/statistics/select-ward-district"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/statistic.svg" />
-          <span class="text-sm font-semibold">Thống kê báo cáo</span>
-        </a>
-        <a href="/register"
-          class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
-          <img class="w-6 h-6" src="/static/img/account.svg" />
-          <span class="text-sm font-semibold">Tạo tài khoản cán bộ</span>
-        </a>
+  <div class="h-screen">
+    <div class="w-full flex flex-row p-4 h-screen">
+      <div class="w-[20%] h-full">
+        <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
+          <a href="/so"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/dashboard.svg" />
+            <span class="text-sm font-semibold">Bản đồ</span>
+          </a>
+          <a href="/so/quan"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/district.svg" />
+            <span class="text-sm font-semibold">Danh sách quận</span>
+          </a>
+          <a href="/so/quangcao"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/diadiem.svg" />
+            <span class="text-sm font-semibold">Phân loại QC</span>
+          </a>
+          <a href="/so/diemdat"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/diadiem.svg" />
+            <span class="text-sm font-semibold">Danh sách điểm đặt QC</span>
+          </a>
+          <a href="/so/bangqc"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/ads.svg" />
+            <span class="text-sm font-semibold">Danh sách bảng QC</span>
+          </a>
+          <a href="/so/loaibc"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/report.svg" />
+            <span class="text-sm font-semibold">Danh sách loại báo cáo</span>
+          </a>
+          <a href="/so/yeu-cau-chinh-sua"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/edit.svg" />
+            <span class="text-sm font-semibold">Yêu cầu chỉnh sửa</span>
+          </a>
+          {{!-- <a href="/so/baocao"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/baocao.svg" />
+            <span class="text-sm font-semibold">Xử lý báo cáo</span>
+          </a> --}}
+          <a href="/so/capphep"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/capphep.svg" />
+            <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
+          </a>
+          <a href="/so/statistics/select-ward-district"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/statistic.svg" />
+            <span class="text-sm font-semibold">Thống kê báo cáo</span>
+          </a>
+          <a href="/register"
+            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            <img class="w-6 h-6" src="/static/img/account.svg" />
+            <span class="text-sm font-semibold">Tạo tài khoản cán bộ</span>
+          </a>
+        </div>
       </div>
+      <div class="w-[80%]">{{{body}}}</div>
     </div>
-    <div class="w-[80%]">{{{body}}}</div>
+    <div class="flex justify-center">{{> footer}}</div>
   </div>
-  {{> footer}}
 </body>
 
 </html>

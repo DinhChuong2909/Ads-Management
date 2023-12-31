@@ -1,21 +1,21 @@
 <div class="map-container ">
   <div id="map"></div>
   <div id="coordinates" class="absolute top-4 left-4 bg-white p-2"></div>
-  <div class="absolute top-1 left-1/2 transform -translate-x-1/2">
+  <div class="absolute top-2 left-1/2 transform -translate-x-1/2">
     <ul class="flex flex-row gap-4">
-      <li class="flex items-center">
+      <li class="flex items-center ">
         <label class="toggle-switch">
           <input type="checkbox" id="qcToggle">
           <span class="toggle-slider"></span>
         </label>
-        <span class="toggle-label">Bảng QC</span>
+        <span class="pl-2 toggle-label">Bảng QC</span>
       </li>
       <li class="flex items-center">
         <label class="toggle-switch">
           <input type="checkbox" id="violationToggle">
           <span class="toggle-slider"></span>
         </label>
-        <span class="toggle-label">Báo cáo vi phạm</span>
+        <span class="pl-2 toggle-label">Báo cáo vi phạm</span>
       </li>
     </ul>
   </div>
@@ -211,7 +211,7 @@
       }
     });
 
-    map.loadImage('/static/img/custom.png', function (error, image) {
+    map.loadImage('/static/img/marker.png', function (error, image) {
       if (error) throw error;
       map.addImage('custom-marker', image);
 
@@ -494,7 +494,7 @@
     </div>
   </div>
   <div class="flex flex-row gap-8">
-    <div class="mr-auto px-1 py-1">
+    <div class="px-1 py-1">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
           stroke-linejoin="round" />
@@ -504,14 +504,14 @@
           stroke-linejoin="round" />
       </svg>
     </div>
-    <div class="text-[#D32E2E] flex flex-row border-[#D32E2E] border-2 rounded-lg ml-auto px-1 py-1">
+    <div class="text-[#D32E2E] flex flex-row border-[#D32E2E] border-2 rounded-lg ml-[-25px] px-1 py-1">
       <div>
         <svg fill="#D32E2E" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z" />
         </svg>
       </div>
-      <div class="text-[#D32E2E] font-semibold">
+      <div class="pl-2 text-[#D32E2E] font-semibold text-md flex items-center">
         <a class="report-violation-btn" onclick="reportViolation(${info.Id})" href="/report?id=${info.Id}"
           role="button">
           BÁO CÁO VI PHẠM
