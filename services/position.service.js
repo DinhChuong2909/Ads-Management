@@ -45,6 +45,10 @@ export default {
     const list = await db('ads').where('KhuVuc', quan).where('Phuong', phuong).count('Id as amount')
     return list[0].amount
   },
+  async countFromQuan(quan) {
+    const list = await db('ads').where('KhuVuc', quan).count('Id as amount')
+    return list[0].amount
+  },
   async countDiemDat(quyhoach) {
     const list = await db('ads').where('QuyHoach', quyhoach).count('Id as amount')
     return list[0].amount

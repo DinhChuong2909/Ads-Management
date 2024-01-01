@@ -54,15 +54,21 @@ router.post(
   (req, res) => {
     let redirectPath = '/'
     if (req.user.Role == 'cbquan') {
-      redirectPath = `/quan/${req.user.ID}`
+      redirectPath = `/quan`;
+      req.session.userId = req.user.ID;
+      console.log(req.session)
     } else if (req.user.Role == 'cbphuong') {
-      redirectPath = `/phuong/${req.user.ID}`
+      redirectPath = `/phuong`;
+      req.session.userId = req.user.ID;
+      console.log(req.session)
     } else if (req.user.Role == 'cbsovhtt') {
-      redirectPath = `/so/${req.user.ID}`
+      redirectPath = `/so`;
+      req.session.userId = req.user.ID;
+      console.log(req.session)
     } else {
-      redirectPath = '/login-failed'
+      redirectPath = '/login-failed';
     }
-    res.redirect(redirectPath)
+    res.redirect(redirectPath);
   }
 )
 
