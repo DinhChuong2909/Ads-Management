@@ -14,6 +14,10 @@ router.use(express.urlencoded({ extended: true }))
 // dashboard/Map
 router.get('/quan', async function (req, res) {
   try {
+    const userId = req.session.userId
+    const user = await authenticationService.findById(userId)
+    const userQuan = user.District
+    
     const list = await positionService.findQuan(userQuan)
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 

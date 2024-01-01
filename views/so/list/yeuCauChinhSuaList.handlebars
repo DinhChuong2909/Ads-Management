@@ -1,4 +1,4 @@
-<div class=" shadow-md mx-auto my-4 rounded-lg mr-4">
+<div class="shadow-md mx-auto my-4 rounded-lg mr-4">
     <table class="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption
             class="p-5 pt-7 text-[24px] text-[#0059CC] font-bold text-left rtl:text-right bg-white dark:text-white dark:bg-gray-800 rounded-lg">
@@ -31,9 +31,12 @@
         </thead>
         <tbody>
             {{#if this.empty}}
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" style="white-space: nowrap;"> Không có dữ liệu </th>
-            </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row"
+                        class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
+                        Không có dữ liệu
+                    </th>
+                </tr>
             {{else}}
             {{#each this.list}}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
