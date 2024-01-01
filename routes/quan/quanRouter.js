@@ -14,9 +14,6 @@ router.use(express.urlencoded({ extended: true }))
 // dashboard/Map
 router.get('/quan', async function (req, res) {
   try {
-    const userId = req.params.userId
-    console.log(userId)
-
     const list = await positionService.findQuan(userQuan)
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 
@@ -42,8 +39,8 @@ router.get('/quan', async function (req, res) {
 router.get('/quan/diadiem', async function (req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userQuan = user.District
 
     const limit = 10
     const page = req.query.page || 1
@@ -186,14 +183,14 @@ router.post('/quan/baocao/detail/:id', async function (req, res) {
 router.get('/quan/capphep', async function (req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userQuan = user.District
 
     const limit = 10
     const page = req.query.page || 1
     const offset = (page - 1) * limit
 
-    const total = await licenseService. countQuan(userQuan)
+    const total = await licenseService.countQuan(userQuan)
     const nPages = Math.ceil(total / limit)
     const pageNumbers = []
     for (let i = 1; i <= nPages; i++) {
