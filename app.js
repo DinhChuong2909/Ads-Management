@@ -11,8 +11,8 @@ import session from 'express-session'
 
 // PAGES
 import governmentRouter from './routes/governmentRouter.js'
-import homeRouter from "./routes/people/homeRouter.js"
-import reportRouter from "./routes/people/reportRouter.js"
+import homeRouter from './routes/people/homeRouter.js'
+import reportRouter from './routes/people/reportRouter.js'
 import aboutRouter from './routes/aboutRouter.js'
 import phuongRouter from './routes/phuong/phuongRouter.js'
 import quanRouter from './routes/quan/quanRouter.js'
@@ -99,19 +99,19 @@ app.use('/static', express.static('static'))
 // app.get('/', governmentRouter)
 
 // Public
-app.use("/report", reportRouter);
-app.get("/report", reportRouter);
-app.post("/report", reportRouter);
+app.use('/report', reportRouter)
+app.get('/report', reportRouter)
+app.post('/report', reportRouter)
 // app.use("/", allDataRouter);
-app.post("/", homeRouter);
-app.get("/", homeRouter);
-app.get("/about", aboutRouter);
+app.post('/', homeRouter)
+app.get('/', homeRouter)
+app.get('/about', aboutRouter)
 
 // About
 app.get('/about', aboutRouter)
 
 // Phuong
-app.get('/phuong', phuongRouter)
+app.get('/phuong/:userId', phuongRouter)
 app.get('/phuong/diadiem', phuongRouter)
 app.get('/phuong/diadiem/edit', phuongRouter)
 app.post('/phuong/diadiem/edit/add', phuongRouter)
@@ -124,9 +124,8 @@ app.post('/phuong/capphep/del', phuongRouter)
 app.post('/phuong/capphep/edit/add', phuongRouter)
 app.get('/phuong/capphep/edit/', phuongRouter)
 
-
 // Quan
-app.get('/quan', quanRouter)
+app.get('/quan/:userId', quanRouter)
 app.get('/quan/diadiem', quanRouter)
 app.get('/quan/diadiem/edit', quanRouter)
 app.post('/quan/diadiem/edit/add', quanRouter)
@@ -142,7 +141,7 @@ app.post('/quan-select-quantam', quanQuanTamRouter)
 app.get('/quan-select-quantam/detail', quanQuanTamRouter)
 
 // So
-app.get('/so', soRouter)
+app.get('/so/:userId', soRouter)
 app.get('/so/quan', soRouter)
 app.get('/so/quan/:quan', soRouter)
 app.get('/so/quangcao', soRouter)

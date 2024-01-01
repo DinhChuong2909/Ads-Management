@@ -11,8 +11,11 @@ const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
 // dashboard/Map
-router.get('/quan', async function (req, res) {
+router.get('/quan/:userId', async function (req, res) {
   try {
+    const userId = req.params.userId
+    console.log(userId)
+
     const list = await positionService.findAll()
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 
@@ -55,10 +58,10 @@ router.get('/quan/diadiem', async function (req, res) {
 
     if (list && list.length > 0) {
       for (let item of list) {
-        const phuong = await phuongService.findById(item.Phuong);
-        const quan = await quanService.findById(item.KhuVuc);
-        item.Phuong = phuong.Name;
-        item.KhuVuc = quan.Name;
+        const phuong = await phuongService.findById(item.Phuong)
+        const quan = await quanService.findById(item.KhuVuc)
+        item.Phuong = phuong.Name
+        item.KhuVuc = quan.Name
       }
     }
 
@@ -160,22 +163,20 @@ router.get('/quan/baocao/detail', async function (req, res) {
   })
 })
 
-router.post('/quan/baocao/detail/:id', async function(req, res)
-{
-  const id = req.params.id || 0;
+router.post('/quan/baocao/detail/:id', async function (req, res) {
+  const id = req.params.id || 0
   console.log(id)
-  const xl = "1"
-  const ndxl = req.body.NoiDungXuLy;
+  const xl = '1'
+  const ndxl = req.body.NoiDungXuLy
 
-  await reportService.updateXuLyByID(id, xl);
-  await reportService.updateNDXuLyByID(id, ndxl);
-  
+  await reportService.updateXuLyByID(id, xl)
+  await reportService.updateNDXuLyByID(id, ndxl)
+
   const report = await reportService.findById(id)
-  sendOtpEmail(report.Email, ndxl);
-
+  sendOtpEmail(report.Email, ndxl)
 
   res.redirect('/quan/baocao')
-});
+})
 // /quan/capphep
 router.get('/quan/capphep', async function (req, res) {
   try {
@@ -197,10 +198,10 @@ router.get('/quan/capphep', async function (req, res) {
 
     if (list && list.length > 0) {
       for (let item of list) {
-        const phuong = await phuongService.findById(item.Phuong);
-        const quan = await quanService.findById(item.KhuVuc);
-        item.Phuong = phuong.Name;
-        item.KhuVuc = quan.Name;
+        const phuong = await phuongService.findById(item.Phuong)
+        const quan = await quanService.findById(item.KhuVuc)
+        item.Phuong = phuong.Name
+        item.KhuVuc = quan.Name
       }
     }
 

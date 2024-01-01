@@ -12,37 +12,29 @@ router.get('/so/statistics/select-ward-district', async function (req, res) {
     const allDistricts = await quanService.findAll()
     const allWards = await phuongService.findAll()
 
-    console.log(allDistricts)
-    console.log(allWards)
-
     const nameMap = new Map(allDistricts.map((item) => [item.ID, item.Name]))
     const mergedArray = allWards.map((item) => ({
       ...item,
       DistrictName: nameMap.get(item.ThuocQuan),
     }))
 
-    console.log(mergedArray);
-
     res.render('so/thongke/wardAndDistrictSelection', {
       layout: 'soPage',
       districtsList: allDistricts,
       wardsList: mergedArray,
     })
-  } catch (error) { }
+  } catch (error) {}
 })
 
 router.get('/so/statistics-ward/:ID', async function (req, res) {
   try {
     const wardId = req.params.ID || 0
 
-    const wName = await phuongService.findById(wardId);
+    const wName = await phuongService.findById(wardId)
     const dName = await quanService.findById(wName.ThuocQuan)
     const data = await positionService.joinReportByPhuongId(wardId)
     const count = data.length
-    
-    // console.log(data)
-    // console.log(wName)
-    //render report data of this
+
     res.render('so/thongke/statistics', {
       layout: 'soPage',
       empty: data.length === 0,
@@ -51,7 +43,7 @@ router.get('/so/statistics-ward/:ID', async function (req, res) {
       districtName: dName,
       count: count,
     })
-  } catch (error) { }
+  } catch (error) {}
 })
 
 router.get('/so/statistics-district/:ID', async function (req, res) {
@@ -60,19 +52,16 @@ router.get('/so/statistics-district/:ID', async function (req, res) {
 
     const district = await quanService.findById(districtId)
     const data = await positionService.joinReportByQuanId(districtId)
-    const count = data.length;
+    const count = data.length
 
-    console.log(data)
-    //render report data of this id
-    res.render('so/thongke/statistics',
-      {
-        layout: 'soPage',
-        empty: data.length === 0,
-        list: data,
-        district: district,
-        count: count,
-      })
-  } catch (error) { }
+    res.render('so/thongke/statistics', {
+      layout: 'soPage',
+      empty: data.length === 0,
+      list: data,
+      district: district,
+      count: count,
+    })
+  } catch (error) {}
 })
 
 export default router

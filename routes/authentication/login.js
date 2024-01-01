@@ -47,10 +47,23 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 router.post(
   '/login',
   passport.authenticate('local', {
-    successRedirect: '/phuong',
+    // successRedirect: '/phuong',
     failureRedirect: '/login-failed',
     failureFlash: true,
-  })
+  }),
+  (req, res) => {
+    let redirectPath = '/'
+    if (req.user.Role == 'cbquan') {
+      redirectPath = `/quan/${req.user.ID}`
+    } else if (req.user.Role == 'cbphuong') {
+      redirectPath = `/phuong/${req.user.ID}`
+    } else if (req.user.Role == 'cbsovhtt') {
+      redirectPath = `/so/${req.user.ID}`
+    } else {
+      redirectPath = '/login-failed'
+    }
+    res.redirect(redirectPath)
+  }
 )
 
 router.get('/login-failed', checkNotAuthenticated, (req, res) => {
