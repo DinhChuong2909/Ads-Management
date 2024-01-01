@@ -56,15 +56,15 @@ router.post(
     if (req.user.Role == 'cbquan') {
       redirectPath = `/quan`;
       req.session.userId = req.user.ID;
-      console.log(req.session)
+      // console.log(req.session)
     } else if (req.user.Role == 'cbphuong') {
       redirectPath = `/phuong`;
       req.session.userId = req.user.ID;
-      console.log(req.session)
+      // console.log(req.session)
     } else if (req.user.Role == 'cbsovhtt') {
       redirectPath = `/so`;
       req.session.userId = req.user.ID;
-      console.log(req.session)
+      // console.log(req.session)
     } else {
       redirectPath = '/login-failed';
     }
