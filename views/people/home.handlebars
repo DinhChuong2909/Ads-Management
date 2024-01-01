@@ -1,4 +1,4 @@
-<div class="map-container ">
+<div class="map-container">
   <div id="map"></div>
   <div id="coordinates" class="absolute top-4 left-4 bg-white p-2"></div>
   <div class="absolute top-2 left-1/2 transform -translate-x-1/2">
@@ -8,18 +8,18 @@
           <input type="checkbox" id="qcToggle">
           <span class="toggle-slider"></span>
         </label>
-        <span class="pl-2 toggle-label">Bảng QC</span>
+        <span class="pl-2">Bảng QC</span>
       </li>
       <li class="flex items-center">
         <label class="toggle-switch">
           <input type="checkbox" id="violationToggle">
           <span class="toggle-slider"></span>
         </label>
-        <span class="pl-2 toggle-label">Báo cáo vi phạm</span>
+        <span class="pl-2">Báo cáo vi phạm</span>
       </li>
     </ul>
   </div>
-  <div class="flex justify-end">
+  <div class="w-full flex justify-end">
     <div class="w-1/5 h-full bg-white shadow-md overflow-y-auto mx-1">
       <div class="DATA">
         {{> allData}}
@@ -64,10 +64,10 @@
         mapDiv.style.height = '90%';
         hideAllDataAndReport();
       } else if (qcToggle.checked && !violationToggle.checked) {
-        mapDiv.style.width = '80%';
+        mapDiv.style.width = '79%';
         showAllData();
       } else if (!qcToggle.checked && violationToggle.checked) {
-        mapDiv.style.width = '80%';
+        mapDiv.style.width = '79%';
         showReportData();
       }
     }
@@ -135,7 +135,7 @@
   map.addControl(new mapboxgl.NavigationControl());
 
   var mapDiv = document.getElementById('map');
-  mapDiv.style.cssText = 'margin: 5px 0px 0px 0px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 100%; height: 200%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
+  mapDiv.style.cssText = 'margin: 5px; border: 1px solid whitesmoke; border-radius: 10px; left: 0px; width: 100%; height: 200%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);';
 
 
   const qcToggle = document.getElementById('qcToggle');

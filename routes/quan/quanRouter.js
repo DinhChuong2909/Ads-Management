@@ -11,10 +11,10 @@ const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
 // dashboard/Map
-router.get('/quan/:userId', async function (req, res) {
+router.get('/quan', async function (req, res) {
   try {
-    const userId = req.params.userId
-    console.log(userId)
+    // const userId = req.params.userId
+    // console.log(userId)
 
     const list = await positionService.findAll()
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu

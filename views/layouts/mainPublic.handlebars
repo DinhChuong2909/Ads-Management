@@ -1,37 +1,43 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-  <link rel="stylesheet" href="static/css/people/home.css">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <head>
+    <meta charset='utf-8' />
+    <script src='https://cdn.tailwindcss.com'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel='stylesheet' href='static/css/people/home.css' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
 
-  <title>SCH Map</title>
-  <style>
-    #map {
-      position: absolute;
-      top: 50;
-      bottom: 50;
-      width: 100%;
-    }
+    <title>SCH Map</title>
+    <style>
+      #map { position: absolute; top: 50; bottom: 50; width: 100%; } #resizeMap { width: 50%; }
+    </style>
+  </head>
 
-    #resizeMap {
-      width: 50%;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row items-center mb-8">
-    <div class="mr-auto">
-      <img class="w-36" alt="logo-img" src="/static/img/SCHlogo.svg" />
+  <body>
+    <div class='w-full h-10 px-28 bg-[#FFFFFF] shadow-xl flex flex-row justify-between items-center'>
+      <div>
+        <img class='w-36' alt='logo-img' src='/static/img/SCHlogo.svg' />
+      </div>
+      <div>
+        <a href='/about'>
+          About
+        </a>
+      </div>
     </div>
-    <a class="mx-auto font-semibold" href="/about">
-      About
-      <a>
-  </div>
-  {{{body}}}
-</body>
+    <div class='min-h-screen h-auto'>{{{body}}}</div>
+    <footer class='w-full h-fit -mt-12 text-white shadow-lg px-28 bg-[#3ED9CB]'>
+      <div class='flex flex-row justify-between'>
+        <div class='w-full h-fit flex flex-col my-4 justify-center items-center'>
+          <h5 class='mb-3 text-2xl font-semibold text-[#0D55B3]'>Ads Management</h5>
+          <p class='w-[70%]'>
+            Đây là ứng dụng web quản lý quảng cáo giúp bạn dễ dàng theo dõi và quản lý các chiến dịch quảng cáo của khu
+            vực mình.
+          </p>
+        </div>
+      </div>
+      <div class='text-center p-3'>
+        21PTUDW02 ©HCMUS 21127158 - 21127236 - 21127511
+      </div>
+    </footer>
+  </body>
 
 </html>

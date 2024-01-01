@@ -24,42 +24,42 @@
 
 <body>
   {{> header}}
-  <div class="h-screen">
-    <div class="w-full flex flex-row p-4 h-screen">
-      <div class="w-[20%] h-full">
+  <div class="h-auto">
+    <div class="w-screen flex flex-row justify-between h-auto p-4">
+      <div class="w-[20%] h-fit">
         <div class="h-fit flex flex-col gap-2 mt-4 overflow-hidden">
           <a href="/so"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/dashboard.svg" />
             <span class="text-sm font-semibold">Bản đồ</span>
           </a>
           <a href="/so/quan"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/district.svg" />
             <span class="text-sm font-semibold">Danh sách quận</span>
           </a>
           <a href="/so/quangcao"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/diadiem.svg" />
             <span class="text-sm font-semibold">Phân loại QC</span>
           </a>
           <a href="/so/diemdat"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/diadiem.svg" />
             <span class="text-sm font-semibold">Danh sách điểm đặt QC</span>
           </a>
           <a href="/so/bangqc"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/ads.svg" />
             <span class="text-sm font-semibold">Danh sách bảng QC</span>
           </a>
           <a href="/so/loaibc"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/report.svg" />
             <span class="text-sm font-semibold">Danh sách loại báo cáo</span>
           </a>
           <a href="/so/yeu-cau-chinh-sua"
-            class="flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/edit.svg" />
             <span class="text-sm font-semibold">Yêu cầu chỉnh sửa</span>
           </a>
@@ -85,9 +85,9 @@
           </a>
         </div>
       </div>
-      <div class="w-[80%]">{{{body}}}</div>
+      <div class="w-[80%] ml-auto min-h-screen">{{{body}}}</div>
     </div>
-    <div class="flex justify-center">{{> footer}}</div>
+    <div >{{> footer}}</div>
   </div>
 </body>
 

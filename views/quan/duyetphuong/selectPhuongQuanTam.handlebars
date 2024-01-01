@@ -7,11 +7,11 @@
 </style>
 
 <form
-  class='w-fit h-fit mx-auto bg-[#f2f2f2] px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center'
+  class='w-fit h-fit mx-auto bg-[#f2f2f2] mt-6 px-4 pt-2 pb-3 shadow-xl rounded-lg flex flex-col justify-center items-center'
   action='/quan-select-quantam'
   method='POST'
 >
-  <div>
+  <div class='max-h-[76vh] overflow-y-scroll'>
     <h1 class='text-2xl py-2 font-medium text-center'>Choose Wards</h1>
     {{#each wardList}}
       <div class='custom-checkbox'>
