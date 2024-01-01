@@ -21,5 +21,9 @@ export default {
     async countAll() {
         const list = await db('updatepos').count('ID as amount');
         return list[0].amount;
+    },
+    updateDuyetById(id, status)
+    {
+      return db('updatepos').where('ID', id).update('Duyet', status);
     }
 }

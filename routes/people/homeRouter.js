@@ -18,7 +18,7 @@ router.get('/', async function (req, res) {
     const combinedData = []
 
     reportData.forEach((reportItem) => {
-      const matchingPositionItem = positionData.find((positionItem) => positionItem.Id === reportItem.AdsID)
+      const matchingPositionItem = positionData.find((positionItem) => positionItem.Id == reportItem.AdsID)
       if (matchingPositionItem) {
         combinedData.push({ ...reportItem, ...matchingPositionItem })
       }

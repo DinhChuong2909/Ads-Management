@@ -336,7 +336,7 @@ router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
         isActive: i === +page,
       })
     }
-    const list = await posPendingService.findAll(limit, offset)
+    const list = await posPendingService.findFromId(limit, offset)
 
     if (list && list.length > 0) {
       for (let item of list) {
@@ -345,14 +345,82 @@ router.get('/so/yeu-cau-chinh-sua', async function (req, res) {
         item.Phuong = phuong.Name
         item.KhuVuc = quan.Name
       }
+
+      // Lọc danh sách để chỉ hiển thị những phần tử có Duyet = 0
+      const filteredList = list.filter((item) => item.Duyet == '0')
+
+      res.render('so/list/yeucauchinhsuaList', {
+        list: filteredList,
+        empty: filteredList.length === 0,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    } else {
+      res.render('so/list/yeucauchinhsuaList', {
+        list: [],
+        empty: true,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    }
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error)
+    res.status(500).send('Internal Server Error')
+  }
+})
+
+
+router.post('/so/yeu-cau-chinh-sua/:id', async function (req, res) {
+  try {
+    const id = req.params.id
+    console.log(id)
+    const duyet = req.body.duyet
+    console.log(duyet)
+
+    const templist = await posPendingService.updateDuyetById(id, duyet)
+
+    const limit = 10
+    const page = req.query.page || 1
+    const offset = (page - 1) * limit
+
+    const total = await posPendingService.countAll()
+    const nPages = Math.ceil(total / limit)
+    const pageNumbers = []
+    for (let i = 1; i <= nPages; i++) {
+      pageNumbers.push({
+        value: i,
+        isActive: i === +page,
+      })
     }
 
-    res.render('so/list/yeuCauChinhSuaList', {
-      list: list,
-      empty: list.length === 0,
-      pageNumbers: pageNumbers,
-      layout: 'soPage',
-    })
+    const list = await posPendingService.findFromId(limit, offset)
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const phuong = await phuongService.findById(item.Phuong)
+        const quan = await quanService.findById(item.KhuVuc)
+        item.Phuong = phuong.Name
+        item.KhuVuc = quan.Name
+      }
+
+      // Lọc danh sách để chỉ hiển thị những phần tử có Duyet = 0
+      const filteredList = list.filter((item) => item.Duyet === '0')
+
+      res.render('so/list/yeucauchinhsuaList', {
+        list: filteredList,
+        empty: filteredList.length === 0,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    } else {
+      res.render('so/list/yeucauchinhsuaList', {
+        list: [],
+        empty: true,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    }
   } catch (error) {
     // Xử lý lỗi nếu cần
     console.error(error)
