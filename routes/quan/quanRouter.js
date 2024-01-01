@@ -1,4 +1,5 @@
 import express from 'express'
+import authenticationService from '../../services/authentication.service.js'
 import positionService from '../../services/position.service.js'
 import posPendingService from '../../services/posPending.service.js'
 import licenseService from '../../services/LicensingRequest.service.js'
@@ -13,10 +14,10 @@ router.use(express.urlencoded({ extended: true }))
 // dashboard/Map
 router.get('/quan', async function (req, res) {
   try {
-    // const userId = req.params.userId
-    // console.log(userId)
+    const userId = req.params.userId
+    console.log(userId)
 
-    const list = await positionService.findAll()
+    const list = await positionService.findQuan(userQuan)
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 
     // Lấy thông tin chi tiết của từng vị trí trong danh sách
@@ -40,11 +41,15 @@ router.get('/quan', async function (req, res) {
 // Bang vi tri cac diem
 router.get('/quan/diadiem', async function (req, res) {
   try {
+    const userId = req.session.userId
+    const user = await authenticationService.findById(userId);
+    const userQuan = user.District;
+
     const limit = 10
     const page = req.query.page || 1
     const offset = (page - 1) * limit
 
-    const total = await positionService.countAll()
+    const total = await positionService.countFromQuan(userQuan)
     const nPages = Math.ceil(total / limit)
     const pageNumbers = []
     for (let i = 1; i <= nPages; i++) {
@@ -54,7 +59,7 @@ router.get('/quan/diadiem', async function (req, res) {
       })
     }
 
-    const list = await positionService.findFromId(limit, offset)
+    const list = await positionService.findFromQuan(limit, offset, userQuan)
 
     if (list && list.length > 0) {
       for (let item of list) {
@@ -180,11 +185,15 @@ router.post('/quan/baocao/detail/:id', async function (req, res) {
 // /quan/capphep
 router.get('/quan/capphep', async function (req, res) {
   try {
+    const userId = req.session.userId
+    const user = await authenticationService.findById(userId);
+    const userQuan = user.District;
+
     const limit = 10
     const page = req.query.page || 1
     const offset = (page - 1) * limit
 
-    const total = await licenseService.countAll()
+    const total = await licenseService. countQuan(userQuan)
     const nPages = Math.ceil(total / limit)
     const pageNumbers = []
     for (let i = 1; i <= nPages; i++) {
@@ -194,7 +203,7 @@ router.get('/quan/capphep', async function (req, res) {
       })
     }
 
-    const list = await licenseService.findFromId(limit, offset)
+    const list = await licenseService.findFromQuan(limit, offset, userQuan)
 
     if (list && list.length > 0) {
       for (let item of list) {

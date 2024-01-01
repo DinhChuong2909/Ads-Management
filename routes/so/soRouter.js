@@ -14,8 +14,7 @@ router.use(express.urlencoded({ extended: true }))
 // dashboard/Map
 router.get('/so', async function (req, res) {
   try {
-    // const userId = req.params.userId
-    // console.log(userId)
+    const userId = req.session.userId;
 
     const list = await positionService.findAll()
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
