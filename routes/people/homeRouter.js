@@ -15,19 +15,22 @@ router.get('/', async function (req, res) {
     const positionData = await positionService.findAll()
     const reportData = await reportService.findAll()
 
+    // console.log(reportData)
     const combinedData = []
 
     reportData.forEach((reportItem) => {
       const matchingPositionItem = positionData.find((positionItem) => positionItem.Id == reportItem.AdsID)
       if (matchingPositionItem) {
-        combinedData.push({ ...reportItem, ...matchingPositionItem })
+        combinedData.push({ ...reportItem, ...matchingPositionItem, HinhAnh: reportItem.HinhAnh })
       }
     })
+
+    // console.log(combinedData)
 
     const dataForTemplate = combinedData.map((item) => {
       let HinhThucReportDisplay = ''
       switch (item.HinhThucReport) {
-        case 'Lựa chọn hình thức báo cáo':
+        case '0':
           HinhThucReportDisplay = 'Tùy Chọn'
           break
         case '1':
@@ -50,7 +53,11 @@ router.get('/', async function (req, res) {
       const NoiDungBaoCaoDisplay = item.NoiDungBaoCao
         ? `<div>${item.NoiDungBaoCao}</div>`
         : 'Không cung cấp lý do cụ thể'
-      const HinhAnhDisplay = item.HinhAnh ? `<img src="${item.HinhAnh}" alt="Hình ảnh" />` : 'Không có hình ảnh'
+
+      // console.log(item.HinhAnh.replace(/\\/g, '/'))
+      const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+      // console.log(HinhAnhDisplay)
+      // console.log(item);
 
       return {
         ...item,

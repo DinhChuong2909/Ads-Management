@@ -2,6 +2,9 @@ import express from "express";
 import positionService from "../../services/position.service.js";
 import reportService from "../../services/report.service.js";
 
+import multer from 'multer';
+import path from 'path';
+
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
@@ -27,7 +30,19 @@ router.get('/report', async function (req, res) {
   });
 })
 
-router.post('/report', async function (req, res) {
+// Khởi tạo Multer và cấu hình nơi lưu trữ file tải lên
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // Thư mục lưu trữ file tải lên
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+});
+
+const upload = multer({ storage: storage });
+
+router.post('/report', upload.single('form__file'), async function (req, res) {
   try {
     const entity = {
       Lat: req.body.Lat,
@@ -38,12 +53,19 @@ router.post('/report', async function (req, res) {
       Email: req.body.form__email,
       SDT: req.body.form__phone__number,
       NoiDungBaoCao: req.body.textarea,
-      HinhAnh: req.body.form__file,
+      HinhAnh: req.file ? req.file.path : null,
       ThoiGian: req.body.form__timestamp
     };
     console.log(entity)
     const ret = await reportService.add(entity);
     console.log(ret);
+
+    if (req.file) {
+      console.log("Nội dung của file:", req.file);
+    } else {
+      console.log("Không có file được tải lên");
+    }
+
 
     res.redirect('/');
   } catch (error) {

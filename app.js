@@ -106,6 +106,7 @@ app.post('/report', reportRouter)
 app.post('/', homeRouter)
 app.get('/', homeRouter)
 app.get('/about', aboutRouter)
+app.use('/uploads', express.static('uploads'));
 
 // About
 app.get('/about', aboutRouter)

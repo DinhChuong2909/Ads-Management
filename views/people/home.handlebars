@@ -44,6 +44,17 @@
     const reportData = document.querySelector('.REPORT');
     const mapDiv = document.getElementById('map');
 
+    function updateToggles() {
+      if (qcToggle.checked && violationToggle.checked) {
+        qcToggle.checked = false;
+        violationToggle.checked = false;
+      } else if (qcToggle.checked) {
+        violationToggle.checked = false;
+      } else if (violationToggle.checked) {
+        qcToggle.checked = false;
+      }
+    }
+
     function hideAllDataAndReport() {
       allData.style.display = 'none';
       reportData.style.display = 'none';
@@ -74,15 +85,13 @@
     }
 
     qcToggle.addEventListener('change', function () {
+      updateToggles();
       updateMapAndContentVisibility();
-      // Logic khi toggle "Bảng QC" thay đổi trạng thái
-      // ...
     });
 
     violationToggle.addEventListener('change', function () {
+      updateToggles();
       updateMapAndContentVisibility();
-      // Logic khi toggle "Báo cáo vi phạm" thay đổi trạng thái
-      // ...
     });
 
     updateMapAndContentVisibility();
