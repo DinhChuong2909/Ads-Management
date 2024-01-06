@@ -6,6 +6,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="/static/css/page.css" rel="stylesheet" />
 
   <title>SCH Map</title>
   <style>
@@ -25,8 +26,13 @@
 <body>
   {{> header}}
   <div class="h-auto">
+    <div href="/quan"
+      class="w-52 flex flex-row items-center rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+      id="sidebar-toggle-button">
+      <img class="w-6 h-6" src="/static/img/list.svg" />
+    </div>
     <div class="w-screen h-auto flex flex-row justify-between p-4">
-      <div class="w-[20%] h-fit">
+      <div class="max-w-[20%] h-fit" id="sidebar">
         <div class="flex flex-col gap-2 mt-4 overflow-hidden">
           <a href="/quan"
             class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
@@ -55,9 +61,29 @@
           </a>
         </div>
       </div>
-      <div class="w-[80%] ml-auto min-h-screen">{{{body}}}</div>
+      <div class="min-w-[80%] ml-auto min-h-screen" id="content">{{{body}}}</div>
     </div>
     <div>{{> footer}}</div>
   </div>
 </body>
+
 </html>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('hide-sidebar');
+    sidebar.classList.toggle('show-sidebar');
+
+    // Toggle class cho phần nội dung chính
+    content.classList.toggle('shift-content');
+    content.classList.toggle('expand-content');
+  }
+
+  // Xử lý sự kiện bấm để ẩn/hiện sidebar
+  const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
+  sidebarToggleButton.addEventListener('click', toggleSidebar);
+
+</script>

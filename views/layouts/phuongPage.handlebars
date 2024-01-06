@@ -1,61 +1,84 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
-    rel="stylesheet"
-  />
-  <script
-    src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
-  ></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="/static/css/page.css" rel="stylesheet" />
 
   <title>SCH Map</title>
   <style>
-    #map { position: absolute; top: 50; bottom: 50; width: 100%; } #resizeMap
-    { width: 50%; }
+    #map {
+      position: absolute;
+      top: 50;
+      bottom: 50;
+      width: 100%;
+    }
+
+    #resizeMap {
+      width: 50%;
+    }
   </style>
 </head>
+
 <body>
   {{> header}}
   <div class="h-auto">
+    <div href="/phuong"
+      class="w-52 flex flex-row items-center rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
+      id="sidebar-toggle-button">
+      <img class="w-6 h-6" src="/static/img/list.svg" />
+    </div>
     <div class="w-screen flex flex-row justify-between h-auto p-4">
-      <div class="w-[20%] h-fit">
+      <div class="max-w-[20%] h-fit" id="sidebar">
         <div class="flex flex-col gap-2 mt-4 overflow-hidden">
-          <a
-            href="/phuong"
-            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
+          <a href="/phuong"
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/dashboard.svg" />
             <span class="text-sm font-semibold">Bản đồ</span>
           </a>
-          <a
-            href="/phuong/diadiem"
-            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
+          <a href="/phuong/diadiem"
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/diadiem.svg" />
             <span class="text-sm font-semibold">Quản lý địa điểm QC</span>
           </a>
-          <a
-            href="/phuong/baocao"
-            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
+          <a href="/phuong/baocao"
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/baocao.svg" />
             <span class="text-sm font-semibold">Xử lý báo cáo</span>
           </a>
-          <a
-            href="/phuong/capphep"
-            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden"
-          >
+          <a href="/phuong/capphep"
+            class="w-52 flex flex-row items-center gap-2 px-4 py-2 rounded-md hover:bg-blue-500 hover:text-white overflow-hidden">
             <img class="w-6 h-6" src="/static/img/capphep.svg" />
             <span class="text-sm font-semibold">Cấp phép quảng cáo</span>
           </a>
         </div>
       </div>
-      <div class="w-[80%] ml-auto min-h-screen">{{{body}}}</div>
+      <div class="min-w-[80%] ml-auto min-h-screen" id="content">{{{body}}}</div>
     </div>
     <div>{{> footer}}</div>
   </div>
 </body>
+
 </html>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('hide-sidebar');
+    sidebar.classList.toggle('show-sidebar');
+
+    // Toggle class cho phần nội dung chính
+    content.classList.toggle('shift-content');
+    content.classList.toggle('expand-content');
+  }
+
+  // Xử lý sự kiện bấm để ẩn/hiện sidebar
+  const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
+  sidebarToggleButton.addEventListener('click', toggleSidebar);
+
+</script>

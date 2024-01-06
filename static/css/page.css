@@ -4,9 +4,11 @@
 
 .show-sidebar {
     transform: translateX(0);
+    width: 20%;
 }
 
 .hide-sidebar {
+    width: 0%;
     transform: translateX(-100%);
 }
 
@@ -22,6 +24,6 @@
 .expand-content {
     margin-left: 0%;
     /* Thay đổi từ 20% thành 10% */
-    width: 200%;
+    width: 100%;
     /* Thêm thuộc tính width để mở rộng từ 80% lên 90% */
 }
