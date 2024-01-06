@@ -7,6 +7,7 @@ import positionService from '../../services/position.service.js'
 import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
 import reportService from '../../services/report.service.js'
+import authenticationService from '../../services/authentication.service.js'
 
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
@@ -521,6 +522,69 @@ router.post('/so/capphep/:id', async function (req, res) {
       })
     } else {
       res.render('so/list/capPhepList', {
+        list: [],
+        empty: true,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    }
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error)
+    res.status(500).send('Internal Server Error')
+  }
+})
+
+router.get('/so/taikhoan', async function (req, res) {
+  try {
+    const limit = 10
+    const page = req.query.page || 1
+    const offset = (page - 1) * limit
+
+    const total = await authenticationService.countAll()
+    const nPages = Math.ceil(total / limit)
+    const pageNumbers = []
+    for (let i = 1; i <= nPages; i++) {
+      pageNumbers.push({
+        value: i,
+        isActive: i === +page,
+      })
+    }
+    const list = await authenticationService.findFromId(limit, offset)
+
+    if (list && list.length > 0) {
+      for (let item of list) {
+        console.log(item)
+        const phuong = (await phuongService.findById(item.Ward)) ? await phuongService.findById(item.Ward) : null
+        console.log(phuong)
+        const quan = (await quanService.findById(item.District)) ? await quanService.findById(item.District) : null
+        item.Ward = phuong ? phuong.Name : '-'
+        item.District = quan ? quan.Name : '-'
+
+        switch (item.Role) {
+          case 'cbsovhtt':
+            item.Role = 'Cán bộ sở';
+            break;
+          case 'cbquan':
+            item.Role = 'Cán bộ quận';
+            break;
+          case 'cbphuong':
+            item.Role = 'Cán bộ phường';
+            break;
+          default:
+            item.Role = 'Không xác định';
+            break;
+        }
+      }
+
+      res.render('so/list/taikhoanList', {
+        list: list,
+        empty: list.length === 0,
+        pageNumbers: pageNumbers,
+        layout: 'soPage',
+      })
+    } else {
+      res.render('so/list/taikhoanList', {
         list: [],
         empty: true,
         pageNumbers: pageNumbers,

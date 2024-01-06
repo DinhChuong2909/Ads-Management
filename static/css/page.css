@@ -1,0 +1,27 @@
+#sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+.show-sidebar {
+    transform: translateX(0);
+}
+
+.hide-sidebar {
+    transform: translateX(-100%);
+}
+
+#content {
+    /* ... Styles cho nội dung chính ... */
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* .shift-content {
+    margin-left: 20%;
+} */
+
+.expand-content {
+    margin-left: 0%;
+    /* Thay đổi từ 20% thành 10% */
+    width: 200%;
+    /* Thêm thuộc tính width để mở rộng từ 80% lên 90% */
+}

@@ -160,6 +160,7 @@ app.post('/so/capphep/:id', soRouter)
 app.get('/so/loaibc', soRouter)
 app.get('/so/loaibc/:type', soRouter)
 app.get('/so/loaibc/:type/detail', soRouter)
+app.get('/so/taikhoan', soRouter)
 
 // START
 function serverStartedHandler() {
