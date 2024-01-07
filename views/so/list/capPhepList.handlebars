@@ -37,9 +37,37 @@
         </thead>
         <tbody>
             {{#if this.empty}}
-            <div class="card-body">
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 Không có dữ liệu
-            </div>
+                </th>
+            </tr>
+            </table>
+            <nav class="flex-wrap justify-between py-4 pl-4" aria-label="Table navigation">
+                <ul class="flex mx-auto -space-x-px rtl:space-x-reverse text-sm h-8">
+                <li>
+                    <a href="#"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                </li>
+                {{#each this.pageNumbers}}
+                {{#if isActive}}
+                <li>
+                    <a href="#" aria-current="page"
+                    class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
+                </li>
+                {{else}}
+                <li>
+                    <a href="?page={{value}}"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
+                </li>
+                {{/if}}
+                {{/each}}
+                <li>
+                    <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                </li>
+                </ul>
+            </nav>
             {{else}}
             {{#each this.list}}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
