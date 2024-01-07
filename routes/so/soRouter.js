@@ -260,7 +260,34 @@ router.get('/so/loaibc', async function (req, res) {
       })
     }
 
-    const list = await soService.findReportType(limit, offset)
+    let list = await soService.findReportType(limit, offset)
+
+    // Thêm thuộc tính mới HinhThucReportDisplay cho mỗi phần tử trong list
+    list = list.map(item => {
+      let HinhThucReportDisplay = ''
+      switch (item.HinhThucReport) {
+        case '0':
+          HinhThucReportDisplay = 'Tùy Chọn'
+          break
+        case '1':
+          HinhThucReportDisplay = 'Tố giác sai phạm'
+          break
+        case '2':
+          HinhThucReportDisplay = 'Đăng ký nội dung'
+          break
+        case '3':
+          HinhThucReportDisplay = 'Đóng góp ý kiến'
+          break
+        case '4':
+          HinhThucReportDisplay = 'Giải đáp thắc mắc'
+          break
+        default:
+          HinhThucReportDisplay = item.HinhThucReport // Giữ nguyên giá trị nếu không khớp với case nào
+          break
+      }
+      return { ...item, HinhThucReportDisplay } // Thêm thuộc tính mới vào phần tử
+    })
+
     res.render('so/loaiReport/list', {
       list: list,
       empty: list.length === 0,
@@ -273,6 +300,7 @@ router.get('/so/loaibc', async function (req, res) {
     res.status(500).send('Internal Server Error')
   }
 })
+
 
 router.get('/so/loaibc/:type', async function (req, res) {
   try {
@@ -292,7 +320,34 @@ router.get('/so/loaibc/:type', async function (req, res) {
       })
     }
 
-    const list = await soService.findFromReportType(type, limit, offset)
+    let list = await soService.findFromReportType(type, limit, offset)
+
+    // Thêm thuộc tính mới HinhThucReportDisplay cho mỗi phần tử trong list
+    list = list.map(item => {
+      let HinhThucReportDisplay = ''
+      switch (item.HinhThucReport) {
+        case '0':
+          HinhThucReportDisplay = 'Tùy Chọn'
+          break
+        case '1':
+          HinhThucReportDisplay = 'Tố giác sai phạm'
+          break
+        case '2':
+          HinhThucReportDisplay = 'Đăng ký nội dung'
+          break
+        case '3':
+          HinhThucReportDisplay = 'Đóng góp ý kiến'
+          break
+        case '4':
+          HinhThucReportDisplay = 'Giải đáp thắc mắc'
+          break
+        default:
+          HinhThucReportDisplay = item.HinhThucReport // Giữ nguyên giá trị nếu không khớp với case nào
+          break
+      }
+      return { ...item, HinhThucReportDisplay } // Thêm thuộc tính mới vào phần tử
+    })
+
     res.render('so/loaiReport/detail', {
       list: list,
       empty: list.length === 0,
