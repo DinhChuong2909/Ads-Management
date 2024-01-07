@@ -4,12 +4,11 @@
 
 .show-sidebar {
     transform: translateX(0);
-    width: 20%;
 }
 
 .hide-sidebar {
-    width: 20%;
     transform: translateX(-100%);
+    display: none;
 }
 
 #content {

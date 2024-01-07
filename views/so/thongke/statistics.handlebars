@@ -1,6 +1,6 @@
-<div class="w-fit shadow-md mr-auto my-4 rounded-lg">
+<div class="shadow-md mr-auto my-4 rounded-lg">
   <div
-    class="flex flex-row p-5 py-7  text-[#0059CC] font-bold text-left rtl:text-right bg-white dark:text-white dark:bg-gray-800 rounded-lg justify-between gap-4">
+    class="w-full flex flex-row p-5 py-7  text-[#0059CC] font-bold text-left bg-white dark:text-white dark:bg-gray-800 rounded-lg justify-between gap-4">
     <div class="text-[24px] flex flex-row justify-center" style="white-space: nowrap;">
       Thống kê báo cáo
       {{#if this.district}}
@@ -17,24 +17,24 @@
       {{/if}}
     </div>
   </div>
-  <table class="w-auto h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+  <table class="w-full h-fit text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <th scope="col" class="px-4 py-3">
         ID
       </th>
-      <th scope="col" class="w-36 px-4 py-3">
+      <th scope="col" class="px-4 py-3">
         STT Điểm đặt
       </th>
-      <th scope="col" class="w-36 px-4 py-3">
+      <th scope="col" class="px-4 py-3">
         Người báo cáo
       </th>
-      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+      <th scope="col" class="px-4 py-3" style="white-space: nowrap;">
         Hình Thức báo cáo
       </th>
-      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+      <th scope="col" class="px-4 py-3" style="white-space: nowrap;">
         Tình Trạng Xử lý
       </th>
-      <th scope="col" class="w-36 px-4 py-3" style="white-space: nowrap;">
+      <th scope="col" class="px-4 py-3" style="white-space: nowrap;">
         Cách thức xử lý
       </th>
     </thead>
@@ -71,7 +71,7 @@
           Đang xử lý
         </td>
         {{/eq}}
-        <td class="px-4 py-4 text-right">
+        <td class="px-4 py-4">
           {{NoiDungXuLy}}
         </td>
       </tr>

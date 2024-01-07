@@ -6,22 +6,22 @@
         </caption>
         <thead class=" text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     ID Bảng quảng cáo
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     Thời gian
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     Quận
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     Phường
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     Hình thức quảng cáo
                 </th>
-                <th scope="col" class="w-28 px-4 py-3 text-center">
+                <th scope="col" class="px-4 py-3 text-center">
                     Nội dung chỉnh sửa
                 </th>
                 <th scope="col" class="px-4 py-3">
@@ -32,11 +32,36 @@
         <tbody>
             {{#if this.empty}}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row"
-                        class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                        Không có dữ liệu
+                    <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Không có dữ liệu
                     </th>
                 </tr>
+                </table>
+                <nav class="flex-wrap justify-between py-4 pl-4" aria-label="Table navigation">
+                    <ul class="flex mx-auto -space-x-px rtl:space-x-reverse text-sm h-8">
+                    <li>
+                        <a href="#"
+                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                    </li>
+                    {{#each this.pageNumbers}}
+                    {{#if isActive}}
+                    <li>
+                        <a href="#" aria-current="page"
+                        class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{value}}</a>
+                    </li>
+                    {{else}}
+                    <li>
+                        <a href="?page={{value}}"
+                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{value}}</a>
+                    </li>
+                    {{/if}}
+                    {{/each}}
+                    <li>
+                        <a href="#"
+                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                    </li>
+                    </ul>
+                </nav>
             {{else}}
             {{#each this.list}}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -45,7 +70,7 @@
                     {{PosID}}
                 </th>
                 <td class="px-4 py-4 text-center">
-                    {{ThoiGian}}
+                    {{formatDate ThoiGian "short"}}
                 </td>
                 <td class="px-4 py-4 text-center">
                     {{KhuVuc}}
@@ -58,7 +83,7 @@
                 </td>
                 <td class="px-4 py-4 text-center">
                     {{NoiDungChinhSua}}
-                </td>
+                    </td>
                 <td class="px-4 py-4">
                     <form action="/so/yeu-cau-chinh-sua/{{ID}}" method="post">
                         <input type="hidden" name="_method" value="PUT">
