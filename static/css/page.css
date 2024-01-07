@@ -8,7 +8,7 @@
 }
 
 .hide-sidebar {
-    width: 0%;
+    width: 20%;
     transform: translateX(-100%);
 }
 
