@@ -148,62 +148,62 @@
         },
       });
     });
-    
 
-  map.on('click', 'clusters', (e) => {
-    const features = map.queryRenderedFeatures(e.point, {
-      layers: ['clusters']
+
+    map.on('click', 'clusters', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['clusters']
+      });
+      const clusterId = features[0].properties.cluster_id;
+      map.getSource('ads').getClusterExpansionZoom(
+        clusterId,
+        (err, zoom) => {
+          if (err) return;
+
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom
+          });
+        }
+      );
     });
-    const clusterId = features[0].properties.cluster_id;
-    map.getSource('ads').getClusterExpansionZoom(
-      clusterId,
-      (err, zoom) => {
-        if (err) return;
+    // When a click event occurs on a feature in
+    // the unclustered-point layer, open a popup at
+    // the location of the feature, with
+    // description HTML from its properties.
+    map.on('click', 'unclustered-point', (e) => {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const mag = e.features[0].properties.mag;
+      const tsunami =
+        e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
 
-        map.easeTo({
-          center: features[0].geometry.coordinates,
-          zoom: zoom
-        });
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
-    );
-  });
-  // When a click event occurs on a feature in
-  // the unclustered-point layer, open a popup at
-  // the location of the feature, with
-  // description HTML from its properties.
-  map.on('click', 'unclustered-point', (e) => {
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const mag = e.features[0].properties.mag;
-    const tsunami =
-      e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+    });
 
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-  });
-
-  addAds(coordinatesList);
+    addAds(coordinatesList);
 
 
-  map.on('click', handleMapClick);
+    map.on('click', handleMapClick);
 
-  map.on('mouseover', 'custom-marker', function (e) {
-    console.log('Mouse entered custom marker.');
-    map.getCanvas().style.cursor = 'pointer';
+    map.on('mouseover', 'custom-marker', function (e) {
+      console.log('Mouse entered custom marker.');
+      map.getCanvas().style.cursor = 'pointer';
 
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const info = positionInfo[e.features[0].properties.idx];
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const info = positionInfo[e.features[0].properties.idx];
 
-    createHoverPopup(coordinates, info);
-  });
+      createHoverPopup(coordinates, info);
+    });
 
-  map.on('mouseleave', 'custom-marker', function () {
-    console.log('Mouse left custom marker.');
-    map.getCanvas().style.cursor = '';
-    if (hoverPopup) {
-      hoverPopup.remove();
-    }
-  });
+    map.on('mouseleave', 'custom-marker', function () {
+      console.log('Mouse left custom marker.');
+      map.getCanvas().style.cursor = '';
+      if (hoverPopup) {
+        hoverPopup.remove();
+      }
+    });
   });
 
   function createHoverPopup(coordinates, info) {
@@ -223,7 +223,9 @@
       .addTo(map);
   }
 
-  const emptyDataPopupTemplate = `
+  function emptyDataPopupTemplate(info) {
+
+    const emptyDataPopupTemplate = `
     <div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
         <div class="flex flex-row text-[#014361] gap-1">
             <div>
@@ -238,15 +240,15 @@
             </div>
         </div>
         <div class="flex flex-col text-[#014361] pl-7">
-            <div class="font-semibold">
-                Chưa có dữ liệu!
-            </div>
-            <div>
-                Vui lòng chọn điểm trên bảng đồ để xem.
-            </div>
+            <p>Loại vị trí: ${info.LoaiViTri}</p>
+            <p>Địa chỉ: ${info.DiaChi}</p>
+            <p>Khu vực: ${info.KhuVuc}</p>
+            <p>Quy hoạch: Chưa quy hoạch</p>
         </div>
     </div>
 `;
+    return emptyDataPopupTemplate;
+  }
 
 
   function handleMapClick(e) {
@@ -302,7 +304,7 @@
   </div>
   <div class="flex flex-col text-[#2A502C] pl-7">
       <div class="font-semibold ">
-                  ${locationName}
+        ${locationName}
       </div>
       <div>
         ${address}
@@ -335,8 +337,8 @@
     const el = document.createElement('div');
     el.className = 'custom-marker';
 
-    if (info.HinhThucQC === null) {
-      const popupContent = emptyDataPopupTemplate;
+    if (info.HinhThucQC === null || info.QuyHoach == 0) {
+      const popupContent = emptyDataPopupTemplate(info);
       new mapboxgl.Marker(el)
         .setLngLat(coordinates)
         .setPopup(new mapboxgl.Popup().setHTML(popupContent))
@@ -373,6 +375,14 @@
         </div>
         <div>
             Phân loại: ${info.LoaiViTri}
+        </div>
+        <div>
+          <div>
+            Hình ảnh:
+          </div>
+          <div>
+            <img src='/${info.HinhAnhDisplay}' alt='Hình ảnh' />
+          </div>
         </div>
     </div>
 </div>`);

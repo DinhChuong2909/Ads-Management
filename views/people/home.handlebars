@@ -314,33 +314,33 @@
       .addTo(map);
   }
 
-  const emptyDataPopupTemplate = `
-<div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
-  <div class="flex flex-row text-[#014361] gap-1">
-    <div>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-          stroke-linejoin="round" />
-        <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-          stroke-linejoin="round" />
-        <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
+  function emptyDataPopupTemplate(info) {
+
+    const emptyDataPopupTemplate = `
+    <div class="bg-[#E5F6FD] -mx-3 -my-4 py-1 px-1">
+        <div class="flex flex-row text-[#014361] gap-1">
+            <div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="9" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="8" x2="12" y2="12" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="16" x2="12" y2="16" stroke="#2095D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="font-semibold">
+                Thông tin bảng quảng cáo
+            </div>
+        </div>
+        <div class="flex flex-col text-[#014361] pl-7">
+            <p>Loại vị trí: ${info.LoaiViTri}</p>
+            <p>Địa chỉ: ${info.DiaChi}</p>
+            <p>Khu vực: ${info.KhuVuc}</p>
+            <p>Quy hoạch: Chưa quy hoạch</p>
+        </div>
     </div>
-    <div class="font-semibold">
-      Thông tin bảng quảng cáo
-    </div>
-  </div>
-  <div class="flex flex-col text-[#014361] pl-7">
-    <div class="font-semibold">
-      Chưa có dữ liệu!
-    </div>
-    <div>
-      Vui lòng chọn điểm trên bảng đồ để xem.
-    </div>
-  </div>
-</div>
 `;
+    return emptyDataPopupTemplate;
+  }
+
 
 
   function handleMapClick(e) {
@@ -463,8 +463,8 @@
     const el = document.createElement('div');
     el.className = 'custom-marker';
 
-    if (info.HinhThucQC === null) {
-      const popupContent = emptyDataPopupTemplate;
+    if (info.HinhThucQC === null || info.QuyHoach == 0) {
+      const popupContent = emptyDataPopupTemplate(info);
       new mapboxgl.Marker(el)
         .setLngLat(coordinates)
         .setPopup(new mapboxgl.Popup().setHTML(popupContent))
@@ -501,6 +501,14 @@
     </div>
     <div>
       Phân loại: ${info.LoaiViTri}
+    </div>
+    <div>
+      <div>
+        Hình ảnh:
+      </div>
+      <div class="py-2 object-fit">
+        <img src='/${info.HinhAnhDisplay}' alt='Hình ảnh' />
+      </div>
     </div>
   </div>
   <div class="flex flex-row gap-8">

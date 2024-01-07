@@ -12,6 +12,17 @@ router.get('/', async function (req, res) {
     const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
     const positionInfo = await Promise.all(positionInfoPromises)
 
+    // console.log(positionInfo)
+    const positionInfoNew = positionInfo.map((item) => {
+      // console.log(item.HinhAnh.replace(/\\/g, '/'))
+      const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+
+      return {
+        ...item,
+        HinhAnhDisplay,
+      }
+    })
+
     const positionData = await positionService.findAll()
     const reportData = await reportService.findAll()
 
@@ -66,12 +77,12 @@ router.get('/', async function (req, res) {
         HinhAnhDisplay,
       }
     })
-
+    console.log(positionInfo)
     res.render('people/home', {
       list: list,
       empty: list.length === 0,
       coordinatesList: JSON.stringify(coordinatesList),
-      positionInfo: JSON.stringify(positionInfo),
+      positionInfo: JSON.stringify(positionInfoNew),
       combinedData: dataForTemplate,
     })
   } catch (error) {

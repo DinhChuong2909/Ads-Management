@@ -22,7 +22,18 @@ router.get('/so', async function (req, res) {
 
     // Lấy thông tin chi tiết của từng vị trí trong danh sách
     const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
-    const positionInfo = await Promise.all(positionInfoPromises)
+    const positionInfoTemp = await Promise.all(positionInfoPromises)
+
+    // console.log(positionInfo)
+    const positionInfo = positionInfoTemp.map((item) => {
+      // console.log(item.HinhAnh.replace(/\\/g, '/'))
+      const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+
+      return {
+        ...item,
+        HinhAnhDisplay,
+      }
+    })
 
     res.render('so/soMap', {
       layout: 'soPage',

@@ -8,6 +8,11 @@ import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
 import { sendOtpEmail } from '../../services/otpEmail.service.js'
 
+
+import multer from 'multer';
+import path from 'path';
+
+
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
@@ -17,13 +22,24 @@ router.get('/quan', async function (req, res) {
     const userId = req.session.userId
     const user = await authenticationService.findById(userId)
     const userQuan = user.District
-    
+
     const list = await positionService.findQuan(userQuan)
     const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 
     // Lấy thông tin chi tiết của từng vị trí trong danh sách
     const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
-    const positionInfo = await Promise.all(positionInfoPromises)
+    const positionInfoTemp = await Promise.all(positionInfoPromises)
+
+    // console.log(positionInfo)
+    const positionInfo = positionInfoTemp.map((item) => {
+      // console.log(item.HinhAnh.replace(/\\/g, '/'))
+      const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+
+      return {
+        ...item,
+        HinhAnhDisplay,
+      }
+    })
 
     res.render('quan/quanMap', {
       layout: 'quanPage',
@@ -97,9 +113,21 @@ router.get('/quan/diadiem/edit', async function (req, res) {
   })
 })
 
-router.post('/quan/diadiem/edit/add', async function (req, res) {
+// Khởi tạo Multer và cấu hình nơi lưu trữ file tải lên
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // Thư mục lưu trữ file tải lên
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+});
+
+const upload = multer({ storage: storage });
+
+router.post('/quan/diadiem/edit/add', upload.single('form__file'), async function (req, res) {
   try {
-    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungChinhSua, HinhAnh } = req.body
+    const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungChinhSua } = req.body
     console.log(req.body)
     // Tạo một object chứa dữ liệu từ form
     const updatePos = {
@@ -109,7 +137,7 @@ router.post('/quan/diadiem/edit/add', async function (req, res) {
       Phuong,
       KhuVuc,
       NoiDungChinhSua,
-      HinhAnh,
+      HinhAnh: req.file ? req.file.path : null,
       ThoiGian: new Date(), // Thêm thời gian hiện tại khi người dùng submit
     }
 
@@ -242,7 +270,7 @@ router.post('/quan/capphep/del', async function (req, res) {
   }
 })
 
-router.post('/quan/capphep/edit/add', async function (req, res) {
+router.post('/quan/capphep/edit/add', upload.single('form__file'), async function (req, res) {
   try {
     const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, HinhAnh, Email, NgayBatDau, NgayKetThuc } = req.body
     console.log(req.body)
@@ -254,7 +282,7 @@ router.post('/quan/capphep/edit/add', async function (req, res) {
       Phuong,
       KhuVuc,
       NoiDungQC,
-      HinhAnh,
+      HinhAnh: req.file ? req.file.path : null,
       Email,
       NgayBatDau,
       NgayKetThuc, // Thêm thời gian hiện tại khi người dùng submit
