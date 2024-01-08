@@ -60,20 +60,24 @@
             <div class="row">
                 <div class="col col-sm-6 col-md-5 col-lg-4">
                     <label for="form__phone-number" class="form-label">Số điện thoại</label>
-                    <input type="text" class="form-control" id="form__phone__number" name="form__phone__number" required>
+                    <input type="text" class="form-control" id="form__phone__number" name="form__phone__number"
+                        required>
                 </div>
             </div>
 
             <label for="form__content" class="form-label">Nội dung báo cáo</label>
             <textarea name="textarea" id="form__content" name="form__content"></textarea>
 
+            <!-- Thêm phần tử để hiển thị tên của hình ảnh -->
             <label for="form__file" class="form-label">Hình ảnh minh họa</label>
             <br>
+            <div id="file-name-display" class="py-2"></div> <!-- Phần tử để hiển thị tên của hình ảnh -->
             <button class="form__file-btn" type="button">
                 <label for="form__file"><i class="fa-light fa-upload"></i> Thêm tệp</label>
             </button>
             <input type="file" id="form__file" name="form__file" multiple>
             <hr>
+
 
             <div class="g-recaptcha" data-sitekey="6LeZQiwpAAAAAL3qeGgkNKncYR-eu1SV2-hN9Wqe"></div>
             <div class="error-message"></div>
@@ -186,6 +190,21 @@
             });
         </script>
     </form>
+
+    <script>
+        document.getElementById("form__file").addEventListener("change", function (event) {
+            const fileInput = event.target;
+            // Kiểm tra xem có hình ảnh nào được chọn hay không
+            if (fileInput.files && fileInput.files.length > 0) {
+                const fileNameDisplay = document.getElementById("file-name-display");
+                // Hiển thị tên của hình ảnh được chọn
+                fileNameDisplay.innerHTML = `Đã thêm file: ${fileInput.files[0].name}`;
+            } else {
+                // Nếu không có hình ảnh nào được chọn, xóa nội dung hiển thị
+                document.getElementById("file-name-display").innerHTML = "";
+            }
+        });
+    </script>
 </body>
 
 </html>

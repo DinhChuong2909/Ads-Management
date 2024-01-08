@@ -4,6 +4,21 @@ import reportService from '../../services/report.service.js'
 
 const router = express.Router()
 
+function getFileType(fileUrl) {
+  const imageExtensions = ['.png', '.jpg', '.jpeg'];
+  const videoExtensions = ['.mp4', '.mov', '.avi']; // Add more video extensions as needed
+
+  const extension = fileUrl.substr(fileUrl.lastIndexOf('.')).toLowerCase();
+
+  if (imageExtensions.includes(extension)) {
+    return 'image';
+  } else if (videoExtensions.includes(extension)) {
+    return 'video';
+  } else {
+    return 'unknown'; // If the extension doesn't match either image or video
+  }
+}
+
 router.get('/', async function (req, res) {
   try {
     const list = await positionService.findAll()
@@ -67,6 +82,23 @@ router.get('/', async function (req, res) {
 
       // console.log(item.HinhAnh.replace(/\\/g, '/'))
       const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+
+      const fileType = getFileType(HinhAnhDisplay);
+
+      let mediaTag;
+      if (fileType === 'image') {
+        mediaTag = `<img src="${HinhAnhDisplay}" alt="Image" class="object-cover"/>`;
+      } else if (fileType === 'video') {
+        mediaTag = 
+        `
+        <video controls>
+          <source src="${HinhAnhDisplay}" type="video/mp4" class="object-cover" />
+          Your browser does not support the video tag.
+        </video>`;
+      } else {
+        // Handle the case when fileType is unknown or not determined
+        mediaTag = 'File type not supported';
+      }
       // console.log(HinhAnhDisplay)
       // console.log(item);
 
@@ -74,10 +106,10 @@ router.get('/', async function (req, res) {
         ...item,
         HinhThucReportDisplay,
         NoiDungBaoCaoDisplay,
-        HinhAnhDisplay,
+        HinhAnhDisplay: mediaTag,
       }
     })
-    console.log(positionInfo)
+    // console.log(positionInfo)
     res.render('people/home', {
       list: list,
       empty: list.length === 0,

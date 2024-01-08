@@ -56,15 +56,15 @@ router.post('/report', upload.single('form__file'), async function (req, res) {
       HinhAnh: req.file ? req.file.path : null,
       ThoiGian: req.body.form__timestamp
     };
-    console.log(entity)
+    // console.log(entity)
     const ret = await reportService.add(entity);
-    console.log(ret);
+    // console.log(ret);
 
-    if (req.file) {
-      console.log("Nội dung của file:", req.file);
-    } else {
-      console.log("Không có file được tải lên");
-    }
+    // if (req.file) {
+    //   console.log("Nội dung của file:", req.file);
+    // } else {
+    //   console.log("Không có file được tải lên");
+    // }
 
 
     res.redirect('/');
