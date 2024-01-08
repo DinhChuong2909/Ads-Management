@@ -154,11 +154,28 @@ router.post('/quan/diadiem/edit/add', upload.single('form__file'), async functio
 // /quan/baocao
 router.get('/quan/baocao', async function (req, res) {
   try {
+    const userId = req.session.userId
+    const user = await authenticationService.findById(userId)
+    const userQuan = user.District
+
+    const adsID = await reportService.getAdsID()
+    console.log(adsID)
+    var reportList = []
+    for (let id of adsID) {
+      console.log(id)
+      var reportID = await positionService.findReportIDQuan(id.AdsID, userQuan)
+      if (reportID[0] !== null && reportID[0] !== undefined) {
+        var report = await reportService.findByAdsID(reportID[0].Id)
+        console.log(report)
+        reportList.push(report[0])
+      }
+    }
+
     const limit = 10
     const page = req.query.page || 1
     const offset = (page - 1) * limit
 
-    const total = await reportService.countAll()
+    const total = reportList.length
     const nPages = Math.ceil(total / limit)
     const pageNumbers = []
     for (let i = 1; i <= nPages; i++) {
@@ -168,7 +185,15 @@ router.get('/quan/baocao', async function (req, res) {
       })
     }
 
-    const list = await reportService.findFromId(limit, offset)
+    const list = reportList.slice(offset, offset + limit)
+    
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const reportType = await reportService.findReportType(item.HinhThucReport)
+        item.HinhThucReport = reportType.Name
+      }
+    }
+
     res.render('quan/baocao/list', {
       list: list,
       empty: list.length === 0,
