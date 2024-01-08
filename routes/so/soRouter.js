@@ -664,4 +664,14 @@ router.get('/so/taikhoan', async function (req, res) {
   }
 })
 
+router.post('/so/taikhoan/del', async function (req, res) {
+  try {
+    const id = req.body.ID // Get the id from the query parameters
+    await authenticationService.del(id)
+    res.redirect('/so/taikhoan')
+  } catch (error) {
+    console.error('Lỗi khi ghi vào cơ sở dữ liệu:', error)
+  }
+})
+
 export default router

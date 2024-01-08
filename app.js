@@ -162,6 +162,7 @@ app.get('/so/loaibc', soRouter)
 app.get('/so/loaibc/:type', soRouter)
 app.get('/so/loaibc/:type/detail', soRouter)
 app.get('/so/taikhoan', soRouter)
+app.post('/so/taikhoan/del', soRouter)
 
 // START
 function serverStartedHandler() {

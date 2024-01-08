@@ -90,8 +90,16 @@
                 <td class="px-4 py-4 text-center">
                     {{Ward}}
                 </td>
-                <td class="px-4 py-4">
-                    <button>Xóa</button>
+                <td>
+                    <form method="post" action="" id="deleteForm">
+                    <script>
+                        function onSubmit(token) {  
+                            document.getElementById("deleteForm").submit();
+                        }
+                    </script>
+                    <input type="hidden" name="ID" value="{{ID}}">
+                    <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" formaction="/so/taikhoan/del">Xoá</button>
+                    </form>
                 </td>
             </tr>
             {{/each}}
