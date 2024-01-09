@@ -6,7 +6,7 @@ import licenseService from '../../services/LicensingRequest.service.js'
 import reportService from '../../services/report.service.js'
 import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
-import { sendOtpEmail } from '../../services/otpEmail.service.js'
+import { sendResponseEmail } from '../../services/otpEmail.service.js'
 
 
 import multer from 'multer';
@@ -232,7 +232,7 @@ router.post('/quan/baocao/detail/:id', async function (req, res) {
   await reportService.updateNDXuLyByID(id, ndxl)
 
   const report = await reportService.findById(id)
-  sendOtpEmail(report.Email, ndxl)
+  sendResponseEmail(report.Email, ndxl)
 
   res.redirect('/quan/baocao')
 })

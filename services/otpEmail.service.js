@@ -35,3 +35,39 @@ export async function sendOtpEmail(email, otp) {
     }
   });
 }
+
+export async function sendResponseEmail(email, otp) {
+  // Replace this with your actual email sending logic using nodemailer
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "lhsang64.work@gmail.com", // Replace with your email
+      pass: "jasphnmgrcrhnzsf", // Replace with your email password
+    },
+  });
+
+  const mailOptions = {
+    from: "lhsang64.work@gmail.com", // Replace with your email
+    to: email,
+    subject: "[SCH Services for Ads Management] - Response report",
+    html: `
+      <div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, sans-serif;">
+        <h2 style="color: #333;">Response report</h2>
+        <p style="color: #555;">Your response for you report: <strong>${otp}</strong></p>
+
+        <p style="color: #555;">If you did not have a question about this response, please ignore this email.</p>
+        <br>
+        <p style="color: #555;">Thanks,</p>
+        <p style="color: #555;">SCH Services for Ads Management.</p>
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, function (err, info) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Message is sent");
+    }
+  });
+}
