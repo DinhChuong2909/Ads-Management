@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-solid.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-regular.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-light.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static//css/people/report.css">
+    <script src="https://cdn.tiny.cloud/1/m0fgkygxs3y749y4x9pmxdsov1isrty871y1cszdyn5tc7vh/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script async="" defer="" src="https://www.google.com/recaptcha/api.js"></script>
+</head>
+
+<body>
+    <form action="/report" method="post" name="reportForm" enctype="multipart/form-data">
+        <div class="container header">
+            <div class="header__title">THÊM ĐIỂM ĐẶT QUẢNG CÁO</div>
+            <div class="header__desc">(Mẫu form cho việc thêm điểm đặt quảng cáo trên bản đồ)</div>
+        </div>
+
+        <div class="container form-section">
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__lng" class="form-label">Kinh độ</label>
+                    <input type="text" class="form-control" id="form__lng" name="form__lng" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__lat" class="form-label">Vĩ độ</label>
+                    <input type="text" class="form-control" id="form__lat" name="form__lat" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__type" class="form-label">Loại bảng Quảng cáo</label>
+                    <select class="form-select" aria-label="Default select example" id="form__type" name="form__type">
+                        <option value="0">Trụ màn hình điển tử LED</option>
+                        <option value="1">Trụ hộp đèn</option>
+                        <option value="2">Bảng hiflex ốp tường</option>
+                        <option value="3">Trụ/Cụm pano</option>
+                        <option value="4">Cổng chào</option>
+                        <option value="5">Trung tâm thương mại</option>
+                        <option value="6">Trụ bảng hiflex</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="form__address" name="form__address" required>
+                </div>
+            </div>
+
+            <div class="col col-sm-6 col-md-5 col-lg-4">
+                <label for="form__des" class="form-label">Loại vị trí</label>
+                <select class="form-select" aria-label="Default select example" id="form__des" name="form__des">
+                    <option value="0">Đất công</option>
+                    <option value="1">Công viên</option>
+                    <option value="2">Hành lang an toàn giao thông</option>
+                    <option value="3">Đất tư nhân</option>
+                    <option value="4">Nhà ở riêng lẻ</option>
+                    <option value="5">Trung tâm thương mại</option>
+                    <option value="6">Chợ</option>
+                    <option value="7">Cây xăng</option>
+                    <option value="8">Nhà chờ xe buýt</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__district" class="form-label">Quận</label>
+                    <input type="text" class="form-control" id="form__district" name="form__district" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__ward" class="form-label">Phường</label>
+                    <input type="text" class="form-control" id="form__ward" name="form__ward" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__size" class="form-label">Kích thước</label>
+                    <input type="text" class="form-control" id="form__size" name="form__size" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-sm-6 col-md-5 col-lg-4">
+                    <label for="form__number" class="form-label">Số lượng</label>
+                    <input type="text" class="form-control" id="form__number" name="form__number" required>
+                </div>
+            </div>
+            <hr>
+
+
+            <div class="g-recaptcha" data-sitekey="6LeZQiwpAAAAAL3qeGgkNKncYR-eu1SV2-hN9Wqe"></div>
+            <div class="error-message"></div>
+            <input type="hidden" id="form__timestamp" name="form__timestamp">
+            <div class="form__submit">
+                <button type="submit" class="form__submit-btn">Gửi</button>
+                <span>Xóa hết câu trả lời</span>
+            </div>
+        </div>
+
+        {{!-- reCapcha --}}
+        <script>
+            function validateform() {
+                var captcha_response = grecaptcha.getResponse()
+                if (captcha_response.length == 0) {
+                    document.querySelector('.error-message').innerHTML = '<p style="margin-bottom:1.3rem;color:#d93025;">Vui lòng chọn hộp kiểm này nếu bạn muốn tiếp tục.</p>'
+                    return false
+                }
+                return true
+            }
+        </script>
+
+        {{!-- Lấy ID, Lat và Lng cho web --}}
+        <script>
+            const infoId = {{{ infoId }}};
+            const Lat = {{{ category.Lat }}};
+            const Lng = {{{ category.Lng }}};
+        </script>
+
+
+        {{!-- Yêu cầu user phải xác nhận capcha trước mới được phép gửi đi --}}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelector(".form__submit-btn").addEventListener("click", function (event) {
+                    // Ngăn chặn hành vi mặc định của nút submit
+                    event.preventDefault();
+
+                    // Kiểm tra trạng thái của reCAPTCHA
+                    var captcha_response = grecaptcha.getResponse();
+
+                    // Nếu reCAPTCHA đã được xác thực
+                    if (captcha_response.length !== 0) {
+                        // Lấy form
+                        var form = document.querySelector("form[name='reportForm']");
+                        // Gửi form
+                        form.submit();
+                    } else {
+                        // Hiển thị thông báo yêu cầu xác thực reCAPTCHA trước khi gửi form
+                        alert("Vui lòng xác thực reCAPTCHA trước khi gửi form.");
+                    }
+                });
+            });
+        </script>
+
+        {{!-- Thao tác với phần xóa hết câu trả lời, đưa tất cả về mặc định --}}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lắng nghe sự kiện khi click vào nút "Xóa hết câu trả lời"
+                document.querySelector("span").addEventListener("click", function () {
+                    // Đặt các trường trong form về giá trị mặc định
+                    document.getElementById("form__type").selectedIndex = 0;
+                    document.getElementById("form__name").value = "";
+                    document.getElementById("form__email").value = "";
+                    document.getElementById("form__phone__number").value = "";
+                    document.getElementById("form__content").value = "";
+                    // Đặt lại trạng thái của reCAPTCHA (nếu cần)
+                    grecaptcha.reset();
+                });
+            });
+        </script>
+    </form>
+
+    <script>
+        document.getElementById("form__file").addEventListener("change", function (event) {
+            const fileInput = event.target;
+            // Kiểm tra xem có hình ảnh nào được chọn hay không
+            if (fileInput.files && fileInput.files.length > 0) {
+                const fileNameDisplay = document.getElementById("file-name-display");
+                // Hiển thị tên của hình ảnh được chọn
+                fileNameDisplay.innerHTML = `Đã thêm file: ${fileInput.files[0].name}`;
+            } else {
+                // Nếu không có hình ảnh nào được chọn, xóa nội dung hiển thị
+                document.getElementById("file-name-display").innerHTML = "";
+            }
+        });
+    </script>
+</body>
+
+</html>
