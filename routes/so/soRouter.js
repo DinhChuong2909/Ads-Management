@@ -51,6 +51,8 @@ router.get('/so', async function (req, res) {
 
 router.get('/so/add', async function (req, res) {
   try {
+    const coordinates = req.body.coordinates
+    console.log(coordinates) 
     const userId = req.session.userId
 
     const list = await positionService.findAll()
@@ -76,6 +78,47 @@ router.get('/so/add', async function (req, res) {
       empty: list.length === 0,
       coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars
       positionInfo: JSON.stringify(positionInfo),
+    })
+  } catch (error) {
+    // Xử lý lỗi nếu cần
+    console.error(error)
+    res.status(500).send('Internal Server Error')
+  }
+})
+
+router.post('/so/add', async function (req, res) {
+  try {
+    const lat = req.body.lat
+    console.log(lat)
+    const lng = req.body.lng
+    console.log(lng)
+    const userId = req.session.userId
+
+    const list = await positionService.findAll()
+    const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
+
+    // Lấy thông tin chi tiết của từng vị trí trong danh sách
+    const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
+    const positionInfoTemp = await Promise.all(positionInfoPromises)
+
+    // console.log(positionInfo)
+    const positionInfo = positionInfoTemp.map((item) => {
+      // console.log(item.HinhAnh.replace(/\\/g, '/'))
+      const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
+
+      return {
+        ...item,
+        HinhAnhDisplay,
+      }
+    })
+
+    res.render('so/addForm', {
+      list: list,
+      empty: list.length === 0,
+      coordinatesList: JSON.stringify(coordinatesList), // Truyền danh sách tọa độ vào handlebars
+      positionInfo: JSON.stringify(positionInfo),
+      lat: lat,
+      lng: lng,
     })
   } catch (error) {
     // Xử lý lỗi nếu cần
