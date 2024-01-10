@@ -63,6 +63,8 @@
   const coordinatesList = {{{ coordinatesList }}};
   const positionInfo = {{{ positionInfo }}};
 
+  console.log(positionInfo)
+
   map.on('load', function () {
     map.addSource('ads', {
       type: 'geojson',
@@ -248,7 +250,6 @@
     return emptyDataPopupTemplate;
   }
 
-  
 
   function handleMapClick(e) {
     if (currentMarker) {
@@ -257,9 +258,8 @@
     let isData = e.originalEvent.target.classList.contains('custom-marker');
 
     if (!isData) {
-      const coordinates = e.lngLat;
-      currentMarker = createMarker(coordinates);
-      fetchAddressInfo(coordinates);
+      currentMarker = createMarker(e.lngLat);
+      fetchAddressInfo(e.lngLat);
     }
   }
 
@@ -289,8 +289,6 @@
           // Lấy địa chỉ (loại bỏ tên địa điểm để chỉ lấy địa chỉ)
           address = addressArray.slice(1).join(',').trim();
         }
-        const lng = `${coordinates.lng}`;
-        const lat = `${coordinates.lat}`;
         const popupContent = `
 <div class="bg-[#EDF7ED] -mx-3 -my-4 py-1 px-1">
   <div class="flex flex-row gap-1">
@@ -312,15 +310,9 @@
         ${address}
       </div>
       <div class="pl-2 text-[#D32E2E] font-semibold text-md flex items-center">
-        <form action='/so/add' method='POST'>
-          <input type='hidden' name='lng' value='${lng}' />
-          <label for='lng'></label>
-          <input type='hidden' name='lat' value='${lat}' />
-          <label for='lat'></label>
-          <button class="report-violation-btn" type='submit'>
-            THÊM ĐIỂM ĐẶT
-          </button>
-        </form>
+        <a class="report-violation-btn" href="/so/add" role="button">
+          THÊM ĐIỂM ĐẶT
+        </a>
       </div>
   </div>
 </div>

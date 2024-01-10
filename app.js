@@ -146,8 +146,7 @@ app.get('/quan-select-quantam/detail', quanQuanTamRouter)
 
 // So
 app.get('/so', soRouter)
-// app.get('/so/add', soRouter)
-app.post('/so/add', soRouter)
+app.get('/so/add', soRouter)
 app.get('/so/quan', soRouter)
 app.get('/so/quan/:quan', soRouter)
 app.get('/so/quangcao', soRouter)
