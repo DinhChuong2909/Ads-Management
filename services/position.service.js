@@ -19,6 +19,12 @@ export default {
   add(entity) {
     return db('ads').insert(entity)
   },
+  findReportIDPhuong(adsID, phuong, quan) {
+    return db('ads').where('Id', adsID).where('Phuong', phuong).where('KhuVuc', quan).select('Id')
+  },
+  findReportIDQuan(adsID, quan) {
+    return db('ads').where('Id', adsID).where('KhuVuc', quan).select('Id')
+  },
   findById(id) {
     return db('ads').where('Id', id).first()
   },

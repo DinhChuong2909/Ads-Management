@@ -7,7 +7,7 @@ import { formatDateTime } from '../../utils/dateConverter.js'
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
-router.get('/quan-select-quantam', async function (req, res) {
+router.get('/quan-select-quantam', async function(req, res) {
   // const isQuan = req.user.Role === 'cbquan'
 
   if (true) {
@@ -25,7 +25,7 @@ router.get('/quan-select-quantam', async function (req, res) {
   }
 })
 
-router.post('/quan-select-quantam', async function (req, res) {
+router.post('/quan-select-quantam', async function(req, res) {
   try {
     const selectedWards = req.body.wards
 
@@ -38,12 +38,12 @@ router.post('/quan-select-quantam', async function (req, res) {
 
     let reportInWards = []
     for (let ads of adsInWards[0]) {
-      const eachReport = await reportService.fintByAdsID(ads.Id)
+      const eachReport = await reportService.findByAdsID(ads.Id)
       if (eachReport[0] !== null && eachReport[0] !== undefined) {
         reportInWards.push(eachReport[0])
       }
     }
-    const formattedData = reportInWards.map((item) => {
+    const formattedData = reportInWards.map(item => {
       return {
         ...item,
         ThoiGian: formatDateTime(item.ThoiGian),
@@ -54,7 +54,7 @@ router.post('/quan-select-quantam', async function (req, res) {
   } catch (error) {}
 })
 
-router.get('/quan-select-quantam/detail', async function (req, res) {
+router.get('/quan-select-quantam/detail', async function(req, res) {
   const id = req.query.id || 0
   console.log(id)
   const category = await reportService.findById(id)

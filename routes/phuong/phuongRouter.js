@@ -8,31 +8,29 @@ import phuongService from '../../services/phuong.service.js'
 import quanService from '../../services/quan.service.js'
 import { sendOtpEmail } from '../../services/otpEmail.service.js'
 
-
-import multer from 'multer';
-import path from 'path';
-
+import multer from 'multer'
+import path from 'path'
 
 const router = express.Router()
 router.use(express.urlencoded({ extended: true }))
 
 // dashboard/Map
-router.get('/phuong', async function (req, res) {
+router.get('/phuong', async function(req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userPhuong = user.Ward;
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userPhuong = user.Ward
+    const userQuan = user.District
 
     const list = await positionService.findPhuong(userPhuong, userQuan)
-    const coordinatesList = list.map((item) => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
+    const coordinatesList = list.map(item => [item.Lng, item.Lat]) // Lấy tọa độ từ danh sách dữ liệu
 
     // Lấy thông tin chi tiết của từng vị trí trong danh sách
-    const positionInfoPromises = list.map((item) => positionService.findById(item.Id))
+    const positionInfoPromises = list.map(item => positionService.findById(item.Id))
     const positionInfoTemp = await Promise.all(positionInfoPromises)
 
     // console.log(positionInfo)
-    const positionInfo = positionInfoTemp.map((item) => {
+    const positionInfo = positionInfoTemp.map(item => {
       // console.log(item.HinhAnh.replace(/\\/g, '/'))
       const HinhAnhDisplay = item.HinhAnh ? item.HinhAnh.replace(/\\/g, '/') : null
 
@@ -57,12 +55,12 @@ router.get('/phuong', async function (req, res) {
 })
 
 // Bang vi tri cac diem
-router.get('/phuong/diadiem', async function (req, res) {
+router.get('/phuong/diadiem', async function(req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userPhuong = user.Ward;
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userPhuong = user.Ward
+    const userQuan = user.District
 
     const limit = 10
     const page = req.query.page || 1
@@ -104,7 +102,7 @@ router.get('/phuong/diadiem', async function (req, res) {
 })
 
 // diadiem/edit?id=6
-router.get('/phuong/diadiem/edit', async function (req, res) {
+router.get('/phuong/diadiem/edit', async function(req, res) {
   const id = req.query.id || 0
   const category = await positionService.findById(id)
   if (!category) {
@@ -118,17 +116,17 @@ router.get('/phuong/diadiem/edit', async function (req, res) {
 
 // Khởi tạo Multer và cấu hình nơi lưu trữ file tải lên
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function(req, file, cb) {
     cb(null, 'uploads/') // Thư mục lưu trữ file tải lên
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname))
-  }
-});
+  },
+})
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage })
 
-router.post('/phuong/diadiem/edit/add', upload.single('form__file'), async function (req, res) {
+router.post('/phuong/diadiem/edit/add', upload.single('form__file'), async function(req, res) {
   try {
     const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungChinhSua } = req.body
     console.log(req.body)
@@ -155,18 +153,30 @@ router.post('/phuong/diadiem/edit/add', upload.single('form__file'), async funct
 })
 
 // /phuong/baocao
-router.get('/phuong/baocao', async function (req, res) {
+router.get('/phuong/baocao', async function(req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userPhuong = user.Ward;
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userPhuong = user.Ward
+    const userQuan = user.District
+
+    const adsID = await reportService.getAdsID()
+    console.log(adsID)
+    var reportList = []
+    for (let id of adsID) {
+      var reportID = await positionService.findReportIDPhuong(id.AdsID, userPhuong, userQuan)
+      if (reportID[0] !== null && reportID[0] !== undefined) {
+        var report = await reportService.findByAdsID(reportID[0].Id)
+        console.log(report[0])
+        reportList.push(report[0])
+      }
+    }
 
     const limit = 10
     const page = req.query.page || 1
     const offset = (page - 1) * limit
 
-    const total = await reportService.countAll()
+    const total = reportList.length
     const nPages = Math.ceil(total / limit)
     const pageNumbers = []
     for (let i = 1; i <= nPages; i++) {
@@ -175,8 +185,16 @@ router.get('/phuong/baocao', async function (req, res) {
         isActive: i === +page,
       })
     }
+    
+    const list = reportList.slice(offset, offset + limit)
 
-    const list = await reportService.findFromId(limit, offset)
+    if (list && list.length > 0) {
+      for (let item of list) {
+        const reportType = await reportService.findReportType(item.HinhThucReport)
+        item.HinhThucReport = reportType.Name
+      }
+    }
+    
     res.render('phuong/baocao/list', {
       list: list,
       empty: list.length === 0,
@@ -190,7 +208,7 @@ router.get('/phuong/baocao', async function (req, res) {
   }
 })
 
-router.get('/phuong/baocao/detail', async function (req, res) {
+router.get('/phuong/baocao/detail', async function(req, res) {
   const id = req.query.id || 0
   // console.log(id)
   const category = await reportService.findById(id)
@@ -205,7 +223,7 @@ router.get('/phuong/baocao/detail', async function (req, res) {
   })
 })
 
-router.post('/phuong/baocao/detail/:id', async function (req, res) {
+router.post('/phuong/baocao/detail/:id', async function(req, res) {
   const id = req.params.id || 0
   console.log(id)
   const xl = '1'
@@ -221,12 +239,12 @@ router.post('/phuong/baocao/detail/:id', async function (req, res) {
 })
 
 // /phuong/capphep
-router.get('/phuong/capphep', async function (req, res) {
+router.get('/phuong/capphep', async function(req, res) {
   try {
     const userId = req.session.userId
-    const user = await authenticationService.findById(userId);
-    const userPhuong = user.Ward;
-    const userQuan = user.District;
+    const user = await authenticationService.findById(userId)
+    const userPhuong = user.Ward
+    const userQuan = user.District
 
     const limit = 10
     const page = req.query.page || 1
@@ -266,11 +284,11 @@ router.get('/phuong/capphep', async function (req, res) {
   }
 })
 
-router.get('/phuong/capphep/edit', async function (req, res) {
+router.get('/phuong/capphep/edit', async function(req, res) {
   res.render('phuong/capphep/edit', {})
 })
 
-router.post('/phuong/capphep/del', async function (req, res) {
+router.post('/phuong/capphep/del', async function(req, res) {
   try {
     const id = req.body.ID // Get the id from the query parameters
     await licenseService.del(id)
@@ -280,7 +298,7 @@ router.post('/phuong/capphep/del', async function (req, res) {
   }
 })
 
-router.post('/phuong/capphep/edit/add', upload.single('form__file'), async function (req, res) {
+router.post('/phuong/capphep/edit/add', upload.single('form__file'), async function(req, res) {
   try {
     const { PosID, HinhThucQC, DiaChi, Phuong, KhuVuc, NoiDungQC, Email, NgayBatDau, NgayKetThuc } = req.body
     console.log(req.body)
